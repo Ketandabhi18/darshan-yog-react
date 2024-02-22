@@ -14,7 +14,11 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router-dom";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = [
+  { name: "Home", route: "/" },
+  { name: "About Us", route: "/about-us" },
+  { name: "Program Schedule", route: "/program-schedule" },
+];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const HeaderComponent = () => {
@@ -49,7 +53,7 @@ const HeaderComponent = () => {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            onClick={() => navigate("/")}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -93,8 +97,14 @@ const HeaderComponent = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem
+                  key={page.name}
+                  onClick={() => {
+                    handleCloseNavMenu();
+                    navigate(page.route);
+                  }}
+                >
+                  <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -121,11 +131,14 @@ const HeaderComponent = () => {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.name}
+                onClick={() => {
+                  handleCloseNavMenu();
+                  navigate(page.route);
+                }}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
