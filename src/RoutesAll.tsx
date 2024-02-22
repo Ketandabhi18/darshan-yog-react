@@ -1,12 +1,20 @@
 import React from "react";
-import { Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import HeaderComponent from "./Components/HeaderComponent";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import AboutUs from "./pages/AboutUs";
+import ProgramSchedule from "./pages/ProgramSchedule";
 
 const RoutesAll = () => {
   return (
     <>
-      <HeaderComponent />
-      <Routes></Routes>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/log-in" element={<Login />} />
+        <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/program-schedule" element={<ProgramSchedule />} />
+      </Routes>
     </>
   );
 };

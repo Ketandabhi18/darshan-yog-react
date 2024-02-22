@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import RoutesAll from "./RoutesAll";
+import FooterComponent from "./Components/FooterComponent";
 import HeaderComponent from "./Components/HeaderComponent";
 
 function App() {
@@ -8,8 +9,9 @@ function App() {
     <>
       <HeaderComponent />
       <Routes>
-        <Route path="/*" element={<RoutesAll />} />{" "}
+        <Route path="/*" element={<RoutesAll />} />
       </Routes>
+      <FooterComponent />
     </>
   );
 }
