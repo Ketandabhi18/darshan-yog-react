@@ -41,7 +41,7 @@ const HeaderComponent = () => {
     setAnchorElUser(null);
   };
   return (
-    <AppBar position="static">
+    <AppBar position="static" style={{ backgroundColor: "#d26b19" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -158,7 +158,9 @@ const HeaderComponent = () => {
                 </MenuItem>
               ))}
             </Menu> */}
-            <Button color="inherit" onClick = {()=>navigate('log-in')}>Login</Button>
+            <Button color="inherit" onClick={() => navigate("log-in")}>
+              Login
+            </Button>
             <Button color="inherit">Register</Button>
           </Box>
         </Toolbar>
