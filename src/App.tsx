@@ -3,10 +3,12 @@ import "./App.css";
 import RoutesAll from "./RoutesAll";
 import FooterComponent from "./Components/FooterComponent";
 import HeaderComponent from "./Components/HeaderComponent";
+import NavbarComponent from "./Components/NavbarComponent";
 
 function App() {
   return (
     <>
+      <NavbarComponent />
       <HeaderComponent />
       <Routes>
         <Route path="/*" element={<RoutesAll />} />

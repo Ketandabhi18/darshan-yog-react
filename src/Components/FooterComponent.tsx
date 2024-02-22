@@ -49,7 +49,7 @@ const FooterComponent = () => {
             px: 2,
             mt: "auto",
           }}
-          style={{ backgroundColor: "#ebb957d1" }}
+          style={{ backgroundColor: "rgb(183 181 179 / 82%)" }}
         >
           <Container maxWidth="sm">
             {/* <Typography variant="body1">
