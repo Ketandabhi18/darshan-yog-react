@@ -8,7 +8,6 @@ import NavbarComponent from "./Components/NavbarComponent";
 function App() {
   return (
     <>
-      <NavbarComponent />
       <HeaderComponent />
       <Routes>
         <Route path="/*" element={<RoutesAll />} />
