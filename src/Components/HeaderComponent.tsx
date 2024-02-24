@@ -66,8 +66,7 @@ const HeaderComponent = () => {
       <AppBar
         position="static"
         // style={{ backgroundColor: "transparent", position: "fixed" }}
-        style={{ backgroundColor: "orange" }}
-        // style={{ backgroundColor: "rgb(247, 247, 247)" }}
+        style={{ backgroundColor: "#e48732" }}
         // style={{ backgroundColor: "#e18c48", position: "fixed" }}
       >
         <Container maxWidth="xl">
