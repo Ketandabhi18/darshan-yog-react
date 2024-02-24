@@ -94,7 +94,10 @@ const HeaderComponent = () => {
                     textDecoration: "none",
                   }}
                 >
-                  <img src="src/assets/images/Dharshanyog_Dham_Logo.png" />
+                  <img
+                    src="https://darshanyog.org/assets/img/upload/branch/banner/9hLkOGFDJp.png"
+                    style={{ height: "70px", width: "160px" }}
+                  />
                 </Typography>
               </div>
               <div>
