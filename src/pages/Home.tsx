@@ -11,20 +11,48 @@ import Carousel from "react-material-ui-carousel";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
 import Container from "@mui/material/Container";
-
+import { ArrowLeft, ArrowRight } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { JSX } from "react/jsx-runtime";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import HomeCarouselCard from "../Components/HomeCarouselCard";
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
-function Item({ item }: { item: { description: string } }) {
-  return (
-    <div style={{ width: "100%", height: "100%" }}>{item.description}</div>
-  );
+interface VideoItem {
+  title: string;
+  date: string;
+  videoUrl: string;
+  imageUrl: string;
 }
 
+const videoData: VideoItem[] = [
+  // Replace with your actual video data
+  {
+    title: "Vaisheshik darshan 05/01 sutra 9 to 12",
+    date: "08 May 2024",
+    videoUrl: "https://www.example.com/video1",
+    imageUrl: "https://img.youtube.com/vi/LRI3oAKB2Yw/mqdefault.jpg",
+  },
+  {
+    title: "Video 2",
+    date: "January 31, 2024",
+    videoUrl: "https://www.example.com/video2",
+    imageUrl: "https://img.youtube.com/vi/XptwMtG0ozE/mqdefault.jpg",
+  },
+  {
+    title: "Video 3",
+    date: "January 31, 2024",
+    videoUrl: "https://www.example.com/video2",
+    imageUrl: "https://img.youtube.com/vi/2EeLjyMQt6Y/mqdefault.jpg",
+  },
+  // Add more video items as needed
+];
+
 const Home = () => {
+  const [index, setIndex] = React.useState(0);
   const theme = useTheme();
   const isSmScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const items = [
@@ -50,8 +78,58 @@ const Home = () => {
     },
     // Add more items as needed
   ];
-  const [index, setIndex] = React.useState(0);
 
+  const branchItems = [
+    {
+      imageUrl:
+        "https://darshanyog.org/assets/img/upload/branch/banner/9hLkOGFDJp.png",
+      alt: "Image 1",
+      title: "दर्शन योग धाम",
+      subtitle: "संस्कृति वन, लाकरोड़ा, गांधीनगर, गुजरात",
+      description: `(वैदिक धर्म की रक्षा और समृद्धि का आदर्श संस्थान)
+
+      दर्शन योग धर्मार्थ ट्रस्ट अपने पूर्वजों ऋषि-मुनियों के द्वारा अनुपालित परम्पराओं की अनमोल थाती को सुरक्षित रखने के लिए सदैव प्रयासशील है । आर्य समाज में योग-विद्या में आदर्श माने जाने वाले पूज्य स्वामी सत्यपति जी परिव्राजक की यह अभिलाषा रही है कि समाज में ऐसे सत्यवादी परोपकारी दार्शनिक आदर्श योगियों का निर्माण किया जाये, जिनका मुख्य उद्देश्य निष्ठापूर्वक ईश्वर, जीव, प्रकृति व भौतिक पदार्थों का वैदिक ज्ञान-विज्ञान आदान-प्रदान करना हो । यह सब कार्य समान लक्ष्य वाले व्यक्तियों के धार्मिक संगठन द्वारा ही सम्भव है । दर्शन योग धर्मार्थ ट्रस्ट ने अपने ऐसे संगठन-निर्माण का निश्चय किया है ।
+
+      `,
+    },
+
+    {
+      imageUrl:
+        "https://darshanyog.org/assets/img/upload/branch/banner/P5RYDz0i57.jpg",
+      alt: "Image 4",
+      title: "This is demfasdfo title",
+      subtitle: "this is sfasdfasubtitle",
+      description: "this ifasfdss demo",
+    },
+  ];
+
+  const homecardCarouselData: any = [
+    { name: "Aaj Ka Suvichar", data: videoData },
+    { name: "News", data: videoData },
+    { name: "Program Schedule", data: videoData },
+    { name: "Latest Video", data: videoData },
+  ];
+  const styles: any = {
+    pageSection: {
+      backgroundColor: "#ffffff",
+    },
+    branchCover: {
+      width: "100%",
+      "& img": {
+        width: "100%",
+        height: "auto",
+      },
+    },
+    branchContent: {
+      padding: "20px",
+      textAlign: "left",
+    },
+    carouselControl: {
+      position: "absolute",
+      top: "50%",
+      transform: "translateY(-50%)",
+    },
+  };
   const handleChange: any = (cur: number, prev: number) => {
     setIndex(cur);
     console.log(cur, prev);
@@ -282,8 +360,8 @@ const Home = () => {
           position: "relative",
           overflow: "hidden",
           border: "1px solid #fff", // Add a border around each testimonial item
-          borderRadius: "15px", // Add border-radius for a rounded look
-          padding: "15px", // Add padding inside each testimonial item
+          borderRadius: "400px", // Add border-radius for a rounded look
+          // padding: "15px", // Add padding inside each testimonial item
           transition: "border-color 0.3s ease", // Add a smooth transition for the border color change
         }}
         onMouseOver={handleMouseOver}
@@ -364,65 +442,137 @@ const Home = () => {
         </div> */}
       </div>
 
-      {/* <section
-        className="background-dark-lt p-t-75 p-b-75"
-        id="spiritualsuccession"
+      <section
+        style={{ background: "#f7f7f7", padding: "50px 0" }}
+        id="announcement"
       >
         <Container>
-          <div>
-            <div className="heading heading heading-center">
-              <Typography variant="h6" className="text-medium">
-                Our Team
-              </Typography>
-            </div>
-          </div>
-
           <div
-            id="testimonials"
-            className={`light-pagination owl-carousel owl-theme ${
-              isSmScreen ? "horizontal-carousel" : "" // Add a class for horizontal layout
-            }`}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              display: "flex",
+              paddingBottom: "2%",
+            }}
           >
-            <Carousel
-              autoPlay={!isSmScreen}
-              animation={isSmScreen ? "slide" : "fade"}
-            >
-              {groupedTestimonials.map(
-                (
-                  testimonialGroup: any[],
-                  pageIndex: React.Key | null | undefined
-                ) => (
-                  <div key={pageIndex} className="carousel-page">
-                    <div
-                      className="horizontal-testimonials-container"
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      {testimonialGroup.map(
-                        (
-                          testimonial: JSX.IntrinsicAttributes & {
-                            imageUrl: any;
-                            link: any;
-                            title: any;
-                          },
-                          index: React.Key | null | undefined
-                        ) => (
-                          <TestimonialItem key={index} {...testimonial} />
-                        )
-                      )}
-                    </div>
-                  </div>
-                )
-              )}
-            </Carousel>
+            {" "}
+            <Typography variant="h4">Photo & Video</Typography>
           </div>
+          <Grid container spacing={3}>
+            {/* Video Section */}
+            {homecardCarouselData.map((item: any, index: any) => (
+              <HomeCarouselCard
+                key={index}
+                videoData={item.data}
+                name={item.name}
+              />
+            ))}
+
+            {/* Repeat the above structure for "5 Minutes Satsang" and "Global Event" sections */}
+          </Grid>
         </Container>
-      </section> */}
+      </section>
+
+      <section style={{}}>
+        <Carousel
+          index={index}
+          onChange={() => handleChange()}
+          interval={4000}
+          animation="slide"
+          indicators={false}
+          stopAutoPlayOnHover
+          swipe
+          className="my-carousel"
+          // style={{ borderRadius: "8px", overflow: "hidden" }}
+        >
+          {branchItems.map((item, i) => (
+            <div key={i} style={{ display: "flex" }}>
+              <div
+                style={{
+                  width: "50%",
+                  marginLeft: "1%",
+                  backgroundColor: "rgb(247, 247, 247)",
+                }}
+              >
+                <img
+                  src={item.imageUrl}
+                  alt={item.alt}
+                  style={{
+                    borderRadius: "90px",
+                    height: "400px",
+                    width: "100%",
+                    border: "5px solid #9a6d6d",
+                  }}
+                />
+              </div>
+              <div
+                style={{ width: "50%", backgroundColor: "rgb(247, 247, 247)" }}
+              >
+                <Paper
+                  style={{
+                    ...styles.branchContent,
+                    boxShadow: "none", // Remove the box shadow
+                    backgroundColor: "rgb(247, 247, 247)",
+                    borderRadius: "0",
+                  }}
+                >
+                  {/* Title */}
+                  <div
+                    style={{
+                      marginLeft: "1%",
+                      marginBottom: "10px",
+                      fontSize: "20px",
+                      color: "#da6b6b",
+                      // fontWeight: "lighter",
+                    }}
+                  >
+                    {item.title}
+                  </div>
+                  {/* Subtitle */}
+                  <div
+                    style={{
+                      marginLeft: "1%",
+                      marginBottom: "20px",
+                      fontSize: "16px",
+                      fontStyle: "italic",
+                      color: "rgb(216 171 171)",
+                    }}
+                  >
+                    {item.subtitle}
+                  </div>
+                  {/* Description */}
+                  <div
+                    style={{
+                      marginLeft: "1%",
+                      fontSize: "14px",
+                      color: "dimgray",
+                    }}
+                  >
+                    {item.description}
+                  </div>
+                  {/* Add more content */}
+                  <div style={{ justifyContent: "center", display: "flex" }}>
+                    <Button
+                      variant="contained"
+                      style={{
+                        backgroundColor: "#a14709",
+
+                        marginTop: "1%",
+                      }}
+                      color="primary"
+                    >
+                      Read More
+                    </Button>
+                  </div>
+                </Paper>
+              </div>
+            </div>
+          ))}
+        </Carousel>
+      </section>
 
       <section
-        style={{ backgroundColor: "rgb(165 165 165)" }}
+        style={{ backgroundColor: "rgb(247, 247, 247)" }}
         className="background-dark-lt p-t-75 p-b-75"
         id="spiritualsuccession"
       >
@@ -437,7 +587,7 @@ const Home = () => {
               <Typography
                 variant="h4"
                 className="text-medium"
-                style={{ color: "white" }}
+                style={{ color: "grey", marginTop: "40px" }}
               >
                 Our Team
               </Typography>
