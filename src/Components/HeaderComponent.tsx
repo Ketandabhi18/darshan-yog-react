@@ -11,37 +11,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
 import "./header.css";
-const pages = [
-  {
-    name: "home",
-    route: "/",
-  },
-  {
-    name: "About Us",
-    route: "/about-us",
-    options: [
-      { pageName: "About Us", route: "about-us" },
-      { pageName: "Aims & Ideals", route: "aims-ideals" },
-      { pageName: "key information", route: "key-info" },
-      { pageName: "Our Functionary", route: "our-functionary" },
-      { pageName: "Passed Scholar", route: "passed-scholar" },
-      { pageName: "Vision", route: "vision" },
-    ],
-  },
-  {
-    name: "Knowledge",
-    route: "/knowledge",
-    options: [
-      { pageName: "Knowledge", route: "/knowledge" },
-      { pageName: "Veda", route: "veda" },
-      { pageName: "Darshan", route: "darshan" },
-      { pageName: "Yoga", route: "yoga" },
-      { pageName: "The Light of truth", route: "life-of-truth" },
-    ],
-  },
-  { name: "Program Schedule", route: "/program-schedule" },
-];
-
+import { pages } from "../config/constants";
 const HeaderComponent = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -69,7 +39,7 @@ const HeaderComponent = () => {
   const [anchorEl, setAnchorEl] = React.useState<any>({});
 
   const handleClick = (event: any, pageName: any, route: any) => {
-    const page: any = pages.find((p) => p.name === pageName);
+    const page: any = pages.find((p: any) => p.name === pageName);
     if (!Object.keys(page).includes("options")) {
       navigate(route);
     }
@@ -155,7 +125,7 @@ const HeaderComponent = () => {
                       display: { xs: "block", md: "none" },
                     }}
                   >
-                    {pages.map((page) => (
+                    {pages.map((page: any) => (
                       <MenuItem
                         key={page.name}
                         onClick={() => {
@@ -187,7 +157,7 @@ const HeaderComponent = () => {
                   LOGO
                 </Typography>
                 <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                  {pages.map((page) => (
+                  {pages.map((page: any) => (
                     <div key={page.name}>
                       <Button
                         onClick={(event) =>
@@ -212,7 +182,13 @@ const HeaderComponent = () => {
                               key={subItem.pageName}
                               onClick={() => {
                                 handleClose(page.name);
-                                navigate(subItem.route);
+                                navigate(subItem.route, {
+                                  state: {
+                                    content: subItem?.content
+                                      ? subItem?.content
+                                      : "",
+                                  },
+                                });
                               }}
                             >
                               {subItem.pageName}
