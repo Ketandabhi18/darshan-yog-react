@@ -448,7 +448,7 @@ const Home = () => {
       </div>
 
       <section
-        style={{ background: "#f7f7f7", padding: "50px 0" }}
+        style={{ background: "rgb(206,206,206)", padding: "50px 0" }}
         id="announcement"
       >
         <Container>
@@ -505,7 +505,8 @@ const Home = () => {
                   style={{
                     borderRadius: "90px",
                     height: "350px",
-                    width: "600px",
+                    width: "90%",
+                    marginTop: "10px",
                     // border: "5px solid #9a6d6d",
                     padding: "1%",
                   }}
@@ -580,7 +581,7 @@ const Home = () => {
       </section>
 
       <section
-        style={{ backgroundColor: "rgb(247, 247, 247)" }}
+        style={{ backgroundColor: "rgb(206, 206, 206)" }}
         className="background-dark-lt p-t-75 p-b-75"
         id="spiritualsuccession"
       >

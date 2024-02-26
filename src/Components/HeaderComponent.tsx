@@ -61,7 +61,8 @@ const HeaderComponent = () => {
       <AppBar
         position="static"
         // style={{ backgroundColor: "transparent", position: "fixed" }}
-        style={{ backgroundColor: "#e48732" }}
+        style={{ backgroundColor: "rgb(206,206,206)" }}
+        // style={{ backgroundColor: "#e48732" }}
         // style={{ backgroundColor: "#e18c48", position: "fixed" }}
       >
         <Container maxWidth="xl">
@@ -167,7 +168,8 @@ const HeaderComponent = () => {
                             page.route ? page.route : "/"
                           )
                         }
-                        sx={{ my: 2, color: "#510000", display: "block" }}
+                        sx={{ my: 2, color: "black", display: "block" }}
+                        style={{ fontWeight: "bold" }}
                       >
                         {page.name}
                       </Button>
@@ -203,7 +205,7 @@ const HeaderComponent = () => {
               <div>
                 <Button
                   color="inherit"
-                  style={{ color: "#510000" }}
+                  style={{ fontWeight: "bold", color: "black" }}
                   onClick={() => navigate("log-in")}
                 >
                   Login
