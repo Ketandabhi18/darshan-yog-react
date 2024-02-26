@@ -236,19 +236,27 @@ const FooterComponent = () => {
               </div>
             </Container>
           </div>
-          <Box
-            component="footer"
-            sx={{
-              py: 3,
-              px: 2,
-              mt: "auto",
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              backgroundColor: "rgb(183 181 179 / 82%)",
             }}
-            style={{ backgroundColor: "rgb(183 181 179 / 82%)" }}
           >
-            <Container maxWidth="sm">
-              <Copyright />
-            </Container>
-          </Box>
+            <Box
+              component="footer"
+              sx={{
+                py: 3,
+                px: 2,
+                mt: "auto",
+              }}
+              style={{}}
+            >
+              <Container maxWidth="sm">
+                <Copyright />
+              </Container>
+            </Box>
+          </div>
         </Box>
       </ThemeProvider>
     </>

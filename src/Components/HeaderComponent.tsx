@@ -7,19 +7,40 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router-dom";
 import "./header.css";
 const pages = [
-  { name: "home", route: "/" },
-  { name: "About Us", route: "/about-us" },
+  {
+    name: "home",
+    route: "/",
+  },
+  {
+    name: "About Us",
+    route: "/about-us",
+    options: [
+      { pageName: "About Us", route: "about-us" },
+      { pageName: "Aims & Ideals", route: "aims-ideals" },
+      { pageName: "key information", route: "key-info" },
+      { pageName: "Our Functionary", route: "our-functionary" },
+      { pageName: "Passed Scholar", route: "passed-scholar" },
+      { pageName: "Vision", route: "vision" },
+    ],
+  },
+  {
+    name: "Knowledge",
+    route: "/knowledge",
+    options: [
+      { pageName: "Knowledge", route: "/knowledge" },
+      { pageName: "Veda", route: "veda" },
+      { pageName: "Darshan", route: "darshan" },
+      { pageName: "Yoga", route: "yoga" },
+      { pageName: "The Light of truth", route: "life-of-truth" },
+    ],
+  },
   { name: "Program Schedule", route: "/program-schedule" },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const HeaderComponent = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -44,25 +65,29 @@ const HeaderComponent = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const [anchorEl, setAnchorEl] = React.useState<any>({});
+
+  const handleClick = (event: any, pageName: any, route: any) => {
+    const page: any = pages.find((p) => p.name === pageName);
+    if (!Object.keys(page).includes("options")) {
+      navigate(route);
+    }
+    setAnchorEl({
+      ...anchorEl,
+      [pageName]: event.currentTarget,
+    });
+  };
+
+  const handleClose = (pageName: any) => {
+    setAnchorEl({
+      ...anchorEl,
+      [pageName]: null,
+    });
+  };
+
   return (
     <>
-      {/* <nav id="navbar">
-        <div id="logo">
-          <img src="/assets/Dharshanyog Dham Logo.png.jpg" alt="" />
-        </div>
-        <ul>
-          <li className="item">
-            <a href="#">HOME</a>
-          </li>
-          <li className="item">
-            <a href="#">ABOUT US</a>
-          </li>
-          <li className="item">
-            <a href="#">PROGRAM SCHEDUAL</a>
-          </li>
-        </ul>
-      </nav> */}
-
       <AppBar
         position="static"
         // style={{ backgroundColor: "transparent", position: "fixed" }}
@@ -163,17 +188,39 @@ const HeaderComponent = () => {
                 </Typography>
                 <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                   {pages.map((page) => (
-                    <Button
-                      key={page.name}
-                      onClick={() => {
-                        handleCloseNavMenu();
-                        navigate(page.route);
-                      }}
-                      sx={{ my: 2, color: "#510000", display: "block" }}
-                      // sx={{ my: 2, color: "#510000", display: "block" }}
-                    >
-                      {page.name}
-                    </Button>
+                    <div key={page.name}>
+                      <Button
+                        onClick={(event) =>
+                          handleClick(
+                            event,
+                            page.name,
+                            page.route ? page.route : "/"
+                          )
+                        }
+                        sx={{ my: 2, color: "#510000", display: "block" }}
+                      >
+                        {page.name}
+                      </Button>
+                      {page.options && (
+                        <Menu
+                          anchorEl={anchorEl[page.name]}
+                          open={Boolean(anchorEl[page.name])}
+                          onClose={() => handleClose(page.name)}
+                        >
+                          {page.options.map((subItem: any) => (
+                            <MenuItem
+                              key={subItem.pageName}
+                              onClick={() => {
+                                handleClose(page.name);
+                                navigate(subItem.route);
+                              }}
+                            >
+                              {subItem.pageName}
+                            </MenuItem>
+                          ))}
+                        </Menu>
+                      )}
+                    </div>
                   ))}
                 </Box>
               </div>

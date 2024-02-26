@@ -376,7 +376,11 @@ const Home = () => {
             overflow: "hidden",
           }}
         >
-          <img src={imageUrl} alt={title} style={{ maxWidth: "100%" }} />
+          <img
+            src={imageUrl}
+            alt={title}
+            style={{ maxWidth: "100%", height: "250px" }}
+          />
           <div
             className="title-overlay"
             style={{
@@ -500,8 +504,8 @@ const Home = () => {
                   alt={item.alt}
                   style={{
                     borderRadius: "90px",
-                    height: "400px",
-                    width: "100%",
+                    height: "350px",
+                    width: "600px",
                     // border: "5px solid #9a6d6d",
                     padding: "1%",
                   }}
