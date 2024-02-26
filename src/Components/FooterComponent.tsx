@@ -190,6 +190,14 @@ const FooterComponent = () => {
                   placeholder="Enter Mobile"
                   // defaultValue="Hello World"
                 />
+
+                <TextField
+                  label="Message"
+                  multiline
+                  rows={3}
+                  variant="standard"
+                  placeholder="Enter Message"
+                />
                 <div
                   style={{
                     display: "flex",
