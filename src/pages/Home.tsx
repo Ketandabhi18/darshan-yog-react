@@ -376,7 +376,11 @@ const Home = () => {
             overflow: "hidden",
           }}
         >
-          <img src={imageUrl} alt={title} style={{ maxWidth: "100%" }} />
+          <img
+            src={imageUrl}
+            alt={title}
+            style={{ maxWidth: "100%", height: "250px" }}
+          />
           <div
             className="title-overlay"
             style={{
@@ -444,7 +448,7 @@ const Home = () => {
       </div>
 
       <section
-        style={{ background: "#f7f7f7", padding: "50px 0" }}
+        style={{ background: "rgb(206,206,206)", padding: "50px 0" }}
         id="announcement"
       >
         <Container>
@@ -500,8 +504,9 @@ const Home = () => {
                   alt={item.alt}
                   style={{
                     borderRadius: "90px",
-                    height: "400px",
-                    width: "100%",
+                    height: "350px",
+                    width: "90%",
+                    marginTop: "10px",
                     // border: "5px solid #9a6d6d",
                     padding: "1%",
                   }}
@@ -576,7 +581,7 @@ const Home = () => {
       </section>
 
       <section
-        style={{ backgroundColor: "rgb(247, 247, 247)" }}
+        style={{ backgroundColor: "rgb(206, 206, 206)" }}
         className="background-dark-lt p-t-75 p-b-75"
         id="spiritualsuccession"
       >
