@@ -158,21 +158,21 @@ const Home = () => {
       link: "https://darshanyog.org/assets/img/upload/team/jjurs4lO2V.jpg",
       title: "Swami vivekanand parivrajak",
     },
-    {
-      imageUrl: "https://darshanyog.org/assets/img/upload/team/J0lDBBYml2.jpg",
-      link: "https://darshanyog.org/assets/img/upload/team/J0lDBBYml2.jpg",
-      title: "Swami dhruvdev privrajak",
-    },
-    {
-      imageUrl: "https://darshanyog.org/assets/img/upload/team/RmiXyuUJEk.jpg",
-      link: "https://darshanyog.org/assets/img/upload/team/RmiXyuUJEk.jpg",
-      title: "Aacharya dinesh kumar",
-    },
-    {
-      imageUrl: "https://darshanyog.org/assets/img/upload/team/qe4tLla1Lm.jpg",
-      link: "https://darshanyog.org/assets/img/upload/team/qe4tLla1Lm.jpg",
-      title: "Acharya ishvaranand",
-    },
+    // {
+    //   imageUrl: "https://darshanyog.org/assets/img/upload/team/J0lDBBYml2.jpg",
+    //   link: "https://darshanyog.org/assets/img/upload/team/J0lDBBYml2.jpg",
+    //   title: "Swami dhruvdev privrajak",
+    // },
+    // {
+    //   imageUrl: "https://darshanyog.org/assets/img/upload/team/RmiXyuUJEk.jpg",
+    //   link: "https://darshanyog.org/assets/img/upload/team/RmiXyuUJEk.jpg",
+    //   title: "Aacharya dinesh kumar",
+    // },
+    // {
+    //   imageUrl: "https://darshanyog.org/assets/img/upload/team/qe4tLla1Lm.jpg",
+    //   link: "https://darshanyog.org/assets/img/upload/team/qe4tLla1Lm.jpg",
+    //   title: "Acharya ishvaranand",
+    // },
     // Add other testimonials similarly
   ];
 

@@ -98,64 +98,90 @@ const FooterComponent = () => {
                 style={{
                   display: "flex",
                   paddingTop: "2%",
+                  position: "relative",
+                  right: "13px",
                 }}
               >
                 <div
                   style={{
-                    border: "2px",
-                    height: "25px",
-                    width: "25px",
+                    height: "35px",
+                    width: "35px",
                     margin: "15px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #11111124",
+                    borderRadius: "5px",
                   }}
                 >
                   <FacebookOutlined style={{}} />
                 </div>
                 <div
                   style={{
-                    border: "2px",
-                    height: "30px",
-                    width: "20px",
+                    height: "35px",
+                    width: "35px",
                     margin: "15px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #11111124",
+                    borderRadius: "5px",
                   }}
                 >
                   <Instagram style={{}} />
                 </div>
                 <div
                   style={{
-                    border: "2px",
-                    height: "30px",
-                    width: "20px",
+                    height: "35px",
+                    width: "35px",
                     margin: "15px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #11111124",
+                    borderRadius: "5px",
                   }}
                 >
                   <Twitter style={{}} />
                 </div>
                 <div
                   style={{
-                    border: "2px",
-                    height: "30px",
-                    width: "20px",
+                    height: "35px",
+                    width: "35px",
                     margin: "15px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #11111124",
+                    borderRadius: "5px",
                   }}
                 >
                   <YouTube style={{}} />
                 </div>
                 <div
                   style={{
-                    border: "2px",
-                    height: "30px",
-                    width: "20px",
+                    height: "35px",
+                    width: "35px",
                     margin: "15px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #11111124",
+                    borderRadius: "5px",
                   }}
                 >
                   <WhatsApp style={{}} />
                 </div>
                 <div
                   style={{
-                    border: "2px",
-                    height: "30px",
-                    width: "20px",
+                    height: "35px",
+                    width: "35px",
                     margin: "15px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #11111124",
+                    borderRadius: "5px",
                   }}
                 >
                   <Telegram style={{}} />
