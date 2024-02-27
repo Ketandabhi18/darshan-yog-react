@@ -11,14 +11,16 @@ import ContactUs from "./pages/ContactUs";
 const RoutesAll = () => {
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/log-in" element={<Login />} />
-        <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/program-schedule" element={<ProgramSchedule />} />
-        <Route path="/:id" element={<ViewDetails />} />
-      </Routes>
+      <div style={{ backgroundColor: "rgb(247, 247, 247)" }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/log-in" element={<Login />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/program-schedule" element={<ProgramSchedule />} />
+          <Route path="/:id" element={<ViewDetails />} />
+        </Routes>
+      </div>
     </>
   );
 };
