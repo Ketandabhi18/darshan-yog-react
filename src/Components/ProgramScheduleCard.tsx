@@ -90,9 +90,16 @@ const ProgramScheduleCard: React.FC<ProgramScheduleProps> = ({
   const visiblePages = calculateVisiblePages();
 
   return (
-    <div>
+    <div style={{ marginTop: "0px" }}>
       {paginatedItems.map((item, index) => (
-        <Card key={index} style={{ paddingTop: "1%", marginTop: "1%" }}>
+        <Card
+          key={index}
+          style={{
+            boxShadow: "0 0 20px black",
+            borderRadius: "20px",
+            marginTop: "15px",
+          }}
+        >
           <CardHeader
             action={
               <IconButton aria-label="settings">
@@ -102,9 +109,15 @@ const ProgramScheduleCard: React.FC<ProgramScheduleProps> = ({
             title={item.title}
             subheader={item.subheader}
           />
-          <div style={{ justifyContent: "center", overflow: "auto" }}>
+          <div style={{ overflow: "auto" }}>
             <img
-              style={{ height: "300px", display: "block", margin: "auto" }}
+              style={{
+                height: "300px",
+                display: "block",
+                margin: "auto",
+                border: "1px solid #00000033",
+                boxShadow: "0 0 2px",
+              }}
               src={item.imageSrc}
               alt={item.title}
             />
@@ -125,7 +138,12 @@ const ProgramScheduleCard: React.FC<ProgramScheduleProps> = ({
               onClick={() => handleExpandClick(index)}
               variant="outlined"
               size="small"
-              style={{ marginLeft: "auto" }}
+              style={{
+                marginLeft: "auto",
+                color: "#000000ad",
+                borderColor: "#0000004f",
+                borderRadius: "15px",
+              }}
             >
               {expanded[index] ? "Read Less" : "Read More"}
             </Button>

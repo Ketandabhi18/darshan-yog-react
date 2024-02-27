@@ -65,46 +65,77 @@ const ContactUs = () => {
           </span>
         </Container>
         <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
-          <Typography variant="h6" component="h1" gutterBottom>
-            Message for Us
-          </Typography>
-          <div style={{ display: "grid", width: "60%" }}>
-            <TextField
-              label="Name"
-              variant="standard"
-              style={{ marginBottom: "2%" }}
-              placeholder="Enter Name"
-            />
-
-            <TextField
-              label="Email"
-              variant="standard"
-              style={{ marginBottom: "2%" }}
-              placeholder="Enter Email"
-            />
-
-            <TextField
-              label="Mobile"
-              variant="standard"
-              style={{ marginBottom: "2%" }}
-              placeholder="Enter Mobile"
-            />
-
-            <TextField
-              label="Message"
-              multiline
-              rows={3}
-              variant="standard"
-              placeholder="Enter Message"
-            />
+          <div
+            style={{
+              border: "7px solid #e4e1e1",
+              width: "80%",
+              margin: "auto",
+              borderRadius: "30px",
+            }}
+          >
+            <Typography
+              variant="h6"
+              component="h1"
+              gutterBottom
+              style={{ justifyContent: "center", display: "flex" }}
+            >
+              Message for Us
+            </Typography>
             <div
               style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "2%",
+                display: "grid",
+                width: "70%",
+
+                margin: "auto",
               }}
             >
-              <Button variant="outlined">Outlined</Button>
+              <TextField
+                label="Name"
+                variant="standard"
+                style={{ marginBottom: "2%" }}
+                placeholder="Enter Name"
+              />
+
+              <TextField
+                label="Email"
+                variant="standard"
+                style={{ marginBottom: "2%" }}
+                placeholder="Enter Email"
+              />
+
+              <TextField
+                label="Mobile"
+                variant="standard"
+                style={{ marginBottom: "2%" }}
+                placeholder="Enter Mobile"
+              />
+
+              <TextField
+                label="Message"
+                multiline
+                rows={3}
+                variant="standard"
+                placeholder="Enter Message"
+              />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "2%",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{
+                    backgroundColor: "#c4c2c1",
+                    color: "black",
+                    marginBottom: "15px",
+                  }}
+                >
+                  Outlined
+                </Button>
+              </div>
             </div>
           </div>
         </Container>

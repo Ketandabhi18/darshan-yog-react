@@ -1,6 +1,11 @@
 import { MapContainer, TileLayer, Popup, Marker } from "react-leaflet";
-
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import icon from "../assets/location-pin.png";
+const customIcon = new L.Icon({
+  iconUrl: icon,
+  iconSize: [32, 32], // Adjust the size as needed
+});
 
 const Map = ({ latitude, longitude }: { latitude: any; longitude: any }) => {
   const mapStyle = {
@@ -26,7 +31,7 @@ const Map = ({ latitude, longitude }: { latitude: any; longitude: any }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={[latitude, longitude]}>
+        <Marker position={[latitude, longitude]} icon={customIcon}>
           <Popup>
             आर्यवन, रोजड़, पत्रा.: सागपुर, तालुका : तलोद,
             <br />
