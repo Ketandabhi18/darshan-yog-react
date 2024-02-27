@@ -7,7 +7,7 @@ export default function ProgramSchedule() {
         justifyContent: "center",
         display: "block",
         width: "55%",
-        margin: "auto",
+        margin: "0px auto",
       }}
     >
       <ProgramScheduleCard items={ProgramScheduleDataArray} itemsPerPage={10} />

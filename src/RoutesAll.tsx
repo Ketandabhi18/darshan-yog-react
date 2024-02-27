@@ -9,7 +9,7 @@ import ContactUs from "./pages/ContactUs";
 const RoutesAll = () => {
   return (
     <>
-      <div style={{ backgroundColor: "rgb(247, 247, 247)" }}>
+      <div style={{}}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/log-in" element={<Login />} />
