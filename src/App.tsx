@@ -4,11 +4,13 @@ import RoutesAll from "./RoutesAll";
 import FooterComponent from "./Components/FooterComponent";
 import HeaderComponent from "./Components/HeaderComponent";
 import NavbarComponent from "./Components/NavbarComponent";
+import NewHeader from "./Components/NewHeader";
 
 function App() {
   return (
     <>
-      <HeaderComponent />
+      {/* <HeaderComponent /> */}
+      <NewHeader />
       <Routes>
         <Route path="/*" element={<RoutesAll />} />
       </Routes>

@@ -1,11 +1,11 @@
 export const pages: any = [
   {
-    name: "home",
+    name: "HOME",
     route: "/",
   },
 
   {
-    name: "Knowledge",
+    name: "KNOWLEDGE",
     route: "/knowledge",
     options: [
       { pageName: "Knowledge", route: "/knowledge" },
@@ -15,13 +15,13 @@ export const pages: any = [
       { pageName: "The Light of truth", route: "light-of-truth" },
     ],
   },
-  { name: "Program Schedule", route: "/program-schedule" },
+  { name: "PROGRAM SCHEDULE", route: "/program-schedule" },
   {
-    name: "Contact Us",
+    name: "CONTACT US",
     route: "/contact-us",
   },
   {
-    name: "About Us",
+    name: "ABOUT US",
     route: "/about-us",
     options: [
       {
@@ -30,7 +30,7 @@ export const pages: any = [
       },
       {
         pageName: "Aims & Ideals",
-        route: "aims-ideals",
+        route: "/aims-ideals",
         content: `<div >
         <h4>About Us</h4>
         
@@ -60,27 +60,33 @@ export const pages: any = [
       { pageName: "Vision", route: "vision" },
     ],
   },
+  {
+    name: "LOG IN",
+    route: "/log-in",
+  },
 ];
 
-export const ProgramScheduleDataArray:any =[ {
-  avatarLabel: "A",
-  title: "सरल क्रियात्मक योग प्रशिक्षण शिविर",
-  subheader: "05/09/2023 to 10/09/2023",
-  imageSrc:
-    "https://darshanyog.org/assets/img/upload/program_schedule/OU2dnTEGrd.jpg",
-  content:
-    "पूज्य स्वामी विवेकानन्द जी परिव्राजक, आचार्य आत्मन जी, आचार्य प्रियेश जी के सानिध्य में वैदिक शिद्धान्त के परिचय के साथ साथ धारणा, ध्यान, समाधि के क्रियात्मक अभ्यास कराया जाएगा।",
-  expandContent:
-    "	गांधीनगर, गुजरात  श्री चन्द्रप्रभ लब्धिधाम तीर्थ, हिम्मतनगर-उदयपुर हाइवे नं-8, चिलोडा चौकड़ी से 5 कि.मी. अंजलि होटल के सामने, गाँव- धणप, गांधीनगर, गुजरात",
-},
-{
-  avatarLabel: "B",
-  title: "क्रियात्मक योग प्रशिक्षण शिविर",
-  subheader: "05/09/2023 to 10/09/2023",
-  imageSrc:
-    "https://darshanyog.org/assets/img/upload/program_schedule/rMosf3iHBl.jpeg",
-  content:
-    "(योगविद्या-ध्यानाभ्यास से सुखद जीवन जीने का कौशल सीखने का पंचदिवसीय आवासीय सुंदर अवसर ) दिनांक : 05/09/2023 से 10/09/2023 श्री चन्द्रप्रभ लब्धिधाम तीर्थ, हिम्मतनगर-उदयपुर हाइवे नं-8, चिलोडा चौकड़ी से 5 कि.मी. अंजलि होटल के सामने, गाँव- धणप, गांधीनगर, गुजरात Location : - https://goo.gl/maps/fz3ypiWy3zYQb8AD6, व्यवस्था शुल्क :- 3000/- (AC आवास कमरे हेतु), 2500/- (Non AC आवास कमरे हेतु) अधिक जानकारी के लिए आचार्य प्रियेश जी (9306374959) से संपर्क करें ।",
-  expandContent:
-    "गांधीनगर, गुजरात      श्री चन्द्रप्रभ लब्धिधाम तीर्थ, हिम्मतनगर-उदयपुर हाइवे नं-8, चिलोडा चौकड़ी से 5 कि.मी. अंजलि होटल के सामने, गाँव- धणप, गांधीनगर, गुजरात",
-},]
+export const ProgramScheduleDataArray: any = [
+  {
+    avatarLabel: "A",
+    title: "सरल क्रियात्मक योग प्रशिक्षण शिविर",
+    subheader: "05/09/2023 to 10/09/2023",
+    imageSrc:
+      "https://darshanyog.org/assets/img/upload/program_schedule/OU2dnTEGrd.jpg",
+    content:
+      "पूज्य स्वामी विवेकानन्द जी परिव्राजक, आचार्य आत्मन जी, आचार्य प्रियेश जी के सानिध्य में वैदिक शिद्धान्त के परिचय के साथ साथ धारणा, ध्यान, समाधि के क्रियात्मक अभ्यास कराया जाएगा।",
+    expandContent:
+      "	गांधीनगर, गुजरात  श्री चन्द्रप्रभ लब्धिधाम तीर्थ, हिम्मतनगर-उदयपुर हाइवे नं-8, चिलोडा चौकड़ी से 5 कि.मी. अंजलि होटल के सामने, गाँव- धणप, गांधीनगर, गुजरात",
+  },
+  {
+    avatarLabel: "B",
+    title: "क्रियात्मक योग प्रशिक्षण शिविर",
+    subheader: "05/09/2023 to 10/09/2023",
+    imageSrc:
+      "https://darshanyog.org/assets/img/upload/program_schedule/rMosf3iHBl.jpeg",
+    content:
+      "(योगविद्या-ध्यानाभ्यास से सुखद जीवन जीने का कौशल सीखने का पंचदिवसीय आवासीय सुंदर अवसर ) दिनांक : 05/09/2023 से 10/09/2023 श्री चन्द्रप्रभ लब्धिधाम तीर्थ, हिम्मतनगर-उदयपुर हाइवे नं-8, चिलोडा चौकड़ी से 5 कि.मी. अंजलि होटल के सामने, गाँव- धणप, गांधीनगर, गुजरात Location : - https://goo.gl/maps/fz3ypiWy3zYQb8AD6, व्यवस्था शुल्क :- 3000/- (AC आवास कमरे हेतु), 2500/- (Non AC आवास कमरे हेतु) अधिक जानकारी के लिए आचार्य प्रियेश जी (9306374959) से संपर्क करें ।",
+    expandContent:
+      "गांधीनगर, गुजरात      श्री चन्द्रप्रभ लब्धिधाम तीर्थ, हिम्मतनगर-उदयपुर हाइवे नं-8, चिलोडा चौकड़ी से 5 कि.मी. अंजलि होटल के सामने, गाँव- धणप, गांधीनगर, गुजरात",
+  },
+];
