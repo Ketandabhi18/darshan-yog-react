@@ -36,41 +36,46 @@ const Login: FunctionComponent = () => {
       //   Authorization: `Basic ${basicAuth}`,
       // });
 
-      const loginRes = { data: {}, status: 200 };
+      // const loginRes = { data: {}, status: 200 };
 
-      if (loginRes.data) {
-        setLoader(false);
-        navigate("/");
-      }
-      console.log(loginRes, "----login res");
+      // if (loginRes.data) {
+      //   setLoader(false);
+      //   navigate("/");
+      // }
+      // console.log(loginRes, "----login res");
+
+      const config = {
+        headers: {
+          Authorization: `Basic ${basicAuth}`,
+        },
+      };
+
+      console.log("config :: ", config);
+
+      axios
+        .get(
+          "http://digitalaryasamaj.ap-south-1.elasticbeanstalk.com/user",
+          config
+        )
+        .then((response) => {
+          // Handle the successful response
+          console.log("Response:", response.data);
+          setLoader(false);
+        })
+        .catch((error) => {
+          // Handle the error
+          console.error("Error:", error);
+        });
     } catch (error) {
       console.log(error);
     }
   };
-  // function Copyright(props: any) {
-  //   return (
-  //     <Typography
-  //       variant="body2"
-  //       color="text.secondary"
-  //       align="center"
-  //       {...props}
-  //     >
-  //       {"Copyright © "}
-  //       <Link color="inherit" href="https://mui.com/">
-  //         Your Website
-  //       </Link>{" "}
-  //       {new Date().getFullYear()}
-  //       {"."}
-  //     </Typography>
-  //   );
-  // }
 
-  // TODO remove, this demo shouldn't need to reset the theme.
   const defaultTheme = createTheme();
 
   return (
     <>
-      {loader && <Loader />}
+      {/* {loader && <Loader />} */}
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
