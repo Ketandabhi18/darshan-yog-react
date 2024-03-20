@@ -154,8 +154,7 @@ const Login: FunctionComponent = () => {
                     required
                     fullWidth
                     name="password"
-                    label="Password"
-                    type="password"
+                    label="OTP"
                     id="password"
                     autoComplete="current-password"
                   />
