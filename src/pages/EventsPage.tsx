@@ -28,6 +28,34 @@ import { useNavigate } from "react-router-dom";
 const EventsPage = () => {
   const navigate = useNavigate();
   const [data, setData] = useState<any>([]);
+  const userDetailString = localStorage.getItem("userDetail");
+  const parsedUser =
+    userDetailString && userDetailString !== "null"
+      ? JSON.parse(userDetailString)
+      : null;
+
+  const userFromLocalStorage: any = parsedUser || {
+    mobileNumber: "",
+    countrycode: "+91",
+    email: "",
+    firstName: "",
+    middleName: null,
+    lastName: null,
+    gender: "",
+    dateOfBirth: "",
+    edQualification: "",
+    profession: "",
+    guardianName: null,
+    maritalStatus: "",
+    bloodGroup: "",
+    addrLine1: "",
+    addrLine2: "",
+    city: "",
+    district: "",
+    state: "",
+    country: "",
+    pincode: "",
+  };
 
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState<any>({
@@ -37,9 +65,8 @@ const EventsPage = () => {
     groupDetails: [{ name: "", relation: "", gender: "", age: "" }],
     pickupPlace: "",
     notes: "",
-    ...JSON.parse(localStorage.getItem("userDetail") || ""),
+    ...userFromLocalStorage,
   });
-
   const authToken = localStorage.getItem("authToken");
   const handleOpen = (eventCode: any) => {
     setFormData({ ...formData, eventCode });
