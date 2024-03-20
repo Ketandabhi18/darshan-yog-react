@@ -25,45 +25,55 @@ const Login: FunctionComponent = () => {
     setLoader(true);
     try {
       const data = new FormData(event.currentTarget);
-      const username = data.get("email");
+      const username: any = data.get("email");
       const password = data.get("password");
 
-      // Base64 encode the username and password for basic authentication
-      const basicAuth = btoa(`${username}:${password}`);
-      console.log(basicAuth, "---basicAuth");
-
-      // const loginRes = await AuthService.postLoginDetail({
-      //   Authorization: `Basic ${basicAuth}`,
-      // });
-
-      // const loginRes = { data: {}, status: 200 };
-
-      // if (loginRes.data) {
-      //   setLoader(false);
-      //   navigate("/");
-      // }
-      // console.log(loginRes, "----login res");
-
-      const config = {
-        headers: {
-          Authorization: `Basic ${basicAuth}`,
-        },
-      };
-
-      console.log("config :: ", config);
-
       axios
-        .get(
-          "http://digitalaryasamaj.ap-south-1.elasticbeanstalk.com/user",
-          config
-        )
+        .post("https://darshan-yog-node-apis.onrender.com/login", {
+          username,
+          password,
+          type: 0,
+        })
         .then((response) => {
           // Handle the successful response
-          console.log("Response:", response.data);
-          setLoader(false);
+          console.log("Response:", response);
+          if (response.data.status === 200) {
+            const { token, ...userDetails } = response.data.data;
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("useDetail");
+            setLoader(false);
+            localStorage.setItem("authToken", response.data.data.token);
+            localStorage.setItem(
+              "userDetail",
+              JSON.stringify({
+                mobileNumber: "+919998982350",
+                countrycode: "+91",
+                email: "fs1ad@gmail.com",
+                role: "ROLE_USER",
+                firstName: "Raj",
+                middleName: null,
+                lastName: null,
+                whatsappNumber: "",
+                gender: "Male",
+                dateOfBirth: "07-05-1994",
+                edQualification: "B.E",
+                profession: "Software engineer",
+                guardianName: null,
+                maritalStatus: "Unmarried",
+                bloodGroup: "B+",
+                addrLine1: "Ahmedabad",
+                addrLine2: "science city",
+                city: "Ahmedabad",
+                district: "Ahmedabad",
+                state: "Gujarat",
+                country: "india",
+                pincode: "380052",
+              })
+            );
+            navigate("/");
+          }
         })
         .catch((error) => {
-          // Handle the error
           console.error("Error:", error);
         });
     } catch (error) {

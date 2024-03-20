@@ -10,6 +10,8 @@ import Button from "@mui/material/Button";
 import logo from "./assets/Dharshanyog Dham Logo.jpg";
 
 const NewHeader = () => {
+  const [navOptions, setNavOptions] = useState<any>(pages);
+
   const iRef = useRef(0);
   const txt =
     "|| कर्मण्येवाधिकारस्ते मा फलेषु कदाचन । मा कर्मफलहेतुर्भुर्मा ते संगोऽस्त्वकर्मणि ||";
@@ -40,7 +42,7 @@ const NewHeader = () => {
   const [anchorEl, setAnchorEl] = React.useState<any>({});
 
   const handleClick = (event: any, pageName: any, route: any) => {
-    const page: any = pages.find((p: any) => p.name === pageName);
+    const page: any = navOptions.find((p: any) => p.name === pageName);
     if (!Object.keys(page).includes("options")) {
       navigate(route);
     }
@@ -57,6 +59,11 @@ const NewHeader = () => {
     });
   };
   useEffect(() => {
+    const isloggedIn = localStorage.getItem("authToken");
+    console.log("isloggedIn :: ", isloggedIn);
+    if (isloggedIn) {
+      setNavOptions([...pages.filter((item: any) => item.name !== "LOG IN")]);
+    }
     const typeWriter = () => {
       const demoElement = document.getElementById("demo");
 
@@ -75,7 +82,7 @@ const NewHeader = () => {
         <nav>
           <img src={logo} className="logo" alt="Darshanyog Dham Logo" />
 
-          {pages.map((page: any) => (
+          {navOptions.map((page: any) => (
             <div key={page.name} style={{ position: "relative" }}>
               <Button
                 onClick={(event: any) =>

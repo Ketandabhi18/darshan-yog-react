@@ -5,6 +5,8 @@ import AboutUs from "./pages/AboutUs";
 import ProgramSchedule from "./pages/ProgramSchedule";
 import ViewDetails from "./pages/ViewDetails";
 import ContactUs from "./pages/ContactUs";
+import UpdateUser from "./pages/UpdateUser";
+import EventsPage from "./pages/EventsPage";
 
 const RoutesAll = () => {
   return (
@@ -13,6 +15,8 @@ const RoutesAll = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/log-in" element={<Login />} />
+          <Route path="/update-user" element={<UpdateUser />} />
+          <Route path="/events" element={<EventsPage/>}/>
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/program-schedule" element={<ProgramSchedule />} />

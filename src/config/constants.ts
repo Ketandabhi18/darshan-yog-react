@@ -61,6 +61,10 @@ export const pages: any = [
     ],
   },
   {
+    name: "EVENTS",
+    route: "/events",
+  },
+  {
     name: "LOG IN",
     route: "/log-in",
   },
