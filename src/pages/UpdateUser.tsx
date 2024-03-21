@@ -11,7 +11,9 @@ import {
 } from "@mui/material";
 
 const UpdateUser = () => {
-  const [formData, setFormData] = useState<any>({});
+  const user: any = localStorage.getItem("userDetail");
+  const userDetail: any = JSON.parse(user);
+  const [formData, setFormData] = useState<any>(userDetail);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
