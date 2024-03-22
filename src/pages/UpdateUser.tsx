@@ -26,7 +26,7 @@ const UpdateUser = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      console.log(formData);
+      console.log("formData :: ", formData);
     } catch (error) {
       console.error(error);
     }

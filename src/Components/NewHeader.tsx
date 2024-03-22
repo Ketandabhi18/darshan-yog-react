@@ -15,13 +15,14 @@ import { Logout, PersonAdd, Settings } from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 
+const isloggedIn = localStorage.getItem("authToken");
+const user: any = localStorage.getItem("userDetail");
+const userDetail: any = JSON.parse(user);
 const NewHeader = () => {
   const [navOptions, setNavOptions] = useState<any>(pages);
   const [anchorEl, setAnchorEl] = React.useState<any>({});
   const [profileDropMenu, setProfileDropMenu] = useState<any>(null);
   const open = Boolean(profileDropMenu);
-  const user: any = localStorage.getItem("userDetail");
-  const userDetail: any = JSON.parse(user);
   const navigate = useNavigate();
   const iRef = useRef(0);
   const txt =
@@ -54,7 +55,6 @@ const NewHeader = () => {
   };
 
   useEffect(() => {
-    const isloggedIn = localStorage.getItem("authToken");
     if (isloggedIn) {
       setNavOptions([...pages.filter((item: any) => item.name !== "LOG IN")]);
     }

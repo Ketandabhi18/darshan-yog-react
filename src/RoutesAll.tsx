@@ -7,6 +7,7 @@ import ViewDetails from "./pages/ViewDetails";
 import ContactUs from "./pages/ContactUs";
 import UpdateUser from "./pages/UpdateUser";
 import EventsPage from "./pages/EventsPage";
+import EventDetailPage from "./pages/EventDetail";
 
 const RoutesAll = () => {
   return (
@@ -16,11 +17,15 @@ const RoutesAll = () => {
           <Route path="/" element={<Home />} />
           <Route path="/log-in" element={<Login />} />
           <Route path="/update-user" element={<UpdateUser />} />
-          <Route path="/events" element={<EventsPage/>}/>
+          <Route path="/events" element={<EventsPage />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/program-schedule" element={<ProgramSchedule />} />
           <Route path="/:id" element={<ViewDetails />} />
+          <Route
+            path="/event-detail"
+            element={<EventDetailPage event={{}} />}
+          />
         </Routes>
       </div>
     </>
