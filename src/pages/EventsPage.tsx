@@ -26,7 +26,11 @@ import axios from "axios";
 import { CloseOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
-import { EducationalQualification, Profession } from "../config/constants";
+import {
+  EducationalQualification,
+  Profession,
+  states,
+} from "../config/constants";
 
 const EventsPage = () => {
   const navigate = useNavigate();
@@ -138,9 +142,7 @@ const EventsPage = () => {
     try {
       e.preventDefault(); // Prevent default form submission
       const newErrors: any = {};
-      if (!formData.mobileNumber) {
-        newErrors.mobileNumber = "Mobile Number is required";
-      }
+     
       if (!formData.firstName) {
         newErrors.firstName = "First Name is required";
       }
@@ -202,7 +204,6 @@ const EventsPage = () => {
       //   notes,
       // } = formData;
 
-
       // const res = await axios.post(
       //   "http://localhost:7001/events/register",
       //   {
@@ -230,7 +231,7 @@ const EventsPage = () => {
     try {
       axios
         // .get("http://localhost:7001/events/active", {
-          .get("https://darshan-yog-node-apis.onrender.com/events/active", {
+        .get("https://darshan-yog-node-apis.onrender.com/events/active", {
           headers: { Authorization: authToken },
         })
         .then((res) => {
@@ -357,7 +358,7 @@ const EventsPage = () => {
                         "authToken :: events :: register :: button",
                         authToken
                       );
-                      if (authToken == null || undefined) {
+                      if (!authToken) {
                         navigate("/log-in");
                       } else {
                         handleOpen(event.eventCode);
@@ -492,8 +493,11 @@ const EventsPage = () => {
                           value={formData.state}
                           onChange={handleChange}
                         >
-                          <MenuItem value="Gujarat">Gujarat</MenuItem>
-                          <MenuItem value="Maharashtra">Maharashtra</MenuItem>
+                          {states.map((state: any, index: any) => (
+                            <MenuItem key={index} value={state}>
+                              {state}
+                            </MenuItem>
+                          ))}
                         </Select>
                       </FormControl>
                       {errors.state && (

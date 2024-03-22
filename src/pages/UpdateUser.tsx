@@ -8,12 +8,21 @@ import {
   MenuItem,
   Select,
   Typography,
+  FormHelperText,
 } from "@mui/material";
+import {
+  EducationalQualification,
+  Profession,
+  states,
+} from "../config/constants";
+import axios from "axios";
 
 const UpdateUser = () => {
+  const [errors, setErrors] = useState<any>({});
+  const authToken = localStorage.getItem("authToken");
   const user: any = localStorage.getItem("userDetail");
   const userDetail: any = JSON.parse(user);
-  const [formData, setFormData] = useState<any>(userDetail);
+  const [formData, setFormData] = useState<any>(userDetail) || "";
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -21,12 +30,53 @@ const UpdateUser = () => {
       ...prevState,
       [name]: value,
     }));
+
+    if (value.trim() !== "") {
+      setErrors({ ...errors, [name]: "" });
+    }
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    const newErrors: any = {};
+    if (!formData.mobileNumber) {
+      newErrors.mobileNumber = "Mobile Number is required";
+    }
+    if (!formData.firstName) {
+      newErrors.firstName = "First Name is required";
+    }
+    if (!formData.addrLine1) {
+      newErrors.addrLine1 = "Address Line 1 is required";
+    }
+    if (!formData.district) {
+      newErrors.district = "District is required";
+    }
+    if (!formData.state) {
+      newErrors.state = "State is required";
+    }
+    if (!formData.country) {
+      newErrors.country = "Country is required";
+    }
+
+    // If there are errors, set them and prevent form submission
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
     try {
-      console.log("formData :: ", formData);
+      console.log(newErrors, "formData :: ", formData);
+      const { data } = await axios.post(
+        "https://darshan-yog-node-apis.onrender.com/update-user",
+        // "http://localhost:7001/update-user",
+        formData,
+        {
+          headers: { Authorization: authToken },
+        }
+      );
+      if (data.status === 200) {
+        localStorage.removeItem("userDetail");
+        localStorage.setItem("userDetail", JSON.stringify(data.data));
+      }
     } catch (error) {
       console.error(error);
     }
@@ -125,8 +175,13 @@ const UpdateUser = () => {
                     onChange={handleChange}
                     name="edQualification"
                   >
-                    <MenuItem value="Graduate">Graduate</MenuItem>
-                    <MenuItem value="Post Graduate">Post Graduate</MenuItem>
+                    {EducationalQualification.map(
+                      (qualification: any, index: any) => (
+                        <MenuItem key={index} value={qualification}>
+                          {qualification}
+                        </MenuItem>
+                      )
+                    )}
                   </Select>
                 </FormControl>
               </Grid>
@@ -138,10 +193,11 @@ const UpdateUser = () => {
                     onChange={handleChange}
                     name="profession"
                   >
-                    <MenuItem value="Software Engineer">
-                      Software Engineer
-                    </MenuItem>
-                    <MenuItem value="Farmer">Farmer</MenuItem>
+                    {Profession.map((profession: any, index: any) => (
+                      <MenuItem key={index} value={profession}>
+                        {profession}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Grid>
@@ -216,6 +272,9 @@ const UpdateUser = () => {
                     <MenuItem value="Ahmedabad">Ahmedabad</MenuItem>
                   </Select>
                 </FormControl>
+                {errors.district && (
+                  <FormHelperText error>{errors.district}</FormHelperText>
+                )}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
@@ -226,10 +285,16 @@ const UpdateUser = () => {
                     value={formData.state}
                     onChange={handleChange}
                   >
-                    <MenuItem value="Gujarat">Gujarat</MenuItem>
-                    <MenuItem value="Maharashtra">Maharashtra</MenuItem>
+                    {states.map((state: any, index: any) => (
+                      <MenuItem key={index} value={state}>
+                        {state}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
+                {errors.state && (
+                  <FormHelperText error>{errors.state}</FormHelperText>
+                )}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
@@ -258,6 +323,7 @@ const UpdateUser = () => {
             </Grid>
             <Button
               type="submit"
+              onClick={handleSubmit}
               variant="contained"
               color="primary"
               style={{ marginTop: "2%", marginBottom: "2%" }}
