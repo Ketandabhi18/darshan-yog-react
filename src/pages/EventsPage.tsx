@@ -142,7 +142,7 @@ const EventsPage = () => {
     try {
       e.preventDefault(); // Prevent default form submission
       const newErrors: any = {};
-     
+
       if (!formData.firstName) {
         newErrors.firstName = "First Name is required";
       }
@@ -292,7 +292,10 @@ const EventsPage = () => {
                   variant="h5"
                   component="div"
                   style={{ color: "#333", marginBottom: "10px" }}
-                  onClick={() => navigate(`/events`)}
+                  onClick={() => {
+                    console.log("event name :: ", event.eventName);
+                    navigate(`/event-detail`, { state: event });
+                  }}
                 >
                   {event.eventName}
                 </Typography>

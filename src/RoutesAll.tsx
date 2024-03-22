@@ -22,10 +22,7 @@ const RoutesAll = () => {
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/program-schedule" element={<ProgramSchedule />} />
           <Route path="/:id" element={<ViewDetails />} />
-          <Route
-            path="/event-detail"
-            element={<EventDetailPage event={{}} />}
-          />
+          <Route path="/event-detail" element={<EventDetailPage />} />
         </Routes>
       </div>
     </>
