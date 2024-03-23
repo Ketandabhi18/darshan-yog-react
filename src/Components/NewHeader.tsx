@@ -190,11 +190,16 @@ const NewHeader = () => {
                   <Avatar /> Profile
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleCloseProfile}>
+                <MenuItem
+                  onClick={() => {
+                    handleCloseProfile();
+                    navigate("/update-password");
+                  }}
+                >
                   <ListItemIcon>
                     <Settings fontSize="small" />
                   </ListItemIcon>
-                  Settings
+                  set/change password
                 </MenuItem>
                 <MenuItem
                   onClick={() => {

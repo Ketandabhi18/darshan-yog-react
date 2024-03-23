@@ -10,11 +10,15 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import { Snackbar } from "@mui/material";
 
 const Login: FunctionComponent = () => {
   const [step, setStep] = useState<any>(false);
   const [mobile, setMobile] = useState<any>();
   const [otp, setOtp] = useState<any>("");
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [loader, setLoader] = useState<boolean>(false);
   const navigate = useNavigate();
   const handleVerfiyOtp = async (event: any) => {
@@ -46,6 +50,8 @@ const Login: FunctionComponent = () => {
               })
             );
             navigate("/");
+            setAlertMessage("Otp Verified Successfully");
+            setOpenAlert(true);
           }
         })
         .catch((error) => {
@@ -66,6 +72,8 @@ const Login: FunctionComponent = () => {
           username: mobile,
         }
       );
+      setAlertMessage("Otp Sent Successfully");
+      setOpenAlert(true);
       console.log("data :: get otp :: response", data);
     } catch (error) {
       console.log("error :: ", error);
@@ -76,6 +84,20 @@ const Login: FunctionComponent = () => {
   return (
     <>
       {/* {loader && <Loader />} */}
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={6000}
+        onClose={() => setOpenAlert(false)}
+      >
+        <Alert
+          onClose={() => setOpenAlert(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />

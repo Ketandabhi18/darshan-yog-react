@@ -107,10 +107,10 @@ const EventsPage = () => {
     //   console.log("formattedValue :: ", formattedValue);
     // }
 
-    if (name === "arrivalDate" || name === "departureDate") {
-      formattedValue =
-        value.replace("T", " ").replace(/-/g, "-").slice(0, -3) + " IST";
-    }
+    // if (name === "arrivalDate" || name === "departureDate") {
+    //   formattedValue =
+    //     value.replace("T", " ").replace(/-/g, "-").slice(0, -3) + " IST";
+    // }
     setFormData({ ...formData, [name]: formattedValue });
 
     if (value.trim() !== "") {
@@ -277,7 +277,7 @@ const EventsPage = () => {
           variant="filled"
           sx={{ width: "100%" }}
         >
-          Resgistration Successfully Done.
+          Registration Successfully Done.
         </Alert>
       </Snackbar>
       <Container
