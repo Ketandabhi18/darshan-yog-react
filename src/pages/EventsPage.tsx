@@ -21,11 +21,12 @@ import {
   IconButton,
   Grid,
   FormHelperText,
+  Snackbar,
 } from "@mui/material";
 import axios from "axios";
 import { CloseOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-
+import Alert from "@mui/material/Alert";
 import {
   EducationalQualification,
   Profession,
@@ -65,6 +66,7 @@ const EventsPage = () => {
   };
 
   const [open, setOpen] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
   const [formData, setFormData] = useState<any>({
     eventCode: "",
     arrivalDate: "",
@@ -86,13 +88,24 @@ const EventsPage = () => {
   };
 
   const handleChange = (e: any) => {
+    console.log("formdata :: ", formData);
     const { name, value } = e.target;
     let formattedValue = value;
     console.log("name :: ", name, "value :: ", value);
 
-    if (name === "dateOfBirth") {
-      formattedValue = value.split("-").reverse().join("-");
-    }
+    // if (name === "dateOfBirth") {
+    //   const parsedDate = new Date(value);
+    //   if (!isNaN(parsedDate.getTime())) {
+    //     const day = String(parsedDate.getDate()).padStart(2, "0");
+    //     const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+    //     const year = parsedDate.getFullYear();
+    //     formattedValue = `${year}-${month}-${day}`; // Keep it in "yyyy-MM-dd" format
+    //   } else {
+    //     // Handle invalid input
+    //     formattedValue = "";
+    //   }
+    //   console.log("formattedValue :: ", formattedValue);
+    // }
 
     if (name === "arrivalDate" || name === "departureDate") {
       formattedValue =
@@ -222,6 +235,8 @@ const EventsPage = () => {
       //   }
       // );
       // console.log("Register event :: res ::", res);
+      setOpenAlert(true);
+      setOpen(false);
     } catch (error) {
       console.log("error :: ", error);
     }
@@ -245,12 +260,26 @@ const EventsPage = () => {
       console.log("error :: ", error);
     }
   };
+
   useEffect(() => {
     fetchEvents();
   }, []);
   return (
     <>
-      {" "}
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={6000}
+        onClose={() => setOpenAlert(false)}
+      >
+        <Alert
+          onClose={() => setOpenAlert(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Resgistration Successfully Done.
+        </Alert>
+      </Snackbar>
       <Container
         maxWidth="md"
         style={{
