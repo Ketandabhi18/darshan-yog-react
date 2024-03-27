@@ -11,21 +11,24 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
-import { Snackbar } from "@mui/material";
+import { Grid, Snackbar } from "@mui/material";
 
 const Login: FunctionComponent = () => {
   const [step, setStep] = useState<any>(false);
   const [mobile, setMobile] = useState<any>();
+  const [countrycode, setCountryCode] = useState<any>("+91");
   const [otp, setOtp] = useState<any>("");
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<any>("success");
   const [loader, setLoader] = useState<boolean>(false);
+  const [loginwithPassword, setLoginWithPassword] = useState(false);
   const navigate = useNavigate();
   const handleVerfiyOtp = async (event: any) => {
     event.preventDefault();
     setLoader(true);
     try {
-      const username: any = mobile;
+      const username: any = `${countrycode}${mobile}`;
       const password = otp;
       axios
         // .post("http://localhost:7001/login", {
@@ -50,8 +53,18 @@ const Login: FunctionComponent = () => {
               })
             );
             navigate("/");
-            setAlertMessage("Otp Verified Successfully");
+            loginwithPassword
+              ? setAlertMessage("Login Successfully")
+              : setAlertMessage("Otp Verified Successfully");
+            setAlertType("success");
             setOpenAlert(true);
+          } else {
+            loginwithPassword
+              ? setAlertMessage("Invalid Credentials !!")
+              : setAlertMessage("Invalid Otp !!");
+            setAlertType("error");
+            setOpenAlert(true);
+            console.log("login failed :: due to invalid creds");
           }
         })
         .catch((error) => {
@@ -63,21 +76,39 @@ const Login: FunctionComponent = () => {
   };
   const handleGetOtp = async () => {
     try {
-      console.log("mobile :: in get otp ", mobile);
-      setStep(true);
-      const { data } = await axios.post(
-        // "http://localhost:7001/get-otp",
-        "https://darshan-yog-node-apis.onrender.com/get-otp",
-        {
-          username: mobile,
-        }
-      );
-      setAlertMessage("Otp Sent Successfully");
-      setOpenAlert(true);
-      console.log("data :: get otp :: response", data);
+      const mobileNumber = `${countrycode}${mobile}`;
+      console.log("mobile :: in get otp ", mobileNumber);
+      axios
+        .post(
+          // "http://localhost:7001/get-otp",
+          "https://darshan-yog-node-apis.onrender.com/get-otp",
+          {
+            username: mobileNumber,
+          }
+        )
+        .then((res) => {
+          console.log("data :: get otp :: ", res);
+          if (res.data.status === 200) {
+            setAlertMessage(res.data.message);
+            setAlertType("success");
+            setOpenAlert(true);
+            setStep(true);
+          } else {
+            setAlertMessage(res.data.message);
+            setAlertType("error");
+            setOpenAlert(true);
+            if (res.data.message === "Try resend otp only after 5 mins") {
+              setStep(true);
+            }
+          }
+        });
     } catch (error) {
       console.log("error :: ", error);
     }
+  };
+
+  const handleClick = () => {
+    setLoginWithPassword(!loginwithPassword);
   };
   const defaultTheme = createTheme();
 
@@ -91,7 +122,7 @@ const Login: FunctionComponent = () => {
       >
         <Alert
           onClose={() => setOpenAlert(false)}
-          severity="success"
+          severity={alertType}
           variant="filled"
           sx={{ width: "100%" }}
         >
@@ -103,10 +134,11 @@ const Login: FunctionComponent = () => {
           <CssBaseline />
           <Box
             sx={{
-              marginTop: 8,
+              marginTop: 5,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              marginBottom: 5,
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
@@ -116,52 +148,32 @@ const Login: FunctionComponent = () => {
               Log in
             </Typography>
             {step === false && (
-              <Box sx={{ mt: 1 }}>
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Mobile Number"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  onChange={(e) => setMobile(e.target.value)}
-                />
-
-                {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  onClick={handleGetOtp}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <div
+                  style={{
+                    marginTop: "5%",
+                    display: "flex",
+                    alignItems: "baseline",
+                    // marginBottom: "1rem",
+                  }}
                 >
-                  Get Otp
-                </Button>
-                {/* <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid> */}
-              </Box>
-            )}
-            {step && (
-              <>
-                <Box sx={{ mt: 1 }}>
+                  <TextField
+                    variant="outlined"
+                    label="Country Code"
+                    value={countrycode}
+                    onChange={(e) => setCountryCode(e.target.value)}
+                    required
+                    style={{ marginRight: "1rem" }}
+                  />
                   <TextField
                     margin="normal"
-                    disabled
+                    required
+                    variant="outlined"
                     fullWidth
                     id="email"
                     label="Mobile Number"
@@ -169,7 +181,84 @@ const Login: FunctionComponent = () => {
                     autoComplete="email"
                     autoFocus
                     value={mobile}
+                    onChange={(e) => setMobile(e.target.value)}
                   />
+                </div>
+                {loginwithPassword && (
+                  <TextField
+                    margin="normal"
+                    onChange={(e) => setOtp(e.target.value)}
+                    required
+                    fullWidth
+                    name="password"
+                    label={loginwithPassword ? "Password" : "OTP"}
+                    id="password"
+                    autoComplete="current-password"
+                  />
+                )}
+
+                <Button
+                  type="submit"
+                  variant="contained"
+                  style={{ width: "100%" }}
+                  onClick={loginwithPassword ? handleVerfiyOtp : handleGetOtp}
+                >
+                  {loginwithPassword ? "Login" : "Get OTP"}
+                </Button>
+
+                <Grid item xs sx={{ marginTop: "2%" }}>
+                  <Typography
+                    variant="body2"
+                    className="forgot-password-typography"
+                    color="primary"
+                    onClick={handleClick}
+                  >
+                    {loginwithPassword
+                      ? "Login with OTP"
+                      : "Login with Password"}
+                  </Typography>
+                </Grid>
+              </div>
+            )}
+            {step && (
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <div
+                    style={{
+                      marginTop: "5%",
+                      display: "flex",
+                      alignItems: "baseline",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <TextField
+                      variant="outlined"
+                      label="Country Code"
+                      value={countrycode}
+                      disabled
+                      onChange={(e) => setCountryCode(e.target.value)}
+                      required
+                      style={{ marginRight: "1rem" }}
+                    />
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="mobile"
+                      label="Mobile Number"
+                      name="mobile"
+                      autoComplete="mobile"
+                      autoFocus
+                      value={mobile}
+                      disabled
+                      onChange={(e) => setMobile(e.target.value)}
+                    />
+                  </div>
                   <TextField
                     margin="normal"
                     onChange={(e) => setOtp(e.target.value)}
@@ -190,7 +279,7 @@ const Login: FunctionComponent = () => {
                   >
                     Verify Otp
                   </Button>
-                </Box>
+                </div>
               </>
             )}
           </Box>

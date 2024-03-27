@@ -9,20 +9,26 @@ import {
   Select,
   Typography,
   FormHelperText,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import {
   EducationalQualification,
   Profession,
   states,
+  statesWithDistricts,
 } from "../config/constants";
 import axios from "axios";
 
 const UpdateUser = () => {
   const [errors, setErrors] = useState<any>({});
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<any>("");
+  const [alertType, setAlertType] = useState<any>("success");
   const authToken = localStorage.getItem("authToken");
   const user: any = localStorage.getItem("userDetail");
   const userDetail: any = JSON.parse(user);
-  const [formData, setFormData] = useState<any>(userDetail) || "";
+  const [formData, setFormData] = useState<any>(userDetail);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -39,15 +45,11 @@ const UpdateUser = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const newErrors: any = {};
-    if (!formData.mobileNumber) {
-      newErrors.mobileNumber = "Mobile Number is required";
-    }
+
     if (!formData.firstName) {
       newErrors.firstName = "First Name is required";
     }
-    if (!formData.addrLine1) {
-      newErrors.addrLine1 = "Address Line 1 is required";
-    }
+
     if (!formData.district) {
       newErrors.district = "District is required";
     }
@@ -74,16 +76,46 @@ const UpdateUser = () => {
         }
       );
       if (data.status === 200) {
+        setAlertType("success");
+        setAlertMessage("User Updated Successfully.");
+        setOpenAlert(true);
         localStorage.removeItem("userDetail");
         localStorage.setItem("userDetail", JSON.stringify(data.data));
+      } else {
+        setAlertType("error");
+        setAlertMessage(data.message);
+        setOpenAlert(true);
       }
     } catch (error) {
       console.error(error);
     }
   };
 
+  const handleStateChange = (event: any) => {
+    const selectedState = event.target.value;
+    setFormData((prevFormData: any) => ({
+      ...prevFormData,
+      state: selectedState,
+      district: "", // Reset district when state changes
+    }));
+  };
+
   return (
     <>
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={3000}
+        onClose={() => setOpenAlert(false)}
+      >
+        <Alert
+          onClose={() => setOpenAlert(false)}
+          severity={alertType}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       <div
         style={{
           width: "100%",
@@ -109,7 +141,7 @@ const UpdateUser = () => {
                   fullWidth
                   label="Email"
                   name="email"
-                  value={formData.email}
+                  value={formData?.email}
                   onChange={handleChange}
                 />
               </Grid>
@@ -119,7 +151,7 @@ const UpdateUser = () => {
                   label="First Name"
                   name="firstName"
                   required
-                  value={formData.firstName}
+                  value={formData?.firstName}
                   onChange={handleChange}
                 />
               </Grid>
@@ -128,7 +160,7 @@ const UpdateUser = () => {
                   fullWidth
                   label="Middle Name"
                   name="middleName"
-                  value={formData.middleName}
+                  value={formData?.middleName}
                   onChange={handleChange}
                 />
               </Grid>
@@ -137,7 +169,7 @@ const UpdateUser = () => {
                   fullWidth
                   label="Last Name"
                   name="lastName"
-                  value={formData.lastName}
+                  value={formData?.lastName}
                   onChange={handleChange}
                 />
               </Grid>
@@ -145,7 +177,7 @@ const UpdateUser = () => {
                 <FormControl fullWidth>
                   <InputLabel>Gender</InputLabel>
                   <Select
-                    value={formData.gender}
+                    value={formData?.gender}
                     onChange={handleChange}
                     name="gender"
                   >
@@ -159,7 +191,7 @@ const UpdateUser = () => {
                   label="Date of Birth"
                   name="dateOfBirth"
                   type="date"
-                  value={formData.dateOfBirth}
+                  value={formData?.dateOfBirth}
                   onChange={handleChange}
                   fullWidth
                   InputLabelProps={{
@@ -171,7 +203,7 @@ const UpdateUser = () => {
                 <FormControl fullWidth>
                   <InputLabel>Educational Qualification</InputLabel>
                   <Select
-                    value={formData.edQualification}
+                    value={formData?.edQualification}
                     onChange={handleChange}
                     name="edQualification"
                   >
@@ -189,7 +221,7 @@ const UpdateUser = () => {
                 <FormControl fullWidth>
                   <InputLabel>Profession</InputLabel>
                   <Select
-                    value={formData.profession}
+                    value={formData?.profession}
                     onChange={handleChange}
                     name="profession"
                   >
@@ -206,7 +238,7 @@ const UpdateUser = () => {
                   fullWidth
                   label="Guardian Name"
                   name="guardianName"
-                  value={formData.guardianName}
+                  value={formData?.guardianName}
                   onChange={handleChange}
                 />
               </Grid>
@@ -214,7 +246,7 @@ const UpdateUser = () => {
                 <FormControl fullWidth>
                   <InputLabel>Marital Status</InputLabel>
                   <Select
-                    value={formData.maritalStatus}
+                    value={formData?.maritalStatus}
                     onChange={handleChange}
                     name="maritalStatus"
                   >
@@ -228,64 +260,38 @@ const UpdateUser = () => {
                   fullWidth
                   label="Blood Group"
                   name="bloodGroup"
-                  value={formData.bloodGroup}
+                  value={formData?.bloodGroup}
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Address 1"
-                  name="addrLine1"
-                  value={formData.addrLine1}
-                  onChange={handleChange}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Address 2"
-                  name="addrLine2"
-                  value={formData.addrLine2}
-                  onChange={handleChange}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="City / Village"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleChange}
-                  fullWidth
-                />
-              </Grid>
+
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
-                  <InputLabel>District*</InputLabel>
+                  <InputLabel>Country*</InputLabel>
                   <Select
-                    name="district"
+                    name="country"
                     required
-                    value={formData.district}
+                    value={formData?.country}
                     onChange={handleChange}
                   >
-                    <MenuItem value="gandhinagar">Gandhinagar</MenuItem>
-                    <MenuItem value="Ahmedabad">Ahmedabad</MenuItem>
+                    <MenuItem value="india">India</MenuItem>
+                    <MenuItem value="afghanistan">Afghanistan</MenuItem>
                   </Select>
                 </FormControl>
-                {errors.district && (
-                  <FormHelperText error>{errors.district}</FormHelperText>
-                )}
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
+                <FormControl fullWidth margin="normal">
                   <InputLabel>State*</InputLabel>
                   <Select
                     name="state"
                     required
-                    value={formData.state}
-                    onChange={handleChange}
+                    value={formData?.state}
+                    onChange={(event) => {
+                      handleStateChange(event);
+                      handleChange(event);
+                    }}
                   >
-                    {states.map((state: any, index: any) => (
+                    {Object.keys(statesWithDistricts).map((state, index) => (
                       <MenuItem key={index} value={state}>
                         {state}
                       </MenuItem>
@@ -296,26 +302,67 @@ const UpdateUser = () => {
                   <FormHelperText error>{errors.state}</FormHelperText>
                 )}
               </Grid>
+
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Country*</InputLabel>
+                <TextField
+                  label="City / Village"
+                  name="city"
+                  value={formData?.city}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth margin="normal">
+                  <InputLabel>District*</InputLabel>
                   <Select
-                    name="country"
+                    name="district"
                     required
-                    value={formData.country}
+                    value={formData?.district}
                     onChange={handleChange}
+                    disabled={!formData?.state || formData?.state === ""}
                   >
-                    <MenuItem value="india">India</MenuItem>
-                    <MenuItem value="afghanistan">Afghanistan</MenuItem>
+                    {formData?.state &&
+                      statesWithDistricts[formData?.state] &&
+                      statesWithDistricts[formData?.state].map(
+                        (district: any, index: any) => (
+                          <MenuItem key={index} value={district}>
+                            {district}
+                          </MenuItem>
+                        )
+                      )}
                   </Select>
                 </FormControl>
+                {formData?.state !== null &&
+                  formData?.district !== null &&
+                  errors.district && (
+                    <FormHelperText error>{errors.district}</FormHelperText>
+                  )}
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Address 1"
+                  name="addrLine1"
+                  value={formData?.addrLine1}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Address 2"
+                  name="addrLine2"
+                  value={formData?.addrLine2}
+                  onChange={handleChange}
+                  fullWidth
+                />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   label="Pincode"
                   name="pincode"
                   type="number"
-                  value={formData.pincode}
+                  value={formData?.pincode}
                   onChange={handleChange}
                   fullWidth
                 />

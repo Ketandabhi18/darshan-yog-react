@@ -31,6 +31,7 @@ import {
   EducationalQualification,
   Profession,
   states,
+  statesWithDistricts,
 } from "../config/constants";
 
 const EventsPage = () => {
@@ -43,16 +44,12 @@ const EventsPage = () => {
       : null;
 
   const userFromLocalStorage: any = parsedUser || {
-    mobileNumber: "",
-    countrycode: "+91",
     email: "",
     firstName: "",
     middleName: null,
     lastName: null,
     gender: "",
     dateOfBirth: "",
-    edQualification: "",
-    profession: "",
     guardianName: null,
     maritalStatus: "",
     bloodGroup: "",
@@ -77,6 +74,7 @@ const EventsPage = () => {
     ...userFromLocalStorage,
   });
   const [errors, setErrors] = useState<any>({});
+  const [registerCheck, setRegisterCheck] = useState<any>(false);
   const authToken = localStorage.getItem("authToken") || "";
   const handleOpen = (eventCode: any) => {
     setFormData({ ...formData, eventCode });
@@ -151,9 +149,35 @@ const EventsPage = () => {
     });
   };
 
+  const onRegisterClick = async (eventCode: any) => {
+    if (!authToken) {
+      navigate("/log-in");
+    } else {
+      const checkRegistered = axios
+        .get(
+          `https://darshan-yog-node-apis.onrender.com/events/event-registrations`,
+          {
+            headers: { Authorization: authToken },
+          }
+        )
+        .then((res) => {
+          if (res.data.data) {
+            const registeredEvent = res.data.data.find(
+              (o: any) => o.eventCode === eventCode
+            );
+            setFormData({ ...formData, ...registeredEvent });
+            if (registeredEvent) {
+              setRegisterCheck(true);
+            }
+          }
+          handleOpen(eventCode);
+        });
+    }
+  };
+
   const handleSubmit = async (e: any) => {
     try {
-      e.preventDefault(); // Prevent default form submission
+      e.preventDefault();
       const newErrors: any = {};
 
       if (!formData.firstName) {
@@ -205,17 +229,16 @@ const EventsPage = () => {
         return;
       }
       console.log("formData ::", formData);
-      // const {
-      //   mobileNumber,
-      //   firstName,
-      //   gender,
-      //   dateOfBirth,
-      //   eventCode,
-      //   arrivalDate,
-      //   departureDate,
-      //   groupDetails,
-      //   notes,
-      // } = formData;
+      const {
+        firstName,
+        gender,
+        dateOfBirth,
+        eventCode,
+        arrivalDate,
+        departureDate,
+        groupDetails,
+        notes,
+      } = formData;
 
       // const res = await axios.post(
       //   "http://localhost:7001/events/register",
@@ -223,20 +246,28 @@ const EventsPage = () => {
       //     mobileNumber,
       //     firstName,
       //     gender,
-      //     dateOfBirth: "17-02-2020",
+      //     dateOfBirth: dateOfBirth.split("-").reverse().join("-"),
       //     eventCode,
-      //     arrivalDate: "2024-04-07 04:00 IST",
-      //     departureDate: "2024-04-09 04:00 IST",
+      //     arrivalDate:
+      //       arrivalDate
+      //         .replace("T", " ")
+      //         .replace(/-/g, "-")
+      //         .replace(/(\d{4})\/(\d{2})\/(\d{2})/, "$2/$3/$1") + " IST",
+      //     departureDate:
+      //       departureDate
+      //         .replace("T", " ")
+      //         .replace(/-/g, "-")
+      //         .replace(/(\d{4})\/(\d{2})\/(\d{2})/, "$2/$3/$1") + " IST",
       //     groupDetails,
       //     notes,
       //   },
-      //   {
-      //     headers: { Authorization: authToken },
-      //   }
+      // {
+      //   headers: { Authorization: authToken },
+      // }
       // );
       // console.log("Register event :: res ::", res);
-      setOpenAlert(true);
-      setOpen(false);
+      // setOpenAlert(true);
+      // setOpen(false);
     } catch (error) {
       console.log("error :: ", error);
     }
@@ -261,6 +292,14 @@ const EventsPage = () => {
     }
   };
 
+  const handleStateChange = (event: any) => {
+    const selectedState = event.target.value;
+    setFormData((prevFormData: any) => ({
+      ...prevFormData,
+      state: selectedState,
+      district: "", 
+    }));
+  };
   useEffect(() => {
     fetchEvents();
   }, []);
@@ -268,7 +307,7 @@ const EventsPage = () => {
     <>
       <Snackbar
         open={openAlert}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={() => setOpenAlert(false)}
       >
         <Alert
@@ -385,17 +424,7 @@ const EventsPage = () => {
                   </a>
                   <Button
                     variant="contained"
-                    onClick={() => {
-                      console.log(
-                        "authToken :: events :: register :: button",
-                        authToken
-                      );
-                      if (!authToken) {
-                        navigate("/log-in");
-                      } else {
-                        handleOpen(event.eventCode);
-                      }
-                    }}
+                    onClick={() => onRegisterClick(event.eventCode)}
                     style={{
                       backgroundColor: "#007bff",
                       color: "#fff",
@@ -431,24 +460,16 @@ const EventsPage = () => {
                       <Typography variant="h6" gutterBottom>
                         Register for {event.eventName}
                       </Typography>
+                      {registerCheck && (
+                        <Typography variant="h6" gutterBottom>
+                          You are already registered for this event
+                        </Typography>
+                      )}
                       <IconButton onClick={handleClose}>
                         <CloseOutlined />
                       </IconButton>
                     </Box>
                     <form>
-                      <TextField
-                        label="Mobile Number"
-                        name="mobileNumber"
-                        value={formData.mobileNumber}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      {errors.mobileNumber && (
-                        <FormHelperText error>
-                          {errors.mobileNumber}
-                        </FormHelperText>
-                      )}
                       <TextField
                         label="First Name"
                         name="firstName"
@@ -478,63 +499,7 @@ const EventsPage = () => {
                           />
                         </RadioGroup>
                       </FormControl>
-                      <TextField
-                        label="Address 1"
-                        name="addrLine1"
-                        value={formData.addrLine1}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      <TextField
-                        label="Address 2"
-                        name="addrLine2"
-                        value={formData.addrLine2}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      <FormControl fullWidth margin="normal">
-                        <InputLabel>District*</InputLabel>
-                        <Select
-                          name="district"
-                          required
-                          value={formData.district}
-                          onChange={handleChange}
-                        >
-                          <MenuItem value="gandhinagar">Gandhinagar</MenuItem>
-                          <MenuItem value="Ahmedabad">Ahmedabad</MenuItem>
-                        </Select>
-                      </FormControl>
-                      {errors.district && (
-                        <FormHelperText error>{errors.district}</FormHelperText>
-                      )}
-                      <TextField
-                        label="City / Village"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      <FormControl fullWidth margin="normal">
-                        <InputLabel>State*</InputLabel>
-                        <Select
-                          name="state"
-                          required
-                          value={formData.state}
-                          onChange={handleChange}
-                        >
-                          {states.map((state: any, index: any) => (
-                            <MenuItem key={index} value={state}>
-                              {state}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                      {errors.state && (
-                        <FormHelperText error>{errors.state}</FormHelperText>
-                      )}
+
                       <FormControl fullWidth margin="normal">
                         <InputLabel>Country*</InputLabel>
                         <Select
@@ -550,6 +515,84 @@ const EventsPage = () => {
                       {errors.country && (
                         <FormHelperText error>{errors.country}</FormHelperText>
                       )}
+
+                      <FormControl fullWidth margin="normal">
+                        <InputLabel>State*</InputLabel>
+                        <Select
+                          name="state"
+                          required
+                          value={formData.state}
+                          onChange={(event) => {
+                            handleStateChange(event);
+                            handleChange(event);
+                          }}
+                        >
+                          {Object.keys(statesWithDistricts).map(
+                            (state, index) => (
+                              <MenuItem key={index} value={state}>
+                                {state}
+                              </MenuItem>
+                            )
+                          )}
+                        </Select>
+                        {errors.state && (
+                          <FormHelperText error>{errors.state}</FormHelperText>
+                        )}
+                      </FormControl>
+
+                      <FormControl fullWidth margin="normal">
+                        <InputLabel>District*</InputLabel>
+                        <Select
+                          name="district"
+                          required
+                          value={formData.district}
+                          onChange={handleChange}
+                          disabled={!formData.state || formData.state === ""}
+                        >
+                          {formData.state &&
+                            statesWithDistricts[formData.state] &&
+                            statesWithDistricts[formData.state].map(
+                              (district: any, index: any) => (
+                                <MenuItem key={index} value={district}>
+                                  {district}
+                                </MenuItem>
+                              )
+                            )}
+                        </Select>
+
+                        {errors.district && (
+                          <FormHelperText error>
+                            {errors.district}
+                          </FormHelperText>
+                        )}
+                      </FormControl>
+                      <TextField
+                        label="City / Village"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleChange}
+                        fullWidth
+                        margin="normal"
+                      />
+
+                      <TextField
+                        label="Address 1"
+                        name="addrLine1"
+                        value={formData.addrLine1}
+                        onChange={handleChange}
+                        fullWidth
+                        margin="normal"
+                      />
+
+                      <TextField
+                        label="Address 2"
+                        name="addrLine2"
+                        value={formData.addrLine2}
+                        onChange={handleChange}
+                        fullWidth
+                        margin="normal"
+                      />
+
                       <TextField
                         label="Pincode"
                         name="pincode"
@@ -572,41 +615,6 @@ const EventsPage = () => {
                         }}
                       />
 
-                      <FormControl fullWidth margin="normal">
-                        <InputLabel>
-                          Highest Education Qualification *
-                        </InputLabel>
-                        <Select
-                          name="edQualification"
-                          required
-                          value={formData.edQualification}
-                          onChange={handleChange}
-                        >
-                          {EducationalQualification.map(
-                            (qualification: any, index: any) => (
-                              <MenuItem key={index} value={qualification}>
-                                {qualification}
-                              </MenuItem>
-                            )
-                          )}
-                        </Select>
-                      </FormControl>
-
-                      <FormControl fullWidth margin="normal">
-                        <InputLabel>Profession *</InputLabel>
-                        <Select
-                          name="profession"
-                          required
-                          value={formData.profession}
-                          onChange={handleChange}
-                        >
-                          {Profession.map((profession: any, index: any) => (
-                            <MenuItem key={index} value={profession}>
-                              {profession}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
                       <TextField
                         label="Arrival Date"
                         name="arrivalDate"
@@ -769,7 +777,7 @@ const EventsPage = () => {
                           marginTop: "10px",
                         }}
                       >
-                        Submit
+                        {registerCheck ? "Update" : "Submit"}
                       </Button>
                     </form>
                   </Box>
