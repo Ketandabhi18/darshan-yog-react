@@ -253,34 +253,26 @@ const EventsPage = () => {
         notes,
       } = formData;
 
-      // const res = await axios.post(
-      //   "http://localhost:7001/events/register",
-      //   {
-      //     mobileNumber,
-      //     firstName,
-      //     gender,
-      //     dateOfBirth: dateOfBirth.split("-").reverse().join("-"),
-      //     eventCode,
-      //     arrivalDate:
-      //       arrivalDate
-      //         .replace("T", " ")
-      //         .replace(/-/g, "-")
-      //         .replace(/(\d{4})\/(\d{2})\/(\d{2})/, "$2/$3/$1") + " IST",
-      //     departureDate:
-      //       departureDate
-      //         .replace("T", " ")
-      //         .replace(/-/g, "-")
-      //         .replace(/(\d{4})\/(\d{2})\/(\d{2})/, "$2/$3/$1") + " IST",
-      //     groupDetails,
-      //     notes,
-      //   },
-      // {
-      //   headers: { Authorization: authToken },
-      // }
-      // );
-      // console.log("Register event :: res ::", res);
-      // setOpenAlert(true);
-      // setOpen(false);
+      const res = await axios.post(
+        "https://darshan-yog-node-apis.onrender.com/register",
+        // "http://localhost:7001/events/register",
+        {
+          firstName,
+          gender,
+          dateOfBirth,
+          eventCode,
+          arrivalDate,
+          departureDate,
+          groupDetails,
+          notes,
+        },
+        {
+          headers: { Authorization: authToken },
+        }
+      );
+      console.log("Register event :: res ::", res);
+      setOpenAlert(true);
+      setOpen(false);
     } catch (error) {
       console.log("error :: ", error);
     }
