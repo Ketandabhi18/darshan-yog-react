@@ -9,9 +9,27 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
-import { Grid, Snackbar } from "@mui/material";
+import {
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Snackbar,
+} from "@mui/material";
+import {
+  EducationalQualification,
+  Profession,
+  statesWithDistricts,
+} from "../config/constants";
+
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { enGB } from "date-fns/locale";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const Login: FunctionComponent = () => {
   const [step, setStep] = useState<any>(false);
@@ -23,7 +41,13 @@ const Login: FunctionComponent = () => {
   const [alertType, setAlertType] = useState<any>("success");
   const [loader, setLoader] = useState<boolean>(false);
   const [loginwithPassword, setLoginWithPassword] = useState(false);
+  const [openEventForm, setOpenEventForm] = useState(false);
+  const [formData, setFormData] = useState<any>({
+    groupDetails: [],
+  });
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log("location :: ", location);
   const handleVerfiyOtp = async (event: any) => {
     event.preventDefault();
     setLoader(true);
@@ -52,12 +76,17 @@ const Login: FunctionComponent = () => {
                 ...userDetails,
               })
             );
-            navigate("/");
-            loginwithPassword
-              ? setAlertMessage("Login Successfully")
-              : setAlertMessage("Otp Verified Successfully");
-            setAlertType("success");
-            setOpenAlert(true);
+            if (location.state && !loginwithPassword) {
+              console.log("first if");
+              setOpenEventForm(true);
+            } else {
+              navigate("/");
+              loginwithPassword
+                ? setAlertMessage("Login Successfully")
+                : setAlertMessage("Otp Verified Successfully");
+              setAlertType("success");
+              setOpenAlert(true);
+            }
           } else {
             loginwithPassword
               ? setAlertMessage("Invalid Credentials !!")
@@ -110,6 +139,81 @@ const Login: FunctionComponent = () => {
   const handleClick = () => {
     setLoginWithPassword(!loginwithPassword);
   };
+
+  const handleChange: any = (e: any) => {
+    console.log("e :: ", e);
+    const { name, value } = e.target;
+    setFormData((prevState: any) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleStateChange = (event: any) => {
+    const selectedState = event.target.value;
+    setFormData((prevFormData: any) => ({
+      ...prevFormData,
+      state: selectedState,
+      district: "", // Reset district when state changes
+    }));
+  };
+
+  const handleGroupDetailsChange = (index: any, e: any) => {
+    const { name, value } = e.target;
+    const updatedGroupDetails: any = [...formData.groupDetails];
+    updatedGroupDetails[index][name] = value;
+
+    setFormData({ ...formData, groupDetails: updatedGroupDetails });
+  };
+
+  const removeGroupMember = (indexToRemove: any) => {
+    const updatedGroupDetails = formData.groupDetails.filter(
+      (member: any, index: any) => index !== indexToRemove
+    );
+    setFormData({
+      ...formData,
+      groupDetails: updatedGroupDetails,
+    });
+  };
+
+  const addGroupMember = () => {
+    setFormData({
+      ...formData,
+      groupDetails: [
+        ...formData.groupDetails,
+        { name: "", relation: "", gender: "", age: "" },
+      ],
+    });
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    console.log("formData :: ", formData);
+    const { data } = await axios.post(
+      "https://darshan-yog-node-apis.onrender.com/update-user",
+      // "http://localhost:7001/update-user",
+      formData,
+      {
+        headers: { Authorization: localStorage.getItem("authToken") },
+      }
+    );
+
+    if (data.status === 200) {
+      localStorage.removeItem("userDetail");
+      localStorage.setItem("userDetail", JSON.stringify(data.data));
+    }
+
+    const res = await axios.post(
+      `https://darshan-yog-node-apis.onrender.com/register`,
+      formData,
+      {
+        headers: { Authorization: localStorage.getItem("authToken") },
+      }
+    );
+
+    console.log("res :: register event :: ", res);
+  };
+
   const defaultTheme = createTheme();
 
   return (
@@ -285,6 +389,471 @@ const Login: FunctionComponent = () => {
           </Box>
           {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
         </Container>
+        {step && openEventForm && (
+          <div
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              display: "flex",
+              marginTop: "2%",
+            }}
+          >
+            <div style={{ width: "80%", justifyContent: "center" }}>
+              <form onSubmit={handleSubmit}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Email"
+                      name="email"
+                      value={formData?.email}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={4}>
+                    <TextField
+                      fullWidth
+                      label="First Name"
+                      name="firstName"
+                      required
+                      value={formData?.firstName}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={4}>
+                    <TextField
+                      fullWidth
+                      label="Middle Name"
+                      name="middleName"
+                      value={formData?.middleName}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <TextField
+                      fullWidth
+                      label="Last Name"
+                      name="lastName"
+                      value={formData?.lastName}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <FormControl fullWidth>
+                      <InputLabel>Gender</InputLabel>
+                      <Select
+                        value={formData?.gender}
+                        onChange={handleChange}
+                        name="gender"
+                      >
+                        <MenuItem value="Male">Male</MenuItem>
+                        <MenuItem value="Female">Female</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <LocalizationProvider
+                    dateAdapter={AdapterDateFns}
+                    adapterLocale={enGB}
+                  >
+                    <Grid item xs={12} sm={6}>
+                      <DatePicker
+                        onChange={(e: any) => {
+                          const value = `${new Date(e)
+                            .getDate()
+                            .toString()
+                            .padStart(2, "0")}-${(new Date(e).getMonth() + 1)
+                            .toString()
+                            .padStart(2, "0")}-${new Date(e).getFullYear()}`;
+                          setFormData({ ...formData, ["dateOfBirth"]: value });
+                        }}
+                        label="Date Of Birth"
+                        slotProps={{
+                          textField: {
+                            helperText: "DD/MM/YYYY",
+                          },
+                        }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <FormControl fullWidth>
+                        <InputLabel>Educational Qualification</InputLabel>
+                        <Select
+                          value={formData?.edQualification}
+                          onChange={handleChange}
+                          name="edQualification"
+                        >
+                          {EducationalQualification.map(
+                            (qualification: any, index: any) => (
+                              <MenuItem key={index} value={qualification}>
+                                {qualification}
+                              </MenuItem>
+                            )
+                          )}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <FormControl fullWidth>
+                        <InputLabel>Profession</InputLabel>
+                        <Select
+                          value={formData?.profession}
+                          onChange={handleChange}
+                          name="profession"
+                        >
+                          {Profession.map((profession: any, index: any) => (
+                            <MenuItem key={index} value={profession}>
+                              {profession}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Guardian Name"
+                        name="guardianName"
+                        value={formData?.guardianName}
+                        onChange={handleChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <FormControl fullWidth>
+                        <InputLabel>Marital Status</InputLabel>
+                        <Select
+                          value={formData?.maritalStatus}
+                          onChange={handleChange}
+                          name="maritalStatus"
+                        >
+                          <MenuItem value="Married">Married</MenuItem>
+                          <MenuItem value="Unmarried">Unmarried</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Blood Group"
+                        name="bloodGroup"
+                        value={formData?.bloodGroup}
+                        onChange={handleChange}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <FormControl fullWidth>
+                        <InputLabel>Country*</InputLabel>
+                        <Select
+                          name="country"
+                          required
+                          value={formData?.country}
+                          onChange={handleChange}
+                        >
+                          <MenuItem value="india">India</MenuItem>
+                          <MenuItem value="afghanistan">Afghanistan</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <FormControl fullWidth>
+                        <InputLabel>State*</InputLabel>
+                        <Select
+                          name="state"
+                          required
+                          value={formData?.state}
+                          onChange={(event) => {
+                            handleStateChange(event);
+                            handleChange(event);
+                          }}
+                        >
+                          {Object.keys(statesWithDistricts).map(
+                            (state, index) => (
+                              <MenuItem key={index} value={state}>
+                                {state}
+                              </MenuItem>
+                            )
+                          )}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        label="City / Village"
+                        name="city"
+                        value={formData?.city}
+                        onChange={handleChange}
+                        fullWidth
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <FormControl fullWidth>
+                        <InputLabel>District*</InputLabel>
+                        <Select
+                          name="district"
+                          required
+                          value={formData?.district}
+                          onChange={handleChange}
+                          disabled={!formData?.state || formData?.state === ""}
+                        >
+                          {formData?.state &&
+                            statesWithDistricts[formData?.state] &&
+                            statesWithDistricts[formData?.state].map(
+                              (district: any, index: any) => (
+                                <MenuItem key={index} value={district}>
+                                  {district}
+                                </MenuItem>
+                              )
+                            )}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <TextField
+                        label="Address 1"
+                        name="addrLine1"
+                        value={formData?.addrLine1}
+                        onChange={handleChange}
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        label="Address 2"
+                        name="addrLine2"
+                        value={formData?.addrLine2}
+                        onChange={handleChange}
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        label="Pincode"
+                        name="pincode"
+                        type="number"
+                        value={formData?.pincode}
+                        onChange={handleChange}
+                        fullWidth
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <FormControl fullWidth>
+                        <DateTimePicker
+                          label="Arrival Date"
+                          name="arrivalDate"
+                          onChange={(e: any) => {
+                            const originalDate = new Date(e)
+                              .toISOString()
+                              .split("T")[0];
+                            const originalTime = new Date(e).toLocaleTimeString(
+                              "en-IN",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: false,
+                              }
+                            );
+                            const convertedDate = `${originalDate
+                              .split("-")
+                              .reverse()
+                              .join("-")} ${originalTime.slice(0, 5)} IST`;
+                            setFormData({
+                              ...formData,
+                              ["arrivalDate"]: convertedDate,
+                            });
+                          }}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <FormControl fullWidth>
+                        <DateTimePicker
+                          label="Departure Date"
+                          name="departureDate"
+                          onChange={(e: any) => {
+                            const originalDate = new Date(e)
+                              .toISOString()
+                              .split("T")[0];
+                            const originalTime = new Date(e).toLocaleTimeString(
+                              "en-IN",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: false,
+                              }
+                            );
+                            const convertedDate = `${originalDate
+                              .split("-")
+                              .reverse()
+                              .join("-")} ${originalTime.slice(0, 5)} IST`;
+                            setFormData({
+                              ...formData,
+                              ["departureDate"]: convertedDate,
+                            });
+                          }}
+                        />
+                      </FormControl>
+                    </Grid>
+                  </LocalizationProvider>
+
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel>Pickup place</InputLabel>
+                      <Select
+                        name="pickupPlace"
+                        value={formData?.pickupPlace}
+                        onChange={handleChange}
+                      >
+                        <MenuItem value="Kalupur Railway Station">
+                          Kalupur Railway Station
+                        </MenuItem>
+                        <MenuItem value="Sabarmati Railway Station">
+                          Sabarmati Railway Station
+                        </MenuItem>
+                        <MenuItem value="Ahmedabad Airport">
+                          Ahmedabad Airport
+                        </MenuItem>
+                        <MenuItem value="Prantij bus stop">
+                          Prantij bus stop
+                        </MenuItem>
+                        <MenuItem value="Self ">Self </MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Box mb={2}>
+                      <Typography variant="subtitle1">
+                        Group Details:
+                      </Typography>
+                      {formData?.groupDetails &&
+                        formData.groupDetails.length > 0 &&
+                        formData.groupDetails.map((member: any, index: any) => (
+                          <Box
+                            key={index}
+                            sx={{
+                              border: "1px solid #ccc",
+                              borderRadius: "8px",
+                              padding: "16px",
+                              marginBottom: "16px",
+                            }}
+                          >
+                            <Typography
+                              variant="h6"
+                              gutterBottom
+                              style={{ marginBottom: "8px" }}
+                            >
+                              Participant {index + 1}
+                            </Typography>
+                            <Grid container spacing={2}>
+                              <Grid item xs={12} sm={6}>
+                                <TextField
+                                  label="Name"
+                                  name="name"
+                                  required
+                                  value={member.name}
+                                  onChange={(e) =>
+                                    handleGroupDetailsChange(index, e)
+                                  }
+                                  fullWidth
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={6}>
+                                <TextField
+                                  label="Relation"
+                                  name="relation"
+                                  value={member.relation}
+                                  onChange={(e) =>
+                                    handleGroupDetailsChange(index, e)
+                                  }
+                                  fullWidth
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={6}>
+                                <TextField
+                                  label="Gender"
+                                  name="gender"
+                                  required
+                                  value={member.gender}
+                                  onChange={(e) =>
+                                    handleGroupDetailsChange(index, e)
+                                  }
+                                  fullWidth
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={6}>
+                                <TextField
+                                  label="Age"
+                                  name="age"
+                                  required
+                                  value={member.age}
+                                  onChange={(e) =>
+                                    handleGroupDetailsChange(index, e)
+                                  }
+                                  fullWidth
+                                />
+                              </Grid>
+                            </Grid>
+
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => removeGroupMember(index)}
+                              style={{ marginTop: "16px" }}
+                            >
+                              Remove
+                            </Button>
+                          </Box>
+                        ))}
+                      <Button
+                        variant="contained"
+                        onClick={addGroupMember}
+                        style={{ marginTop: "10px" }}
+                      >
+                        Add Member
+                      </Button>
+                    </Box>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Anything else you want to inform us"
+                      name="notes"
+                      value={formData?.notes}
+                      onChange={handleChange}
+                      fullWidth
+                      multiline
+                      rows={3}
+                    />
+                  </Grid>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    onClick={handleSubmit}
+                    style={{
+                      backgroundColor: "#007bff",
+                      color: "#fff",
+                      margin: "16px",
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </Grid>
+              </form>
+            </div>
+          </div>
+        )}
       </ThemeProvider>
     </>
   );

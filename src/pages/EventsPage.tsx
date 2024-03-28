@@ -33,6 +33,11 @@ import {
   states,
   statesWithDistricts,
 } from "../config/constants";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { enGB } from "date-fns/locale";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const EventsPage = () => {
   const navigate = useNavigate();
@@ -151,7 +156,7 @@ const EventsPage = () => {
 
   const onRegisterClick = async (eventCode: any) => {
     if (!authToken) {
-      navigate("/log-in");
+      navigate("/log-in", { state: { eventCode: eventCode } });
     } else {
       const checkRegistered = axios
         .get(
@@ -165,12 +170,20 @@ const EventsPage = () => {
             const registeredEvent = res.data.data.find(
               (o: any) => o.eventCode === eventCode
             );
-            setFormData({ ...formData, ...registeredEvent });
+
             if (registeredEvent) {
+              // setFormData({ ...formData, ...registeredEvent });
+              setFormData({
+                ...formData,
+                groupDetails: registeredEvent.groupDetails,
+                notes: registeredEvent.notes,
+                eventCode: eventCode,
+              });
               setRegisterCheck(true);
+              setOpen(true);
             }
           }
-          handleOpen(eventCode);
+          // handleOpen(eventCode);
         });
     }
   };
@@ -297,7 +310,7 @@ const EventsPage = () => {
     setFormData((prevFormData: any) => ({
       ...prevFormData,
       state: selectedState,
-      district: "", 
+      district: "",
     }));
   };
   useEffect(() => {
@@ -602,43 +615,104 @@ const EventsPage = () => {
                         fullWidth
                         margin="normal"
                       />
-                      <TextField
-                        label="Date of Birth"
-                        name="dateOfBirth"
-                        type="date"
-                        value={formData.dateOfBirth}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
 
-                      <TextField
-                        label="Arrival Date"
-                        name="arrivalDate"
-                        type="datetime-local"
-                        value={formData.arrivalDate}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                      <TextField
-                        label="Departure Date"
-                        name="departureDate"
-                        type="datetime-local"
-                        value={formData.departureDate}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
+                      <LocalizationProvider
+                        dateAdapter={AdapterDateFns}
+                        adapterLocale={enGB}
+                      >
+                        <Grid container spacing={2}>
+                          <Grid item xs={12}>
+                            <FormControl fullWidth>
+                              <DatePicker
+                                onChange={(e: any) => {
+                                  const value = `${new Date(e)
+                                    .getDate()
+                                    .toString()
+                                    .padStart(2, "0")}-${(
+                                    new Date(e).getMonth() + 1
+                                  )
+                                    .toString()
+                                    .padStart(2, "0")}-${new Date(
+                                    e
+                                  ).getFullYear()}`;
+                                  setFormData({
+                                    ...formData,
+                                    ["dateOfBirth"]: value,
+                                  });
+                                }}
+                                label="Date Of Birth"
+                                slotProps={{
+                                  textField: {
+                                    helperText: "DD/MM/YYYY",
+                                  },
+                                }}
+                              />
+                            </FormControl>
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                              <DateTimePicker
+                                label="Arrival Date"
+                                name="arrivalDate"
+                                onChange={(e: any) => {
+                                  const originalDate = new Date(e)
+                                    .toISOString()
+                                    .split("T")[0];
+                                  const originalTime = new Date(
+                                    e
+                                  ).toLocaleTimeString("en-IN", {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: false,
+                                  });
+                                  const convertedDate = `${originalDate
+                                    .split("-")
+                                    .reverse()
+                                    .join("-")} ${originalTime.slice(
+                                    0,
+                                    5
+                                  )} IST`;
+                                  setFormData({
+                                    ...formData,
+                                    ["arrivalDate"]: convertedDate,
+                                  });
+                                }}
+                              />
+                            </FormControl>
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                              <DateTimePicker
+                                label="Departure Date"
+                                name="departureDate"
+                                onChange={(e: any) => {
+                                  const originalDate = new Date(e)
+                                    .toISOString()
+                                    .split("T")[0];
+                                  const originalTime = new Date(
+                                    e
+                                  ).toLocaleTimeString("en-IN", {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: false,
+                                  });
+                                  const convertedDate = `${originalDate
+                                    .split("-")
+                                    .reverse()
+                                    .join("-")} ${originalTime.slice(
+                                    0,
+                                    5
+                                  )} IST`;
+                                  setFormData({
+                                    ...formData,
+                                    ["departureDate"]: convertedDate,
+                                  });
+                                }}
+                              />
+                            </FormControl>
+                          </Grid>
+                        </Grid>
+                      </LocalizationProvider>
                       <FormControl fullWidth margin="normal">
                         <InputLabel>Pickup place</InputLabel>
                         <Select
