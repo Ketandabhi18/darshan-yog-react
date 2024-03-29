@@ -22,6 +22,7 @@ import {
 import {
   EducationalQualification,
   Profession,
+  baseUrl,
   statesWithDistricts,
 } from "../config/constants";
 
@@ -55,8 +56,7 @@ const Login: FunctionComponent = () => {
       const username: any = `${countrycode}${mobile}`;
       const password = otp;
       axios
-        // .post("http://localhost:7001/login", {
-        .post("https://darshan-yog-node-apis.onrender.com/login", {
+        .post(`${baseUrl}/login`, {
           username,
           password,
           type: 0,
@@ -65,7 +65,7 @@ const Login: FunctionComponent = () => {
           // Handle the successful response
           console.log("Response:", response);
           if (response.data.status === 200) {
-            const { token, ...userDetails } = response.data.data;
+            const { token, ...userDetails }: any = response.data.data;
             localStorage.removeItem("authToken");
             localStorage.removeItem("useDetail");
             setLoader(false);
@@ -77,8 +77,43 @@ const Login: FunctionComponent = () => {
               })
             );
             if (location.state && !loginwithPassword) {
-              console.log("first if");
-              setOpenEventForm(true);
+              const checkRegistered = axios
+                .get(`${baseUrl}/events/event-registrations`, {
+                  headers: {
+                    Authorization: localStorage.getItem("authToken"),
+                  },
+                })
+                .then((res) => {
+                  if (res.data.data) {
+                    const registeredEvent = res.data.data.find(
+                      (o: any) =>
+                        o.eventCode === location?.state.eventCode &&
+                        o.mobileNumber === `${countrycode}${mobile}`
+                    );
+                    console.log("registeredEvent :: ", registeredEvent);
+                    if (registeredEvent) {
+                      setAlertType("error");
+                      setAlertMessage(
+                        "You have already registered for this event."
+                      );
+                      setOpenAlert(true);
+                      setTimeout(() => {
+                        navigate("/events");
+                      }, 2000);
+                    } else {
+                      let user: any = localStorage.getItem("userDetail");
+                      user = JSON.parse(user);
+                      console.log("first if");
+                      setFormData((prevFormData: any) => {
+                        return {
+                          ...prevFormData,
+                          ...user,
+                        };
+                      });
+                      setOpenEventForm(true);
+                    }
+                  }
+                });
             } else {
               navigate("/");
               loginwithPassword
@@ -108,13 +143,9 @@ const Login: FunctionComponent = () => {
       const mobileNumber = `${countrycode}${mobile}`;
       console.log("mobile :: in get otp ", mobileNumber);
       axios
-        .post(
-          // "http://localhost:7001/get-otp",
-          "https://darshan-yog-node-apis.onrender.com/get-otp",
-          {
-            username: mobileNumber,
-          }
-        )
+        .post(`${baseUrl}/get-otp`, {
+          username: mobileNumber,
+        })
         .then((res) => {
           console.log("data :: get otp :: ", res);
           if (res.data.status === 200) {
@@ -189,10 +220,52 @@ const Login: FunctionComponent = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     console.log("formData :: ", formData);
+    const {
+      email,
+      firstName,
+      middleName,
+      lastName,
+      whatsappNumber,
+      gender,
+      dateOfBirth,
+      edQualification,
+      profession,
+      guardianName,
+      maritalStatus,
+      bloodGroup,
+      addrLine1,
+      addrLine2,
+      city,
+      district,
+      state,
+      country,
+      pincode,
+    } = formData;
     const { data } = await axios.post(
-      "https://darshan-yog-node-apis.onrender.com/update-user",
-      // "http://localhost:7001/update-user",
-      formData,
+      `${baseUrl}/update-user`,
+      {
+        mobileNumber: mobile,
+        countrycode,
+        email,
+        firstName,
+        middleName,
+        lastName,
+        whatsappNumber,
+        gender,
+        dateOfBirth,
+        edQualification,
+        profession,
+        guardianName,
+        maritalStatus,
+        bloodGroup,
+        addrLine1,
+        addrLine2,
+        city,
+        district,
+        state,
+        country,
+        pincode,
+      },
       {
         headers: { Authorization: localStorage.getItem("authToken") },
       }
@@ -202,15 +275,35 @@ const Login: FunctionComponent = () => {
       localStorage.removeItem("userDetail");
       localStorage.setItem("userDetail", JSON.stringify(data.data));
     }
-
+    const reqObj = { ...formData, eventCode: location.state.eventCode };
+    const { eventCode, arrivalDate, departureDate, groupDetails, notes } =
+      reqObj;
     const res = await axios.post(
-      `https://darshan-yog-node-apis.onrender.com/register`,
-      formData,
+      `${baseUrl}/events/register`,
+      {
+        mobileNumber: formData.mobileNumber,
+        firstName,
+        gender,
+        dateOfBirth,
+        eventCode,
+        arrivalDate,
+        departureDate,
+        groupDetails,
+        notes,
+      },
       {
         headers: { Authorization: localStorage.getItem("authToken") },
       }
     );
 
+    if (res.data.status === 200) {
+      setAlertMessage("Registration successfully done");
+      setAlertType("success");
+      setOpenAlert(true);
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    }
     console.log("res :: register event :: ", res);
   };
 
@@ -374,15 +467,17 @@ const Login: FunctionComponent = () => {
                     autoComplete="current-password"
                   />
 
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                    onClick={handleVerfiyOtp}
-                  >
-                    Verify Otp
-                  </Button>
+                  {!openEventForm && (
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                      onClick={handleVerfiyOtp}
+                    >
+                      Verify Otp
+                    </Button>
+                  )}
                 </div>
               </>
             )}
@@ -468,7 +563,7 @@ const Login: FunctionComponent = () => {
                             .padStart(2, "0")}-${(new Date(e).getMonth() + 1)
                             .toString()
                             .padStart(2, "0")}-${new Date(e).getFullYear()}`;
-                          setFormData({ ...formData, ["dateOfBirth"]: value });
+                          setFormData({ ...formData, dateOfBirth: value });
                         }}
                         label="Date Of Birth"
                         slotProps={{

@@ -1,3 +1,6 @@
+// export const baseUrl = "http://localhost:7001";
+export const baseUrl = "https://darshan-yog-node-apis.onrender.com";
+
 export const pages: any = [
   {
     name: "HOME",

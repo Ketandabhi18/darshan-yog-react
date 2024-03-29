@@ -19,6 +19,10 @@ import {
   statesWithDistricts,
 } from "../config/constants";
 import axios from "axios";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { enGB } from "date-fns/locale";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const UpdateUser = () => {
   const [errors, setErrors] = useState<any>({});
@@ -28,6 +32,7 @@ const UpdateUser = () => {
   const authToken = localStorage.getItem("authToken");
   const user: any = localStorage.getItem("userDetail");
   const userDetail: any = JSON.parse(user);
+  console.log("userDetail :: in update user ", userDetail);
   const [formData, setFormData] = useState<any>(userDetail);
 
   const handleChange = (e: any) => {
@@ -68,8 +73,8 @@ const UpdateUser = () => {
     try {
       console.log(newErrors, "formData :: ", formData);
       const { data } = await axios.post(
-        "https://darshan-yog-node-apis.onrender.com/update-user",
-        // "http://localhost:7001/update-user",
+        // "https://darshan-yog-node-apis.onrender.com/update-user",
+        "http://localhost:7001/update-user",
         formData,
         {
           headers: { Authorization: authToken },
@@ -186,19 +191,40 @@ const UpdateUser = () => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Date of Birth"
-                  name="dateOfBirth"
-                  type="date"
-                  value={formData?.dateOfBirth}
-                  onChange={handleChange}
-                  fullWidth
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </Grid>
+              <LocalizationProvider
+                dateAdapter={AdapterDateFns}
+                adapterLocale={enGB}
+              >
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <DatePicker
+                      value={
+                        formData.dateOfBirth
+                          ? new Date(formData.dateOfBirth.replace(/-/g, "/"))
+                          : new Date()
+                      }
+                      onChange={(e: any) => {
+                        const value = `${new Date(e)
+                          .getDate()
+                          .toString()
+                          .padStart(2, "0")}-${(new Date(e).getMonth() + 1)
+                          .toString()
+                          .padStart(2, "0")}-${new Date(e).getFullYear()}`;
+                        setFormData({
+                          ...formData,
+                          ["dateOfBirth"]: value,
+                        });
+                      }}
+                      label="Date Of Birth"
+                      slotProps={{
+                        textField: {
+                          helperText: "DD/MM/YYYY",
+                        },
+                      }}
+                    />
+                  </FormControl>
+                </Grid>
+              </LocalizationProvider>
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel>Educational Qualification</InputLabel>

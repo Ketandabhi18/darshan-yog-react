@@ -2,16 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import "./newHeader.css";
 import { pages } from "../config/constants";
 import { Link, useNavigate } from "react-router-dom";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import logo from "./assets/Dharshanyog Dham Logo.jpg";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import { Logout, PersonAdd, Settings } from "@mui/icons-material";
+import { Logout, Settings } from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 
@@ -142,7 +140,7 @@ const NewHeader = () => {
                   aria-expanded={open ? "true" : undefined}
                 >
                   <Avatar sx={{ width: 32, height: 32 }}>
-                    {userDetail?.firstName.split("")[0] || "User"}
+                    {userDetail?.firstName?.split("")[0] || "User"}
                   </Avatar>
                 </IconButton>
               </Tooltip>

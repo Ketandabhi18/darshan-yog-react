@@ -30,6 +30,7 @@ import Alert from "@mui/material/Alert";
 import {
   EducationalQualification,
   Profession,
+  baseUrl,
   states,
   statesWithDistricts,
 } from "../config/constants";
@@ -95,27 +96,7 @@ const EventsPage = () => {
     const { name, value } = e.target;
     let formattedValue = value;
     console.log("name :: ", name, "value :: ", value);
-
-    // if (name === "dateOfBirth") {
-    //   const parsedDate = new Date(value);
-    //   if (!isNaN(parsedDate.getTime())) {
-    //     const day = String(parsedDate.getDate()).padStart(2, "0");
-    //     const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
-    //     const year = parsedDate.getFullYear();
-    //     formattedValue = `${year}-${month}-${day}`; // Keep it in "yyyy-MM-dd" format
-    //   } else {
-    //     // Handle invalid input
-    //     formattedValue = "";
-    //   }
-    //   console.log("formattedValue :: ", formattedValue);
-    // }
-
-    // if (name === "arrivalDate" || name === "departureDate") {
-    //   formattedValue =
-    //     value.replace("T", " ").replace(/-/g, "-").slice(0, -3) + " IST";
-    // }
     setFormData({ ...formData, [name]: formattedValue });
-
     if (value.trim() !== "") {
       setErrors({ ...errors, [name]: "" });
     }
@@ -155,35 +136,42 @@ const EventsPage = () => {
   };
 
   const onRegisterClick = async (eventCode: any) => {
+    let user: any = localStorage.getItem("userDetail");
+    user = JSON.parse(user);
     if (!authToken) {
-      navigate("/log-in", { state: { eventCode: eventCode } });
+      navigate("/log-in", {
+        state: { eventCode: eventCode },
+      });
     } else {
       const checkRegistered = axios
-        .get(
-          `https://darshan-yog-node-apis.onrender.com/events/event-registrations`,
-          {
-            headers: { Authorization: authToken },
-          }
-        )
+        .get(`${baseUrl}/events/event-registrations`, {
+          headers: { Authorization: authToken },
+        })
         .then((res) => {
           if (res.data.data) {
             const registeredEvent = res.data.data.find(
-              (o: any) => o.eventCode === eventCode
+              (o: any) =>
+                o.eventCode === eventCode &&
+                o.mobileNumber === user.mobileNumber
             );
 
             if (registeredEvent) {
-              // setFormData({ ...formData, ...registeredEvent });
-              setFormData({
-                ...formData,
-                groupDetails: registeredEvent.groupDetails,
-                notes: registeredEvent.notes,
-                eventCode: eventCode,
+              setFormData((prevFormData: any) => {
+                return {
+                  ...prevFormData,
+                  arrivalDate: registeredEvent.arrivalDate,
+                  departureDate: registeredEvent.departureDate,
+                  groupDetails: registeredEvent.groupDetails,
+                  notes: registeredEvent.notes,
+                  eventCode: eventCode,
+                };
               });
               setRegisterCheck(true);
               setOpen(true);
+            } else {
+              handleOpen(eventCode);
             }
           }
-          // handleOpen(eventCode);
         });
     }
   };
@@ -211,21 +199,7 @@ const EventsPage = () => {
       if (!formData.country) {
         newErrors.country = "Country is required";
       }
-      // if (!formData.pincode) {
-      //   newErrors.pincode = "Pincode is required";
-      // }
-      // if (!formData.dateOfBirth) {
-      //   newErrors.dateOfBirth = "Date of Birth is required";
-      // }
-      // if (!formData.arrivalDate) {
-      //   newErrors.arrivalDate = "Arrival Date is required";
-      // }
-      // if (!formData.departureDate) {
-      //   newErrors.departureDate = "Departure Date is required";
-      // }
-      // if (!formData.pickupPlace) {
-      //   newErrors.pickupPlace = "Pickup Place is required";
-      // }
+
       const groupDetailsErrors = formData.groupDetails.map((member: any) => {
         if (!member.name || !member.gender || !member.age) {
           return "Please fill in all fields for all group members";
@@ -243,6 +217,7 @@ const EventsPage = () => {
       }
       console.log("formData ::", formData);
       const {
+        mobileNumber,
         firstName,
         gender,
         dateOfBirth,
@@ -252,11 +227,10 @@ const EventsPage = () => {
         groupDetails,
         notes,
       } = formData;
-
       const res = await axios.post(
-        "https://darshan-yog-node-apis.onrender.com/register",
-        // "http://localhost:7001/events/register",
+        `${baseUrl}/register`,
         {
+          mobileNumber,
           firstName,
           gender,
           dateOfBirth,
@@ -281,8 +255,7 @@ const EventsPage = () => {
   const fetchEvents = async () => {
     try {
       axios
-        // .get("http://localhost:7001/events/active", {
-        .get("https://darshan-yog-node-apis.onrender.com/events/active", {
+        .get(`${baseUrl}/events/active`, {
           headers: { Authorization: authToken },
         })
         .then((res) => {
@@ -616,6 +589,11 @@ const EventsPage = () => {
                           <Grid item xs={12}>
                             <FormControl fullWidth>
                               <DatePicker
+                                value={
+                                  formData.dateOfBirth
+                                    ? new Date(formData.dateOfBirth)
+                                    : null
+                                }
                                 onChange={(e: any) => {
                                   const value = `${new Date(e)
                                     .getDate()
@@ -646,6 +624,11 @@ const EventsPage = () => {
                               <DateTimePicker
                                 label="Arrival Date"
                                 name="arrivalDate"
+                                value={
+                                  formData.arrivalDate
+                                    ? new Date(formData?.arrivalDate)
+                                    : new Date()
+                                }
                                 onChange={(e: any) => {
                                   const originalDate = new Date(e)
                                     .toISOString()
@@ -677,6 +660,11 @@ const EventsPage = () => {
                               <DateTimePicker
                                 label="Departure Date"
                                 name="departureDate"
+                                value={
+                                  formData.departureDate
+                                    ? new Date(formData?.departureDate)
+                                    : new Date()
+                                }
                                 onChange={(e: any) => {
                                   const originalDate = new Date(e)
                                     .toISOString()
