@@ -227,8 +227,45 @@ const EventsPage = () => {
         groupDetails,
         notes,
       } = formData;
+
+      const updateUserObj = {
+        mobileNumber,
+        countrycode: parsedUser.countrycode,
+        email: parsedUser.email,
+        firstName,
+        middleName: parsedUser.middleName,
+        lastName: parsedUser.lastName,
+        whatsappNumber: parsedUser.whatsappNumber,
+        gender,
+        dateOfBirth,
+        edQualification: parsedUser.edQualification,
+        profession: parsedUser.profession,
+        guardianName: parsedUser.guardianName,
+        maritalStatus: parsedUser.maritalStatus,
+        bloodGroup: parsedUser.bloodGroup,
+        addrLine1: formData.addrLine1,
+        addrLine2: formData.addrLine2,
+        city: formData.city,
+        district: formData.district,
+        state: formData.state,
+        country: formData.country,
+        pincode: formData.pincode,
+      };
+
+      const { data } = await axios.post(
+        "http://localhost:7001/update-user",
+        updateUserObj,
+        {
+          headers: { Authorization: authToken },
+        }
+      );
+      if (data.status === 200) {
+        setOpenAlert(true);
+        localStorage.removeItem("userDetail");
+        localStorage.setItem("userDetail", JSON.stringify(data.data));
+      }
       const res = await axios.post(
-        `${baseUrl}/register`,
+        `${baseUrl}/events/register`,
         {
           mobileNumber,
           firstName,
@@ -294,7 +331,9 @@ const EventsPage = () => {
           variant="filled"
           sx={{ width: "100%" }}
         >
-          Registration Successfully Done.
+          {registerCheck
+            ? "Registration Successfully updated."
+            : " Registration Successfully Done."}
         </Alert>
       </Snackbar>
       <Container

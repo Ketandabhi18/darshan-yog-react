@@ -32,7 +32,7 @@ const UpdateUser = () => {
   const authToken = localStorage.getItem("authToken");
   const user: any = localStorage.getItem("userDetail");
   const userDetail: any = JSON.parse(user);
-  console.log("userDetail :: in update user ", userDetail);
+  console.log(new Date(), "userDetail :: in update user ", userDetail);
   const [formData, setFormData] = useState<any>(userDetail);
 
   const handleChange = (e: any) => {
@@ -198,11 +198,7 @@ const UpdateUser = () => {
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <DatePicker
-                      value={
-                        formData.dateOfBirth
-                          ? new Date(formData.dateOfBirth.replace(/-/g, "/"))
-                          : new Date()
-                      }
+                      value={new Date(formData.dateOfBirth)}
                       onChange={(e: any) => {
                         const value = `${new Date(e)
                           .getDate()
@@ -210,9 +206,8 @@ const UpdateUser = () => {
                           .padStart(2, "0")}-${(new Date(e).getMonth() + 1)
                           .toString()
                           .padStart(2, "0")}-${new Date(e).getFullYear()}`;
-                        setFormData({
-                          ...formData,
-                          ["dateOfBirth"]: value,
+                        setFormData((prevFormData: any) => {
+                          return { ...prevFormData, ["dateOfBirth"]: value };
                         });
                       }}
                       label="Date Of Birth"
