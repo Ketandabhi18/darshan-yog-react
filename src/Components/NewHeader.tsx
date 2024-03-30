@@ -12,11 +12,10 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import { Logout, Settings } from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-
-const isloggedIn = localStorage.getItem("authToken");
-const user: any = localStorage.getItem("userDetail");
-const userDetail: any = JSON.parse(user);
 const NewHeader = () => {
+  const isloggedIn = localStorage.getItem("authToken");
+  const user: any = localStorage.getItem("userDetail");
+  const userDetail: any = JSON.parse(user);
   const [navOptions, setNavOptions] = useState<any>(pages);
   const [anchorEl, setAnchorEl] = React.useState<any>({});
   const [profileDropMenu, setProfileDropMenu] = useState<any>(null);
