@@ -15,6 +15,7 @@ import {
 import {
   EducationalQualification,
   Profession,
+  baseUrl,
   states,
   statesWithDistricts,
 } from "../config/constants";
@@ -72,14 +73,9 @@ const UpdateUser = () => {
     }
     try {
       console.log(newErrors, "formData :: ", formData);
-      const { data } = await axios.post(
-        // "https://darshan-yog-node-apis.onrender.com/update-user",
-        "http://localhost:7001/update-user",
-        formData,
-        {
-          headers: { Authorization: authToken },
-        }
-      );
+      const { data } = await axios.post(`${baseUrl}/update-user`, formData, {
+        headers: { Authorization: authToken },
+      });
       if (data.status === 200) {
         setAlertType("success");
         setAlertMessage("User Updated Successfully.");

@@ -253,7 +253,7 @@ const EventsPage = () => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:7001/update-user",
+        `${baseUrl}/update-user`,
         updateUserObj,
         {
           headers: { Authorization: authToken },

@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { baseUrl } from "../config/constants";
 
 const UpdatePassword = () => {
   const user: any = localStorage.getItem("userDetail") || "";
@@ -32,8 +33,7 @@ const UpdatePassword = () => {
     }
     try {
       const res = await axios.post(
-        "https://darshan-yog-node-apis.onrender.com/update-password",
-        // "http://localhost:7001/update-password",
+        `${baseUrl}/update-password`,
         {
           password,
           mobileNumber: defaultMobileNumber,
