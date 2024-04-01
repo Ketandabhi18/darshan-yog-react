@@ -194,7 +194,11 @@ const UpdateUser = () => {
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <DatePicker
-                      value={new Date(formData.dateOfBirth)}
+                      value={
+                        new Date(
+                          formData.dateOfBirth.split("-").reverse().join("-")
+                        )
+                      }
                       onChange={(e: any) => {
                         const value = `${new Date(e)
                           .getDate()

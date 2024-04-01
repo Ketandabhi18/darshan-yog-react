@@ -34,7 +34,7 @@ const HomeCarouselCard = ({
             {/* Thin grey line before */}
             <Typography variant="h6" style={{ marginRight: "10px" }}>
               <a
-                href="https://www.smvs.org/smvs-video/0/r"
+                href=""
                 style={{
                   color: "black",
                   textDecoration: "none",
@@ -141,7 +141,7 @@ const HomeCarouselCard = ({
                 variant="outlined"
                 className="btn-rounded"
                 type="button"
-                href="https://www.smvs.org/smvs-video/0/r"
+                href=""
                 target="_blank"
                 style={{
                   borderColor: "#009688",

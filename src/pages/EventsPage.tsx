@@ -630,7 +630,12 @@ const EventsPage = () => {
                               <DatePicker
                                 value={
                                   formData.dateOfBirth
-                                    ? new Date(formData.dateOfBirth)
+                                    ? new Date(
+                                        formData.dateOfBirth
+                                          .split("-")
+                                          .reverse()
+                                          .join("-")
+                                      )
                                     : null
                                 }
                                 onChange={(e: any) => {
