@@ -17,13 +17,19 @@ const UpdatePassword = () => {
   const userDetails = JSON.parse(user);
   const defaultMobileNumber = userDetails.mobileNumber;
   const [password, setPassword] = useState<any>("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [openAlert, setOpenAlert] = useState(false);
   const authToken = localStorage.getItem("authToken") || "";
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     console.log("password :: ", password);
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
     if (password.length < 8 || password.length > 16) {
       setError("Password length should be between 8 and 16");
       return;
@@ -132,7 +138,40 @@ const UpdatePassword = () => {
           }}
           error={error !== ""}
           helperText={error}
-          autoComplete="off"
+          autoComplete="new-password"
+        />
+        <TextField
+          label="Confirm Password"
+          type={showConfirmPassword ? "text" : "password"}
+          variant="outlined"
+          fullWidth
+          required
+          value={confirmPassword}
+          style={{ marginBottom: "20px" }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => {
+                    setShowConfirmPassword(!showConfirmPassword);
+                  }}
+                  edge="end"
+                >
+                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          onChange={(e) => {
+            setConfirmPassword(e.target.value);
+            setError("");
+          }}
+          error={error !== ""}
+          helperText={error}
+          autoComplete="new-password" // Make sure to set this for security
         />
         <Button
           type="submit"
