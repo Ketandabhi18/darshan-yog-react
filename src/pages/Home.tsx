@@ -158,22 +158,6 @@ const Home = () => {
       link: "https://darshanyog.org/assets/img/upload/team/jjurs4lO2V.jpg",
       title: "Swami vivekanand parivrajak",
     },
-    // {
-    //   imageUrl: "https://darshanyog.org/assets/img/upload/team/J0lDBBYml2.jpg",
-    //   link: "https://darshanyog.org/assets/img/upload/team/J0lDBBYml2.jpg",
-    //   title: "Swami dhruvdev privrajak",
-    // },
-    // {
-    //   imageUrl: "https://darshanyog.org/assets/img/upload/team/RmiXyuUJEk.jpg",
-    //   link: "https://darshanyog.org/assets/img/upload/team/RmiXyuUJEk.jpg",
-    //   title: "Aacharya dinesh kumar",
-    // },
-    // {
-    //   imageUrl: "https://darshanyog.org/assets/img/upload/team/qe4tLla1Lm.jpg",
-    //   link: "https://darshanyog.org/assets/img/upload/team/qe4tLla1Lm.jpg",
-    //   title: "Acharya ishvaranand",
-    // },
-    // Add other testimonials similarly
   ];
 
   const itemsPerPage = isSmScreen ? 1 : 3; // Adjust the number of items per page based on screen size
@@ -192,122 +176,6 @@ const Home = () => {
     },
     []
   );
-  // const TestimonialItem = ({
-  //   imageUrl,
-  //   link,
-  //   title,
-  // }: {
-  //   imageUrl: any;
-  //   link: any;
-  //   title: any;
-  // }) => (
-  //   <Paper
-  //     style={{
-  //       overflow: "hidden",
-  //       border: "1px solid #fff", // Add a border around each testimonial item
-  //       borderRadius: "100%", // Add border-radius for a rounded look
-  //       padding: "15px", // Add padding inside each testimonial item
-  //     }}
-
-  //   >
-  //     <Link href={link}>
-  //       <img src={imageUrl} alt={title} style={{ maxWidth: "100%" }} />
-  //     </Link>
-  //     {/* <Typography>
-  //     <Link href={link}>{title}</Link>
-  //   </Typography> */}
-  //   </Paper>
-  // );
-
-  // const TestimonialItem = ({
-  //   imageUrl,
-  //   link,
-  //   title,
-  // }: {
-  //   imageUrl: any;
-  //   link: any;
-  //   title: any;
-  // }) => {
-  //   // Generate a unique id for each TestimonialItem
-  //   const itemId = `testimonial-item-${Math.floor(Math.random() * 100000)}`;
-
-  //   const handleMouseOver = () => {
-  //     const element = document.getElementById(itemId);
-  //     if (element) {
-  //       // Change border color on hover
-  //       element.style.borderColor = "#ccc";
-
-  //       // Show the title on hover
-  //       const titleOverlay = element.querySelector(
-  //         ".title-overlay"
-  //       ) as HTMLElement | null;
-  //       if (titleOverlay) {
-  //         titleOverlay.style.display = "block";
-  //       }
-  //     }
-  //   };
-
-  //   const handleMouseOut = () => {
-  //     const element = document.getElementById(itemId);
-  //     if (element) {
-  //       // Change back to the original border color on mouse out
-  //       element.style.borderColor = "#fff";
-
-  //       // Hide the title on mouse out
-  //       const titleOverlay = element.querySelector(
-  //         ".title-overlay"
-  //       ) as HTMLElement | null;
-  //       if (titleOverlay) {
-  //         titleOverlay.style.display = "none";
-  //       }
-  //     }
-  //   };
-
-  //   return (
-  //     <Paper
-  //       id={itemId}
-  //       style={{
-  //         position: "relative",
-  //         overflow: "hidden",
-  //         border: "1px solid #fff", // Add a border around each testimonial item
-  //         borderRadius: "15px", // Add border-radius for a rounded look
-  //         padding: "15px", // Add padding inside each testimonial item
-  //         transition: "border-color 0.3s ease", // Add a smooth transition for the border color change
-  //       }}
-  //       onMouseOver={handleMouseOver}
-  //       onMouseOut={handleMouseOut}
-  //     >
-  //       <Link
-  //         href={link}
-  //         style={{
-  //           position: "relative",
-  //           display: "block",
-  //           overflow: "hidden",
-  //         }}
-  //       >
-  //         <img src={imageUrl} alt={title} style={{ maxWidth: "100%" }} />
-  //         <div
-  //           className="title-overlay"
-  //           style={{
-  //             position: "absolute",
-  //             top: "50%",
-  //             left: "50%",
-  //             transform: "translate(-50%, -50%)",
-  //             color: "#fff",
-  //             display: "none", // Initially hide the title
-  //             background: "rgba(0, 0, 0, 0.5)", // Semi-transparent background to overlay on the image
-  //             padding: "10px",
-  //             borderRadius: "10px",
-  //             textAlign: "center",
-  //             width: "100%",
-  //           }}
-  //         >
-  //           {title}
-  //         </div>
-  //       </Link>
-  //     </Paper>
-  //   );
-  // };
 
   const TestimonialItem = ({
     imageUrl,
@@ -425,26 +293,6 @@ const Home = () => {
             </div>
           ))}
         </Carousel>
-        {/* <div style={{ textAlign: "center", marginTop: "10px" }}>
-          {items.map((item, i) => (
-            <button
-              key={i}
-              onClick={() => setIndex(i)}
-              style={{
-                background: i === index ? "#3498db" : "#2c3e50",
-                color: "#fff",
-                padding: "8px 12px",
-                margin: "0 5px",
-                cursor: "pointer",
-                borderRadius: "4px",
-                border: "none",
-                outline: "none",
-              }}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div> */}
       </div>
 
       <section
