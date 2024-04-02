@@ -195,9 +195,14 @@ const UpdateUser = () => {
                   <FormControl fullWidth>
                     <DatePicker
                       value={
-                        new Date(
-                          formData.dateOfBirth.split("-").reverse().join("-")
-                        )
+                        formData.dateOfBirth
+                          ? new Date(
+                              formData.dateOfBirth
+                                .split("-")
+                                .reverse()
+                                .join("-")
+                            )
+                          : new Date()
                       }
                       onChange={(e: any) => {
                         const value = `${new Date(e)
