@@ -83,6 +83,7 @@ const EventsPage = () => {
   });
   const [errors, setErrors] = useState<any>({});
   const [registerCheck, setRegisterCheck] = useState<any>(false);
+  const [registerId, setRegisterId] = useState<any>();
   const authToken = localStorage.getItem("authToken") || "";
   const handleOpen = (eventCode: any) => {
     setFormData({ ...formData, eventCode });
@@ -168,6 +169,7 @@ const EventsPage = () => {
                   eventCode: eventCode,
                 };
               });
+              setRegisterId(registeredEvent.eventRegId);
               setRegisterCheck(true);
               setOpen(true);
             } else {
@@ -536,9 +538,11 @@ const EventsPage = () => {
                       <Typography variant="h6" gutterBottom>
                         Register for {event.eventName}
                       </Typography>
+
                       {registerCheck && (
                         <Typography variant="h6" gutterBottom color="error">
-                          You are already registered for this event
+                          You are already registered for this event with Reg id{" "}
+                          {registerId}
                         </Typography>
                       )}
                       <IconButton onClick={handleClose}>
