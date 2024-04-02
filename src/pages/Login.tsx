@@ -248,7 +248,7 @@ const Login: FunctionComponent = () => {
     const { data } = await axios.post(
       `${baseUrl}/update-user`,
       {
-        mobileNumber: mobile,
+        mobileNumber: `${countrycode}${mobile}`,
         countrycode,
         email,
         firstName,
