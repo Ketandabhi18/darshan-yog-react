@@ -23,7 +23,7 @@ const NewHeader = () => {
   const navigate = useNavigate();
   const iRef = useRef(0);
   const txt =
-    "|| कर्मण्येवाधिकारस्ते मा फलेषु कदाचन । मा कर्मफलहेतुर्भुर्मा ते संगोऽस्त्वकर्मणि ||";
+    "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
   const speed = 50;
 
   const handleProfileClick = (event: any) => {
@@ -218,7 +218,7 @@ const NewHeader = () => {
 
         <section className="box">
           <div>
-            <h1 id="demo" style={{ fontSize: "4em", color: "white" }}></h1>
+            <h1 id="demo" style={{ fontSize: "3em", color: "white" }}></h1>
           </div>
         </section>
       </div>
