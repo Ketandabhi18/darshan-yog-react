@@ -306,7 +306,7 @@ const UpdateUser = () => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth margin="normal">
+                <FormControl fullWidth>
                   <InputLabel>State*</InputLabel>
                   <Select
                     name="state"
@@ -339,7 +339,7 @@ const UpdateUser = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth margin="normal">
+                <FormControl fullWidth>
                   <InputLabel>District*</InputLabel>
                   <Select
                     name="district"

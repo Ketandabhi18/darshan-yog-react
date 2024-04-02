@@ -182,6 +182,7 @@ const EventsPage = () => {
     try {
       e.preventDefault();
       const newErrors: any = {};
+      console.log("formData ::", formData);
 
       if (!formData.firstName) {
         newErrors.firstName = "First Name is required";
@@ -189,9 +190,7 @@ const EventsPage = () => {
       if (!formData.gender) {
         newErrors.gender = "Gender is required";
       }
-      if (!formData.addrLine1) {
-        newErrors.addrLine1 = "Address Line 1 is required";
-      }
+
       if (!formData.district) {
         newErrors.district = "District is required";
       }
@@ -217,7 +216,6 @@ const EventsPage = () => {
         setErrors(newErrors);
         return;
       }
-      console.log("formData ::", formData);
       const {
         mobileNumber,
         firstName,
@@ -261,31 +259,32 @@ const EventsPage = () => {
           headers: { Authorization: authToken },
         }
       );
+
       if (data.status === 200) {
-        setOpenAlert(true);
         localStorage.removeItem("userDetail");
         localStorage.setItem("userDetail", JSON.stringify(data.data));
+
+        const res = await axios.post(
+          `${baseUrl}/events/register`,
+          {
+            mobileNumber,
+            firstName,
+            gender,
+            dateOfBirth,
+            eventCode,
+            arrivalDate,
+            departureDate,
+            groupDetails,
+            notes,
+          },
+          {
+            headers: { Authorization: authToken },
+          }
+        );
+        console.log("Register event :: res ::", res);
+        setOpenAlert(true);
+        setOpen(false);
       }
-      const res = await axios.post(
-        `${baseUrl}/events/register`,
-        {
-          mobileNumber,
-          firstName,
-          gender,
-          dateOfBirth,
-          eventCode,
-          arrivalDate,
-          departureDate,
-          groupDetails,
-          notes,
-        },
-        {
-          headers: { Authorization: authToken },
-        }
-      );
-      console.log("Register event :: res ::", res);
-      setOpenAlert(true);
-      setOpen(false);
     } catch (error) {
       console.log("error :: ", error);
     }
@@ -538,7 +537,7 @@ const EventsPage = () => {
                         Register for {event.eventName}
                       </Typography>
                       {registerCheck && (
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h6" gutterBottom color="error">
                           You are already registered for this event
                         </Typography>
                       )}

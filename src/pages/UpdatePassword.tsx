@@ -185,7 +185,7 @@ const UpdatePassword = () => {
             fontWeight: "bold",
           }}
         >
-          Update Password
+          Set Password
         </Button>
       </form>
     </div>

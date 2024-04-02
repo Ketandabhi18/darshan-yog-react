@@ -14,6 +14,8 @@ import Alert from "@mui/material/Alert";
 import {
   FormControl,
   Grid,
+  IconButton,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -31,6 +33,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { enGB } from "date-fns/locale";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login: FunctionComponent = () => {
   const [step, setStep] = useState<any>(false);
@@ -40,6 +43,7 @@ const Login: FunctionComponent = () => {
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<any>("success");
+  const [showPassword, setShowPassword] = useState(false);
   const [loader, setLoader] = useState<boolean>(false);
   const [loginwithPassword, setLoginWithPassword] = useState(false);
   const [openEventForm, setOpenEventForm] = useState(false);
@@ -274,7 +278,13 @@ const Login: FunctionComponent = () => {
     if (data.status === 200) {
       localStorage.removeItem("userDetail");
       localStorage.setItem("userDetail", JSON.stringify(data.data));
+    } else {
+      setAlertMessage(data.message);
+      setAlertType("error");
+      setOpenAlert(true);
+      return;
     }
+
     const reqObj = { ...formData, eventCode: location.state.eventCode };
     const { eventCode, arrivalDate, departureDate, groupDetails, notes } =
       reqObj;
@@ -381,7 +391,42 @@ const Login: FunctionComponent = () => {
                     onChange={(e) => setMobile(e.target.value)}
                   />
                 </div>
-                {loginwithPassword && (
+
+                {loginwithPassword === true && (
+                  <TextField
+                    margin="normal"
+                    label="Password"
+                    type={showPassword ? "text" : "password"}
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={otp}
+                    style={{ marginBottom: "20px" }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => {
+                              setShowPassword(!showPassword);
+                            }}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onChange={(e) => {
+                      setOtp(e.target.value);
+                    }}
+                    autoComplete="new-password"
+                  />
+                )}
+
+                {/* {step && (
                   <TextField
                     margin="normal"
                     onChange={(e) => setOtp(e.target.value)}
@@ -392,7 +437,7 @@ const Login: FunctionComponent = () => {
                     id="password"
                     autoComplete="current-password"
                   />
-                )}
+                )} */}
 
                 <Button
                   type="submit"
@@ -739,6 +784,10 @@ const Login: FunctionComponent = () => {
                         value={formData?.pincode}
                         onChange={handleChange}
                         fullWidth
+                        inputProps={{
+                          min: 100000, // example minimum value
+                          max: 999999, // example maximum value
+                        }}
                       />
                     </Grid>
 
