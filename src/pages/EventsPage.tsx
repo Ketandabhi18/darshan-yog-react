@@ -22,6 +22,7 @@ import {
   Grid,
   FormHelperText,
   Snackbar,
+  Skeleton,
 } from "@mui/material";
 import axios from "axios";
 import { CloseOutlined } from "@mui/icons-material";
@@ -42,6 +43,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const EventsPage = () => {
   const navigate = useNavigate();
+  const [skeletonopen, setSkeletonOpen] = useState(false);
   const [data, setData] = useState<any>([]);
   const userDetailString = localStorage.getItem("userDetail");
   const parsedUser =
@@ -291,6 +293,7 @@ const EventsPage = () => {
 
   const fetchEvents = async () => {
     try {
+      setSkeletonOpen(true);
       axios
         .get(`${baseUrl}/events/active`, {
           headers: { Authorization: authToken },
@@ -300,6 +303,7 @@ const EventsPage = () => {
           console.log("res :: data ::", res.data);
           if (res.data.status === 200) {
             setData(res.data.data);
+            setSkeletonOpen(false);
           }
         });
     } catch (error) {
@@ -358,6 +362,62 @@ const EventsPage = () => {
         >
           Event List
         </Typography>
+
+        {skeletonopen && (
+          <Card
+            style={{
+              marginBottom: "20px",
+              boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+              transition: "0.3s",
+              borderRadius: "8px",
+              overflow: "hidden",
+              background: "#fff",
+              border: "1px solid #ddd",
+            }}
+          >
+            <CardContent style={{ padding: "20px" }}>
+              <Typography
+                variant="h5"
+                component="div"
+                style={{ color: "#333", marginBottom: "10px" }}
+              >
+                <Skeleton animation="pulse" />
+              </Typography>
+
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                gutterBottom
+                style={{ marginBottom: "10px" }}
+              >
+                <Skeleton animation="pulse" />
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                gutterBottom
+                style={{ marginBottom: "10px" }}
+              >
+                <Skeleton animation="pulse" />
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                gutterBottom
+                style={{ marginBottom: "10px" }}
+              >
+                <Skeleton animation="pulse" />
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                style={{ marginBottom: "10px" }}
+              >
+                <Skeleton animation="pulse" />
+              </Typography>
+            </CardContent>
+          </Card>
+        )}
         {data.map((event: any) => {
           return (
             <Card
