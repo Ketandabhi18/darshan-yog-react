@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./newHeader.css";
 import { pages } from "../config/constants";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
@@ -12,6 +12,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import { Logout, Settings } from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Box, Typography } from "@mui/material";
 const NewHeader = () => {
   const isloggedIn = localStorage.getItem("authToken");
   const user: any = localStorage.getItem("userDetail");
@@ -67,66 +69,160 @@ const NewHeader = () => {
 
     typeWriter();
   }, [userDetail]);
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null
+  );
+
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
   return (
     <>
       <div className="container">
         <nav>
-          <img src={logo} className="logo" alt="Darshanyog Dham Logo" />
-
-          {navOptions.map((page: any) => (
-            <div key={page.name} style={{ position: "relative" }}>
-              <Button
-                onClick={(event: any) =>
-                  handleClick(event, page.name, page.route ? page.route : "/")
-                }
-                sx={{
-                  my: 2,
-                  color: "white",
-                  display: "block",
-                  position: "relative",
-                  overflow: "hidden",
-                  "&::before": {
-                    content: '""',
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: 0,
-                    height: "100%",
-                    borderBottom: "2px solid orange",
-                    transition: "width 0.4s linear",
-                  },
-                  "&:hover::before": {
-                    width: "100%",
-                  },
-                }}
-              >
-                {page.name}
-              </Button>
-              {page.options && (
-                <Menu
-                  anchorEl={anchorEl[page.name]}
-                  open={Boolean(anchorEl[page.name])}
-                  onClose={() => handleClose(page.name)}
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}
+            >
+              {navOptions.map((page: any) => [
+                <MenuItem
+                  key={page.name}
+                  onClick={(event: any) => {
+                    handleClick(
+                      event,
+                      page.name,
+                      page.route ? page.route : "/"
+                    );
+                  }}
                 >
-                  {page.options.map((subItem: any) => (
-                    <MenuItem
-                      key={subItem.pageName}
-                      onClick={() => {
-                        handleClose(page.name);
-                        navigate(subItem.route, {
-                          state: {
-                            content: subItem?.content ? subItem?.content : "",
-                          },
-                        });
-                      }}
-                    >
-                      {subItem.pageName}
-                    </MenuItem>
-                  ))}
-                </Menu>
-              )}
-            </div>
-          ))}
+                  <Typography textAlign="center">{page.name}</Typography>
+                </MenuItem>,
+                page.options && (
+                  <Menu
+                    anchorEl={anchorEl[page.name]}
+                    open={Boolean(anchorEl[page.name])}
+                    onClose={() => handleClose(page.name)}
+                  >
+                    {page.options.map((subItem: any) => (
+                      <MenuItem
+                        key={subItem.pageName}
+                        onClick={() => {
+                          handleClose(page.name);
+                          navigate(subItem.route, {
+                            state: {
+                              content: subItem?.content ? subItem?.content : "",
+                            },
+                          });
+                          handleCloseNavMenu();
+                        }}
+                      >
+                        {subItem.pageName}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                ),
+              ])}
+            </Menu>
+          </Box>
+
+          <img src={logo} className="logo" alt="Darshanyog Dham Logo" />
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: {
+                xs: "none",
+                md: "flex",
+
+                justifyContent: "space-evenly",
+              },
+              // mr: 2,
+            }}
+          >
+            {navOptions.map((page: any) => (
+              <div key={page.name} style={{ position: "relative" }}>
+                <Button
+                  onClick={(event: any) =>
+                    handleClick(event, page.name, page.route ? page.route : "/")
+                  }
+                  sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
+                    position: "relative",
+                    overflow: "hidden",
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: 0,
+                      height: "100%",
+                      borderBottom: "2px solid orange",
+                      transition: "width 0.4s linear",
+                    },
+                    "&:hover::before": {
+                      width: "100%",
+                    },
+                  }}
+                >
+                  {page.name}
+                </Button>
+                {page.options && (
+                  <Menu
+                    anchorEl={anchorEl[page.name]}
+                    open={Boolean(anchorEl[page.name])}
+                    onClose={() => handleClose(page.name)}
+                  >
+                    {page.options.map((subItem: any) => (
+                      <MenuItem
+                        key={subItem.pageName}
+                        onClick={() => {
+                          handleClose(page.name);
+                          navigate(subItem.route, {
+                            state: {
+                              content: subItem?.content ? subItem?.content : "",
+                            },
+                          });
+                        }}
+                      >
+                        {subItem.pageName}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                )}
+              </div>
+            ))}
+          </Box>
+
           {localStorage.getItem("authToken") && (
             <>
               <Tooltip title="Account settings">
@@ -218,12 +314,10 @@ const NewHeader = () => {
 
         <section className="box">
           <div>
-            <h1 id="demo" style={{ fontSize: "3em", color: "white" }}></h1>
+            <h1 id="demo" className="text"></h1>
           </div>
         </section>
       </div>
-
-      <div className="card-container">{/* Your card components go here */}</div>
     </>
   );
 };
