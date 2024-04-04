@@ -109,19 +109,20 @@ const ProgramScheduleCard: React.FC<ProgramScheduleProps> = ({
             title={item.title}
             subheader={item.subheader}
           />
-          <div style={{ overflow: "auto" }}>
-            <img
-              style={{
-                height: "300px",
-                display: "block",
-                margin: "auto",
-                border: "1px solid #00000033",
-                boxShadow: "0 0 2px",
-              }}
-              src={item.imageSrc}
-              alt={item.title}
-            />
-          </div>
+           <div style={{ overflow: "auto" }}>
+              <img
+                style={{
+                  width: "100%", 
+                  maxWidth: "100%",
+                  display: "block",
+                  margin: "auto",
+                  border: "1px solid #00000033",
+                  boxShadow: "0 0 2px",
+                }}
+                src={item.imageSrc}
+                alt={item.title}
+              />
+            </div>
           <CardContent>
             <Typography variant="body2" color="text.secondary">
               {item.content}

@@ -154,7 +154,17 @@ const NewHeader = () => {
             </Menu>
           </Box>
 
-          <img src={logo} className="logo" alt="Darshanyog Dham Logo" />
+          <img
+            src={logo}
+            style={{
+              maxWidth: "100%",
+              height: "auto",
+              display: "block",
+              margin: "auto",
+            }}
+            className="logo"
+            alt="Darshanyog Dham Logo"
+          />
           <Box
             sx={{
               flexGrow: 1,
