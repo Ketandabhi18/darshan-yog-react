@@ -34,7 +34,6 @@ const HomeCarouselCard = ({
             {/* Thin grey line before */}
             <Typography variant="h6" style={{ marginRight: "10px" }}>
               <a
-                href=""
                 style={{
                   color: "black",
                   textDecoration: "none",
@@ -69,9 +68,7 @@ const HomeCarouselCard = ({
                   >
                     <div className="post-image">
                       <a
-                        href={item.videoUrl}
                         title={item.title}
-                        target="_blank"
                       >
                         <img
                           src={item.imageUrl}
@@ -101,9 +98,7 @@ const HomeCarouselCard = ({
                           }}
                         >
                           <a
-                            href={item.videoUrl}
                             title={item.title}
-                            target="_blank"
                             style={{
                               color: "#333",
                               textDecoration: "none",
@@ -141,8 +136,6 @@ const HomeCarouselCard = ({
                 variant="outlined"
                 className="btn-rounded"
                 type="button"
-                href=""
-                target="_blank"
                 style={{
                   borderColor: "#009688",
                   borderRadius: "20px",

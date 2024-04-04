@@ -10,7 +10,7 @@ const ContactUs = () => {
   const longitude = 73.11904; // Replace with your desired longitude
   return (
     <>
-      <Grid container spacing={2} sx={{ backgroundColor: "#f7f7f7" }}>
+      {/* <Grid container spacing={2} sx={{ backgroundColor: "#f7f7f7" }}>
         <Grid item xs={12} md={6}>
           <Container maxWidth="sm">
             <div style={{ display: "flex" }}>
@@ -139,7 +139,7 @@ const ContactUs = () => {
             </div>
           </Container>
         </Grid>
-      </Grid>
+      </Grid> */}
 
       <Map latitude={latitude} longitude={longitude} />
     </>

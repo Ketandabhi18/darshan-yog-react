@@ -237,7 +237,7 @@ const Home = () => {
         onMouseOut={handleMouseOut}
       >
         <Link
-          href={link}
+          // href={link}
           style={{
             position: "relative",
             display: "block",
@@ -275,7 +275,7 @@ const Home = () => {
 
   return (
     <>
-      <div style={{ position: "relative" }}>
+      {/* <div style={{ position: "relative" }}>
         <Carousel
           index={index}
           onChange={() => handleChange()}
@@ -293,7 +293,7 @@ const Home = () => {
             </div>
           ))}
         </Carousel>
-      </div>
+      </div> */}
 
       <section
         style={{ background: "rgb(206,206,206)", padding: "50px 0" }}

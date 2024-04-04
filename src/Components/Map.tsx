@@ -14,6 +14,8 @@ const Map = ({ latitude, longitude }: { latitude: any; longitude: any }) => {
     display: "flex",
     justifyContent: "center",
     overflow: "hidden",
+    marginTop: "1%",
+    marginBottom: "2%",
   };
   return (
     <div style={mapStyle}>

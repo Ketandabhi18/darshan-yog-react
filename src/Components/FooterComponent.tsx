@@ -32,7 +32,7 @@ const FooterComponent = () => {
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-        <Grid container spacing={2} sx={{ backgroundColor: "#f7f7f7", mt: 2 }}>
+        <Grid container spacing={2} sx={{ backgroundColor: "#f7f7f7" }}>
           <Grid item xs={12} md={6}>
             <Container maxWidth="sm">
               <div style={{ display: "flex" }}>
