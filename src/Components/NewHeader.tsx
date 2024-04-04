@@ -57,6 +57,8 @@ const NewHeader = () => {
     if (isloggedIn) {
       setNavOptions([...pages.filter((item: any) => item.name !== "LOG IN")]);
     }
+  }, [isloggedIn]);
+  useEffect(() => {
     const typeWriter = () => {
       const demoElement = document.getElementById("demo");
 
@@ -68,7 +70,7 @@ const NewHeader = () => {
     };
 
     typeWriter();
-  }, [userDetail]);
+  }, [txt, speed]);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
