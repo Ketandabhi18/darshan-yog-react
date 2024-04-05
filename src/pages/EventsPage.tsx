@@ -737,23 +737,19 @@ const EventsPage = () => {
                                     : new Date()
                                 }
                                 onChange={(e: any) => {
-                                  const originalDate = new Date(e)
-                                    .toISOString()
-                                    .split("T")[0];
-                                  const originalTime = new Date(
-                                    e
-                                  ).toLocaleTimeString("en-IN", {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    hour12: false,
-                                  });
-                                  const convertedDate = `${originalDate
-                                    .split("-")
-                                    .reverse()
-                                    .join("-")} ${originalTime.slice(
-                                    0,
-                                    5
-                                  )} IST`;
+                                  const convertedDate =
+                                    new Date(e)
+                                      .toLocaleDateString("en-US", {
+                                        timeZone: "Asia/Kolkata",
+                                        day: "2-digit",
+                                        month: "2-digit",
+                                        year: "numeric",
+                                      })
+                                      .replace(/\//g, "-") +
+                                    " " +
+                                    ("0" + new Date(e).getHours()).slice(-2) +
+                                    ":" +
+                                    ("0" + new Date(e).getMinutes()).slice(-2);
                                   setFormData({
                                     ...formData,
                                     ["arrivalDate"]: convertedDate,
@@ -773,23 +769,19 @@ const EventsPage = () => {
                                     : new Date()
                                 }
                                 onChange={(e: any) => {
-                                  const originalDate = new Date(e)
-                                    .toISOString()
-                                    .split("T")[0];
-                                  const originalTime = new Date(
-                                    e
-                                  ).toLocaleTimeString("en-IN", {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    hour12: false,
-                                  });
-                                  const convertedDate = `${originalDate
-                                    .split("-")
-                                    .reverse()
-                                    .join("-")} ${originalTime.slice(
-                                    0,
-                                    5
-                                  )} IST`;
+                                  const convertedDate =
+                                    new Date(e)
+                                      .toLocaleDateString("en-US", {
+                                        timeZone: "Asia/Kolkata",
+                                        day: "2-digit",
+                                        month: "2-digit",
+                                        year: "numeric",
+                                      })
+                                      .replace(/\//g, "-") +
+                                    " " +
+                                    ("0" + new Date(e).getHours()).slice(-2) +
+                                    ":" +
+                                    ("0" + new Date(e).getMinutes()).slice(-2);
                                   setFormData({
                                     ...formData,
                                     ["departureDate"]: convertedDate,
