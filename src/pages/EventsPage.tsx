@@ -23,6 +23,8 @@ import {
   FormHelperText,
   Snackbar,
   Skeleton,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import axios from "axios";
 import { CloseOutlined } from "@mui/icons-material";
@@ -45,6 +47,7 @@ const EventsPage = () => {
   const navigate = useNavigate();
   const [skeletonopen, setSkeletonOpen] = useState(false);
   const [data, setData] = useState<any>([]);
+  const [backDrop, setBackDrop] = useState<any>(false);
   const userDetailString = localStorage.getItem("userDetail");
   const parsedUser =
     userDetailString && userDetailString !== "null"
@@ -139,6 +142,7 @@ const EventsPage = () => {
   };
 
   const onRegisterClick = async (eventCode: any) => {
+    setBackDrop(true);
     let user: any = localStorage.getItem("userDetail");
     user = JSON.parse(user);
     if (!authToken) {
@@ -171,8 +175,10 @@ const EventsPage = () => {
               });
               setRegisterId(registeredEvent.eventRegId);
               setRegisterCheck(true);
+              setBackDrop(false);
               setOpen(true);
             } else {
+              setBackDrop(false);
               handleOpen(eventCode);
             }
           }
@@ -253,7 +259,7 @@ const EventsPage = () => {
         country: formData.country,
         pincode: formData.pincode,
       };
-
+      setBackDrop(true);
       const { data } = await axios.post(
         `${baseUrl}/update-user`,
         updateUserObj,
@@ -284,6 +290,7 @@ const EventsPage = () => {
           }
         );
         console.log("Register event :: res ::", res);
+        setBackDrop(false);
         setOpenAlert(true);
         setOpen(false);
       }
@@ -513,427 +520,447 @@ const EventsPage = () => {
                   </Button>
                 </Stack>
                 <Modal open={open} onClose={handleClose}>
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                      width: "75%", // Adjusted width for responsiveness
-                      maxHeight: "90vh", // Adjusted height for responsiveness
-                      overflowY: "auto",
-                      bgcolor: "background.paper",
-                      boxShadow: 24,
-                      p: 4,
-                    }}
-                  >
+                  <>
+                    {" "}
+                    <Backdrop
+                      sx={{
+                        color: "#fff",
+                        zIndex: (theme) => theme.zIndex.drawer + 1,
+                      }}
+                      open={backDrop}
+                    >
+                      <CircularProgress color="inherit" />
+                    </Backdrop>
                     <Box
                       sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        mb: 2,
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: "75%", // Adjusted width for responsiveness
+                        maxHeight: "90vh", // Adjusted height for responsiveness
+                        overflowY: "auto",
+                        bgcolor: "background.paper",
+                        boxShadow: 24,
+                        p: 4,
                       }}
                     >
-                      <Typography variant="h6" gutterBottom>
-                        Register for {event.eventName}
-                      </Typography>
-
-                      {registerCheck && (
-                        <Typography variant="h6" gutterBottom color="error">
-                          You are already registered for this event with Reg id{" "}
-                          {registerId}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          mb: 2,
+                        }}
+                      >
+                        <Typography variant="h6" gutterBottom>
+                          Register for {event.eventName}
                         </Typography>
-                      )}
-                      <IconButton onClick={handleClose}>
-                        <CloseOutlined />
-                      </IconButton>
-                    </Box>
-                    <form>
-                      <TextField
-                        label="First Name"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                      />
-                      <FormControl component="fieldset" margin="normal">
-                        <FormLabel component="legend">Gender</FormLabel>
-                        <RadioGroup
-                          aria-label="gender"
-                          name="gender"
-                          value={formData.gender}
-                          onChange={handleChange}
-                          row
-                        >
-                          <FormControlLabel
-                            value="Male"
-                            control={<Radio />}
-                            label="Male"
-                          />
-                          <FormControlLabel
-                            value="Female"
-                            control={<Radio />}
-                            label="Female"
-                          />
-                        </RadioGroup>
-                      </FormControl>
 
-                      <FormControl fullWidth margin="normal">
-                        <InputLabel>Country*</InputLabel>
-                        <Select
-                          name="country"
-                          required
-                          value={formData.country}
-                          onChange={handleChange}
-                        >
-                          <MenuItem value="india">India</MenuItem>
-                          <MenuItem value="afghanistan">Afghanistan</MenuItem>
-                        </Select>
-                      </FormControl>
-                      {errors.country && (
-                        <FormHelperText error>{errors.country}</FormHelperText>
-                      )}
-
-                      <FormControl fullWidth margin="normal">
-                        <InputLabel>State*</InputLabel>
-                        <Select
-                          name="state"
-                          required
-                          value={formData.state}
-                          onChange={(event) => {
-                            handleStateChange(event);
-                            handleChange(event);
-                          }}
-                        >
-                          {Object.keys(statesWithDistricts).map(
-                            (state, index) => (
-                              <MenuItem key={index} value={state}>
-                                {state}
-                              </MenuItem>
-                            )
-                          )}
-                        </Select>
-                        {errors.state && (
-                          <FormHelperText error>{errors.state}</FormHelperText>
+                        {registerCheck && (
+                          <Typography variant="h6" gutterBottom color="error">
+                            You are already registered for this event with Reg
+                            id {registerId}
+                          </Typography>
                         )}
-                      </FormControl>
-
-                      <FormControl fullWidth margin="normal">
-                        <InputLabel>District*</InputLabel>
-                        <Select
-                          name="district"
-                          required
-                          value={formData.district}
+                        <IconButton onClick={handleClose}>
+                          <CloseOutlined />
+                        </IconButton>
+                      </Box>
+                      <form>
+                        <TextField
+                          label="First Name"
+                          name="firstName"
+                          value={formData.firstName}
                           onChange={handleChange}
-                          disabled={!formData.state || formData.state === ""}
-                        >
-                          {formData.state &&
-                            statesWithDistricts[formData.state] &&
-                            statesWithDistricts[formData.state].map(
-                              (district: any, index: any) => (
-                                <MenuItem key={index} value={district}>
-                                  {district}
+                          fullWidth
+                          margin="normal"
+                        />
+                        <FormControl component="fieldset" margin="normal">
+                          <FormLabel component="legend">Gender</FormLabel>
+                          <RadioGroup
+                            aria-label="gender"
+                            name="gender"
+                            value={formData.gender}
+                            onChange={handleChange}
+                            row
+                          >
+                            <FormControlLabel
+                              value="Male"
+                              control={<Radio />}
+                              label="Male"
+                            />
+                            <FormControlLabel
+                              value="Female"
+                              control={<Radio />}
+                              label="Female"
+                            />
+                          </RadioGroup>
+                        </FormControl>
+
+                        <FormControl fullWidth margin="normal">
+                          <InputLabel>Country*</InputLabel>
+                          <Select
+                            name="country"
+                            required
+                            value={formData.country}
+                            onChange={handleChange}
+                          >
+                            <MenuItem value="india">India</MenuItem>
+                            <MenuItem value="afghanistan">Afghanistan</MenuItem>
+                          </Select>
+                        </FormControl>
+                        {errors.country && (
+                          <FormHelperText error>
+                            {errors.country}
+                          </FormHelperText>
+                        )}
+
+                        <FormControl fullWidth margin="normal">
+                          <InputLabel>State*</InputLabel>
+                          <Select
+                            name="state"
+                            required
+                            value={formData.state}
+                            onChange={(event) => {
+                              handleStateChange(event);
+                              handleChange(event);
+                            }}
+                          >
+                            {Object.keys(statesWithDistricts).map(
+                              (state, index) => (
+                                <MenuItem key={index} value={state}>
+                                  {state}
                                 </MenuItem>
                               )
                             )}
-                        </Select>
+                          </Select>
+                          {errors.state && (
+                            <FormHelperText error>
+                              {errors.state}
+                            </FormHelperText>
+                          )}
+                        </FormControl>
 
-                        {errors.district && (
-                          <FormHelperText error>
-                            {errors.district}
-                          </FormHelperText>
-                        )}
-                      </FormControl>
-                      <TextField
-                        label="City / Village"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                      />
+                        <FormControl fullWidth margin="normal">
+                          <InputLabel>District*</InputLabel>
+                          <Select
+                            name="district"
+                            required
+                            value={formData.district}
+                            onChange={handleChange}
+                            disabled={!formData.state || formData.state === ""}
+                          >
+                            {formData.state &&
+                              statesWithDistricts[formData.state] &&
+                              statesWithDistricts[formData.state].map(
+                                (district: any, index: any) => (
+                                  <MenuItem key={index} value={district}>
+                                    {district}
+                                  </MenuItem>
+                                )
+                              )}
+                          </Select>
 
-                      <TextField
-                        label="Address 1"
-                        name="addrLine1"
-                        value={formData.addrLine1}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                      />
-
-                      <TextField
-                        label="Address 2"
-                        name="addrLine2"
-                        value={formData.addrLine2}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                      />
-
-                      <TextField
-                        label="Pincode"
-                        name="pincode"
-                        type="number"
-                        value={formData.pincode}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                      />
-
-                      <LocalizationProvider
-                        dateAdapter={AdapterDateFns}
-                        adapterLocale={enGB}
-                      >
-                        <Grid container spacing={2}>
-                          <Grid item xs={12}>
-                            <FormControl fullWidth>
-                              <DatePicker
-                                value={
-                                  formData.dateOfBirth
-                                    ? new Date(
-                                        formData.dateOfBirth
-                                          .split("-")
-                                          .reverse()
-                                          .join("-")
-                                      )
-                                    : null
-                                }
-                                onChange={(e: any) => {
-                                  const value = `${new Date(e)
-                                    .getDate()
-                                    .toString()
-                                    .padStart(2, "0")}-${(
-                                    new Date(e).getMonth() + 1
-                                  )
-                                    .toString()
-                                    .padStart(2, "0")}-${new Date(
-                                    e
-                                  ).getFullYear()}`;
-                                  setFormData({
-                                    ...formData,
-                                    ["dateOfBirth"]: value,
-                                  });
-                                }}
-                                label="Date Of Birth"
-                                slotProps={{
-                                  textField: {
-                                    helperText: "DD/MM/YYYY",
-                                  },
-                                }}
-                              />
-                            </FormControl>
-                          </Grid>
-                          <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth>
-                              <DateTimePicker
-                                label="Arrival Date"
-                                name="arrivalDate"
-                                value={
-                                  formData.arrivalDate
-                                    ? new Date(formData?.arrivalDate)
-                                    : new Date()
-                                }
-                                onChange={(e: any) => {
-                                  const convertedDate =
-                                    new Date(e)
-                                      .toLocaleDateString("en-US", {
-                                        timeZone: "Asia/Kolkata",
-                                        day: "2-digit",
-                                        month: "2-digit",
-                                        year: "numeric",
-                                      })
-                                      .replace(/\//g, "-") +
-                                    " " +
-                                    ("0" + new Date(e).getHours()).slice(-2) +
-                                    ":" +
-                                    ("0" + new Date(e).getMinutes()).slice(-2);
-                                  setFormData({
-                                    ...formData,
-                                    ["arrivalDate"]: convertedDate,
-                                  });
-                                }}
-                              />
-                            </FormControl>
-                          </Grid>
-                          <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth>
-                              <DateTimePicker
-                                label="Departure Date"
-                                name="departureDate"
-                                value={
-                                  formData.departureDate
-                                    ? new Date(formData?.departureDate)
-                                    : new Date()
-                                }
-                                onChange={(e: any) => {
-                                  const convertedDate =
-                                    new Date(e)
-                                      .toLocaleDateString("en-US", {
-                                        timeZone: "Asia/Kolkata",
-                                        day: "2-digit",
-                                        month: "2-digit",
-                                        year: "numeric",
-                                      })
-                                      .replace(/\//g, "-") +
-                                    " " +
-                                    ("0" + new Date(e).getHours()).slice(-2) +
-                                    ":" +
-                                    ("0" + new Date(e).getMinutes()).slice(-2);
-                                  setFormData({
-                                    ...formData,
-                                    ["departureDate"]: convertedDate,
-                                  });
-                                }}
-                              />
-                            </FormControl>
-                          </Grid>
-                        </Grid>
-                      </LocalizationProvider>
-                      <FormControl fullWidth margin="normal">
-                        <InputLabel>Pickup place</InputLabel>
-                        <Select
-                          name="pickupPlace"
-                          value={formData.pickupPlace}
+                          {errors.district && (
+                            <FormHelperText error>
+                              {errors.district}
+                            </FormHelperText>
+                          )}
+                        </FormControl>
+                        <TextField
+                          label="City / Village"
+                          name="city"
+                          value={formData.city}
                           onChange={handleChange}
+                          fullWidth
+                          margin="normal"
+                        />
+
+                        <TextField
+                          label="Address 1"
+                          name="addrLine1"
+                          value={formData.addrLine1}
+                          onChange={handleChange}
+                          fullWidth
+                          margin="normal"
+                        />
+
+                        <TextField
+                          label="Address 2"
+                          name="addrLine2"
+                          value={formData.addrLine2}
+                          onChange={handleChange}
+                          fullWidth
+                          margin="normal"
+                        />
+
+                        <TextField
+                          label="Pincode"
+                          name="pincode"
+                          type="number"
+                          value={formData.pincode}
+                          onChange={handleChange}
+                          fullWidth
+                          margin="normal"
+                        />
+
+                        <LocalizationProvider
+                          dateAdapter={AdapterDateFns}
+                          adapterLocale={enGB}
                         >
-                          <MenuItem value="Kalupur Railway Station">
-                            Kalupur Railway Station
-                          </MenuItem>
-                          <MenuItem value="Sabarmati Railway Station">
-                            Sabarmati Railway Station
-                          </MenuItem>
-                          <MenuItem value="Ahmedabad Airport">
-                            Ahmedabad Airport
-                          </MenuItem>
-                          <MenuItem value="Prantij bus stop">
-                            Prantij bus stop
-                          </MenuItem>
-                          <MenuItem value="Self ">Self </MenuItem>
-                        </Select>
-                      </FormControl>
-                      <Box mb={2}>
-                        <Typography variant="subtitle1">
-                          Group Details:
-                        </Typography>
-                        {formData.groupDetails.map(
-                          (member: any, index: any) => (
-                            <Box
-                              key={index}
-                              sx={{
-                                border: "1px solid #ccc",
-                                borderRadius: "8px",
-                                padding: "16px",
-                                marginBottom: "16px",
-                              }}
-                            >
-                              <Typography
-                                variant="h6"
-                                gutterBottom
-                                style={{ marginBottom: "8px" }}
+                          <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                              <FormControl fullWidth>
+                                <DatePicker
+                                  value={
+                                    formData.dateOfBirth
+                                      ? new Date(
+                                          formData.dateOfBirth
+                                            .split("-")
+                                            .reverse()
+                                            .join("-")
+                                        )
+                                      : null
+                                  }
+                                  onChange={(e: any) => {
+                                    const value = `${new Date(e)
+                                      .getDate()
+                                      .toString()
+                                      .padStart(2, "0")}-${(
+                                      new Date(e).getMonth() + 1
+                                    )
+                                      .toString()
+                                      .padStart(2, "0")}-${new Date(
+                                      e
+                                    ).getFullYear()}`;
+                                    setFormData({
+                                      ...formData,
+                                      ["dateOfBirth"]: value,
+                                    });
+                                  }}
+                                  label="Date Of Birth"
+                                  slotProps={{
+                                    textField: {
+                                      helperText: "DD/MM/YYYY",
+                                    },
+                                  }}
+                                />
+                              </FormControl>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                              <FormControl fullWidth>
+                                <DateTimePicker
+                                  label="Arrival Date"
+                                  name="arrivalDate"
+                                  value={
+                                    formData.arrivalDate
+                                      ? new Date(formData?.arrivalDate)
+                                      : new Date()
+                                  }
+                                  onChange={(e: any) => {
+                                    const convertedDate =
+                                      new Date(e)
+                                        .toLocaleDateString("en-US", {
+                                          timeZone: "Asia/Kolkata",
+                                          day: "2-digit",
+                                          month: "2-digit",
+                                          year: "numeric",
+                                        })
+                                        .replace(/\//g, "-") +
+                                      " " +
+                                      ("0" + new Date(e).getHours()).slice(-2) +
+                                      ":" +
+                                      ("0" + new Date(e).getMinutes()).slice(
+                                        -2
+                                      );
+                                    setFormData({
+                                      ...formData,
+                                      ["arrivalDate"]: convertedDate,
+                                    });
+                                  }}
+                                />
+                              </FormControl>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                              <FormControl fullWidth>
+                                <DateTimePicker
+                                  label="Departure Date"
+                                  name="departureDate"
+                                  value={
+                                    formData.departureDate
+                                      ? new Date(formData?.departureDate)
+                                      : new Date()
+                                  }
+                                  onChange={(e: any) => {
+                                    const convertedDate =
+                                      new Date(e)
+                                        .toLocaleDateString("en-US", {
+                                          timeZone: "Asia/Kolkata",
+                                          day: "2-digit",
+                                          month: "2-digit",
+                                          year: "numeric",
+                                        })
+                                        .replace(/\//g, "-") +
+                                      " " +
+                                      ("0" + new Date(e).getHours()).slice(-2) +
+                                      ":" +
+                                      ("0" + new Date(e).getMinutes()).slice(
+                                        -2
+                                      );
+                                    setFormData({
+                                      ...formData,
+                                      ["departureDate"]: convertedDate,
+                                    });
+                                  }}
+                                />
+                              </FormControl>
+                            </Grid>
+                          </Grid>
+                        </LocalizationProvider>
+                        <FormControl fullWidth margin="normal">
+                          <InputLabel>Pickup place</InputLabel>
+                          <Select
+                            name="pickupPlace"
+                            value={formData.pickupPlace}
+                            onChange={handleChange}
+                          >
+                            <MenuItem value="Kalupur Railway Station">
+                              Kalupur Railway Station
+                            </MenuItem>
+                            <MenuItem value="Sabarmati Railway Station">
+                              Sabarmati Railway Station
+                            </MenuItem>
+                            <MenuItem value="Ahmedabad Airport">
+                              Ahmedabad Airport
+                            </MenuItem>
+                            <MenuItem value="Prantij bus stop">
+                              Prantij bus stop
+                            </MenuItem>
+                            <MenuItem value="Self ">Self </MenuItem>
+                          </Select>
+                        </FormControl>
+                        <Box mb={2}>
+                          <Typography variant="subtitle1">
+                            Group Details:
+                          </Typography>
+                          {formData.groupDetails.map(
+                            (member: any, index: any) => (
+                              <Box
+                                key={index}
+                                sx={{
+                                  border: "1px solid #ccc",
+                                  borderRadius: "8px",
+                                  padding: "16px",
+                                  marginBottom: "16px",
+                                }}
                               >
-                                Participant {index + 1}
-                              </Typography>
-                              <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
-                                  <TextField
-                                    label="Name"
-                                    name="name"
-                                    required
-                                    value={member.name}
-                                    onChange={(e) =>
-                                      handleGroupDetailsChange(index, e)
-                                    }
-                                    fullWidth
-                                  />
+                                <Typography
+                                  variant="h6"
+                                  gutterBottom
+                                  style={{ marginBottom: "8px" }}
+                                >
+                                  Participant {index + 1}
+                                </Typography>
+                                <Grid container spacing={2}>
+                                  <Grid item xs={12} sm={6}>
+                                    <TextField
+                                      label="Name"
+                                      name="name"
+                                      required
+                                      value={member.name}
+                                      onChange={(e) =>
+                                        handleGroupDetailsChange(index, e)
+                                      }
+                                      fullWidth
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12} sm={6}>
+                                    <TextField
+                                      label="Relation"
+                                      name="relation"
+                                      value={member.relation}
+                                      onChange={(e) =>
+                                        handleGroupDetailsChange(index, e)
+                                      }
+                                      fullWidth
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12} sm={6}>
+                                    <TextField
+                                      label="Gender"
+                                      name="gender"
+                                      required
+                                      value={member.gender}
+                                      onChange={(e) =>
+                                        handleGroupDetailsChange(index, e)
+                                      }
+                                      fullWidth
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12} sm={6}>
+                                    <TextField
+                                      label="Age"
+                                      name="age"
+                                      required
+                                      value={member.age}
+                                      onChange={(e) =>
+                                        handleGroupDetailsChange(index, e)
+                                      }
+                                      fullWidth
+                                    />
+                                  </Grid>
                                 </Grid>
-                                <Grid item xs={12} sm={6}>
-                                  <TextField
-                                    label="Relation"
-                                    name="relation"
-                                    value={member.relation}
-                                    onChange={(e) =>
-                                      handleGroupDetailsChange(index, e)
-                                    }
-                                    fullWidth
-                                  />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                  <TextField
-                                    label="Gender"
-                                    name="gender"
-                                    required
-                                    value={member.gender}
-                                    onChange={(e) =>
-                                      handleGroupDetailsChange(index, e)
-                                    }
-                                    fullWidth
-                                  />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                  <TextField
-                                    label="Age"
-                                    name="age"
-                                    required
-                                    value={member.age}
-                                    onChange={(e) =>
-                                      handleGroupDetailsChange(index, e)
-                                    }
-                                    fullWidth
-                                  />
-                                </Grid>
-                              </Grid>
-                              {errors.groupDetails &&
-                                errors.groupDetails[index] && (
-                                  <FormHelperText error>
-                                    {errors.groupDetails[index]}
-                                  </FormHelperText>
-                                )}
-                              <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={() => removeGroupMember(index)}
-                                style={{ marginTop: "16px" }}
-                              >
-                                Remove
-                              </Button>
-                            </Box>
-                          )
-                        )}
+                                {errors.groupDetails &&
+                                  errors.groupDetails[index] && (
+                                    <FormHelperText error>
+                                      {errors.groupDetails[index]}
+                                    </FormHelperText>
+                                  )}
+                                <Button
+                                  variant="contained"
+                                  color="secondary"
+                                  onClick={() => removeGroupMember(index)}
+                                  style={{ marginTop: "16px" }}
+                                >
+                                  Remove
+                                </Button>
+                              </Box>
+                            )
+                          )}
+                          <Button
+                            variant="contained"
+                            onClick={addGroupMember}
+                            style={{ marginTop: "10px" }}
+                          >
+                            Add Member
+                          </Button>
+                        </Box>
+                        <TextField
+                          label="Anything else you want to inform us"
+                          name="notes"
+                          value={formData.notes}
+                          onChange={handleChange}
+                          fullWidth
+                          margin="normal"
+                          multiline
+                          rows={3}
+                        />
                         <Button
+                          type="submit"
                           variant="contained"
-                          onClick={addGroupMember}
-                          style={{ marginTop: "10px" }}
+                          onClick={handleSubmit}
+                          style={{
+                            backgroundColor: "#007bff",
+                            color: "#fff",
+                            marginTop: "10px",
+                          }}
                         >
-                          Add Member
+                          {registerCheck ? "Update" : "Submit"}
                         </Button>
-                      </Box>
-                      <TextField
-                        label="Anything else you want to inform us"
-                        name="notes"
-                        value={formData.notes}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                        multiline
-                        rows={3}
-                      />
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        onClick={handleSubmit}
-                        style={{
-                          backgroundColor: "#007bff",
-                          color: "#fff",
-                          marginTop: "10px",
-                        }}
-                      >
-                        {registerCheck ? "Update" : "Submit"}
-                      </Button>
-                    </form>
-                  </Box>
+                      </form>
+                    </Box>
+                  </>
                 </Modal>
               </CardContent>
             </Card>

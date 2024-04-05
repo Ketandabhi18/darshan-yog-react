@@ -12,6 +12,8 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import {
+  Backdrop,
+  CircularProgress,
   FormControl,
   Grid,
   IconButton,
@@ -44,18 +46,18 @@ const Login: FunctionComponent = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<any>("success");
   const [showPassword, setShowPassword] = useState(false);
-  const [loader, setLoader] = useState<boolean>(false);
   const [loginwithPassword, setLoginWithPassword] = useState(false);
   const [openEventForm, setOpenEventForm] = useState(false);
   const [formData, setFormData] = useState<any>({
     groupDetails: [],
   });
+  const [backDrop, setBackDrop] = useState<any>(false);
   const navigate = useNavigate();
   const location = useLocation();
   console.log("location :: ", location);
   const handleVerfiyOtp = async (event: any) => {
     event.preventDefault();
-    setLoader(true);
+    setBackDrop(true);
     try {
       const username: any = `${countrycode}${mobile}`;
       const password = otp;
@@ -72,7 +74,6 @@ const Login: FunctionComponent = () => {
             const { token, ...userDetails }: any = response.data.data;
             localStorage.removeItem("authToken");
             localStorage.removeItem("useDetail");
-            setLoader(false);
             localStorage.setItem("authToken", response.data.data.token);
             localStorage.setItem(
               "userDetail",
@@ -96,6 +97,7 @@ const Login: FunctionComponent = () => {
                     );
                     console.log("registeredEvent :: ", registeredEvent);
                     if (registeredEvent) {
+                      setBackDrop(false);
                       setAlertType("error");
                       setAlertMessage(
                         "You have already registered for this event."
@@ -114,11 +116,13 @@ const Login: FunctionComponent = () => {
                           ...user,
                         };
                       });
+                      setBackDrop(false);
                       setOpenEventForm(true);
                     }
                   }
                 });
             } else {
+              setBackDrop(false);
               navigate("/");
               loginwithPassword
                 ? setAlertMessage("Login Successfully")
@@ -127,6 +131,7 @@ const Login: FunctionComponent = () => {
               setOpenAlert(true);
             }
           } else {
+            setBackDrop(false);
             loginwithPassword
               ? setAlertMessage("Invalid Credentials !!")
               : setAlertMessage("Invalid Otp !!");
@@ -144,6 +149,7 @@ const Login: FunctionComponent = () => {
   };
   const handleGetOtp = async () => {
     try {
+      setBackDrop(true);
       const mobileNumber = `${countrycode}${mobile}`;
       console.log("mobile :: in get otp ", mobileNumber);
       axios
@@ -153,11 +159,13 @@ const Login: FunctionComponent = () => {
         .then((res) => {
           console.log("data :: get otp :: ", res);
           if (res.data.status === 200) {
+            setBackDrop(false);
             setAlertMessage(res.data.message);
             setAlertType("success");
             setOpenAlert(true);
             setStep(true);
           } else {
+            setBackDrop(false);
             setAlertMessage(res.data.message);
             setAlertType("error");
             setOpenAlert(true);
@@ -223,6 +231,7 @@ const Login: FunctionComponent = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setBackDrop(true);
     console.log("formData :: ", formData);
     const {
       email,
@@ -279,6 +288,7 @@ const Login: FunctionComponent = () => {
       localStorage.removeItem("userDetail");
       localStorage.setItem("userDetail", JSON.stringify(data.data));
     } else {
+      setBackDrop(false);
       setAlertMessage(data.message);
       setAlertType("error");
       setOpenAlert(true);
@@ -307,12 +317,13 @@ const Login: FunctionComponent = () => {
     );
 
     if (res.data.status === 200) {
+      setBackDrop(false);
       setAlertMessage("Registration successfully done");
       setAlertType("success");
       setOpenAlert(true);
       setTimeout(() => {
         navigate("/");
-      }, 3000);
+      }, 2000);
     }
     console.log("res :: register event :: ", res);
   };
@@ -321,7 +332,12 @@ const Login: FunctionComponent = () => {
 
   return (
     <>
-      {/* {loader && <Loader />} */}
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={backDrop}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Snackbar
         open={openAlert}
         autoHideDuration={6000}

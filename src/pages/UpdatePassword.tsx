@@ -7,6 +7,8 @@ import {
   Alert,
   InputAdornment,
   IconButton,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import axios from "axios";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -22,6 +24,7 @@ const UpdatePassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [openAlert, setOpenAlert] = useState(false);
+  const [backDrop, setBackDrop] = useState<any>(false);
   const authToken = localStorage.getItem("authToken") || "";
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -38,6 +41,7 @@ const UpdatePassword = () => {
       // Proceed with form submission
     }
     try {
+      setBackDrop(true);
       const res = await axios.post(
         `${baseUrl}/update-password`,
         {
@@ -49,9 +53,11 @@ const UpdatePassword = () => {
         }
       );
       if (res.data.status === 200) {
+        setBackDrop(false);
         setOpenAlert(true);
       }
       console.log("Register event :: res ::", res);
+      setBackDrop(false);
     } catch (error) {
       console.log("error ::", error);
     }
@@ -63,6 +69,15 @@ const UpdatePassword = () => {
 
   return (
     <div>
+      <Backdrop
+        sx={{
+          color: "#fff",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={backDrop}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Snackbar
         open={openAlert}
         autoHideDuration={6000}

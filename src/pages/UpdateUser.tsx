@@ -11,6 +11,8 @@ import {
   FormHelperText,
   Snackbar,
   Alert,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import {
   EducationalQualification,
@@ -30,6 +32,7 @@ const UpdateUser = () => {
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState<any>("");
   const [alertType, setAlertType] = useState<any>("success");
+  const [backDrop, setBackDrop] = useState<any>(false);
   const authToken = localStorage.getItem("authToken");
   const user: any = localStorage.getItem("userDetail");
   const userDetail: any = JSON.parse(user);
@@ -72,17 +75,20 @@ const UpdateUser = () => {
       return;
     }
     try {
+      setBackDrop(true);
       console.log(newErrors, "formData :: ", formData);
       const { data } = await axios.post(`${baseUrl}/update-user`, formData, {
         headers: { Authorization: authToken },
       });
       if (data.status === 200) {
+        setBackDrop(false);
         setAlertType("success");
         setAlertMessage("User Updated Successfully.");
         setOpenAlert(true);
         localStorage.removeItem("userDetail");
         localStorage.setItem("userDetail", JSON.stringify(data.data));
       } else {
+        setBackDrop(false);
         setAlertType("error");
         setAlertMessage(data.message);
         setOpenAlert(true);
@@ -103,6 +109,15 @@ const UpdateUser = () => {
 
   return (
     <>
+      <Backdrop
+        sx={{
+          color: "#fff",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={backDrop}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Snackbar
         open={openAlert}
         autoHideDuration={3000}
