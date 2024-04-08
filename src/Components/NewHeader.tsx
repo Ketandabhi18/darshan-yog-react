@@ -20,6 +20,9 @@ const NewHeader = () => {
   const userDetail: any = JSON.parse(user);
   const [navOptions, setNavOptions] = useState<any>(pages);
   const [anchorEl, setAnchorEl] = React.useState<any>({});
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null
+  );
   const [profileDropMenu, setProfileDropMenu] = useState<any>(null);
   const open = Boolean(profileDropMenu);
   const navigate = useNavigate();
@@ -46,12 +49,24 @@ const NewHeader = () => {
     });
   };
 
-  const handleClose = (pageName: any) => {
-    setAnchorEl({
-      ...anchorEl,
-      [pageName]: null,
-    });
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
   };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleClose = (pageName: any) => {
+    setAnchorEl((prevAnchorEl: any) => ({
+      ...prevAnchorEl,
+      [pageName]: null,
+    }));
+  };
+
+  useEffect(() => {
+    // console.log("Updated anchorEl:", anchorEl);
+  }, [anchorEl]);
 
   useEffect(() => {
     if (isloggedIn) {
@@ -71,17 +86,7 @@ const NewHeader = () => {
 
     typeWriter();
   }, [txt, speed]);
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
   return (
     <>
       <div className="container">
@@ -124,6 +129,15 @@ const NewHeader = () => {
                       page.name,
                       page.route ? page.route : "/"
                     );
+                    if (!Object.keys(page).includes("options")) {
+                      handleCloseNavMenu();
+                    } else {
+                      console.log(
+                        "anchorEl,anchorElNav :: ",
+                        anchorEl,
+                        anchorElNav
+                      );
+                    }
                   }}
                 >
                   <Typography textAlign="center">{page.name}</Typography>
@@ -144,7 +158,6 @@ const NewHeader = () => {
                               content: subItem?.content ? subItem?.content : "",
                             },
                           });
-                          handleCloseNavMenu();
                         }}
                       >
                         {subItem.pageName}
