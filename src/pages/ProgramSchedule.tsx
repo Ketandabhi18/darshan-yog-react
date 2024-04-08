@@ -8,6 +8,7 @@ export default function ProgramSchedule() {
         display: "block",
         width: "55%",
         margin: "0px auto",
+        marginBottom: "2%",
       }}
     >
       <ProgramScheduleCard items={ProgramScheduleDataArray} itemsPerPage={10} />
