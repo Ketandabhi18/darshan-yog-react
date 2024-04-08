@@ -260,7 +260,7 @@ const NewHeader = () => {
                   aria-expanded={open ? "true" : undefined}
                 >
                   <Avatar sx={{ width: 32, height: 32 }}>
-                    {userDetail?.firstName?.split("")[0] || "User"}
+                    {userDetail?.firstName?.charAt(0) || "User"}
                   </Avatar>
                 </IconButton>
               </Tooltip>
@@ -317,7 +317,7 @@ const NewHeader = () => {
                   <ListItemIcon>
                     <Settings fontSize="small" />
                   </ListItemIcon>
-                  set/change password
+                  Set/Change Password
                 </MenuItem>
                 <MenuItem
                   onClick={() => {

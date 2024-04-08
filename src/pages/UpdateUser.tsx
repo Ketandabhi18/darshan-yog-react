@@ -196,6 +196,8 @@ const UpdateUser = () => {
                     value={formData?.gender}
                     onChange={handleChange}
                     name="gender"
+                    label="Gender"
+                    aria-label="Gender"
                   >
                     <MenuItem value="Male">Male</MenuItem>
                     <MenuItem value="Female">Female</MenuItem>
@@ -244,6 +246,8 @@ const UpdateUser = () => {
                 <FormControl fullWidth>
                   <InputLabel>Educational Qualification</InputLabel>
                   <Select
+                    label={"Educational Qualification"}
+                    arial-label={"Educational Qualification"}
                     value={formData?.edQualification}
                     onChange={handleChange}
                     name="edQualification"
@@ -262,6 +266,8 @@ const UpdateUser = () => {
                 <FormControl fullWidth>
                   <InputLabel>Profession</InputLabel>
                   <Select
+                    label={"Profession"}
+                    arial-label={"Profession"}
                     value={formData?.profession}
                     onChange={handleChange}
                     name="profession"
@@ -287,6 +293,8 @@ const UpdateUser = () => {
                 <FormControl fullWidth>
                   <InputLabel>Marital Status</InputLabel>
                   <Select
+                    label={"Marital Status"}
+                    arial-label={"Marital Status"}
                     value={formData?.maritalStatus}
                     onChange={handleChange}
                     name="maritalStatus"
@@ -310,6 +318,8 @@ const UpdateUser = () => {
                 <FormControl fullWidth>
                   <InputLabel>Country*</InputLabel>
                   <Select
+                    label={"Country"}
+                    arial-label={"Country"}
                     name="country"
                     required
                     value={formData?.country}
@@ -324,6 +334,8 @@ const UpdateUser = () => {
                 <FormControl fullWidth>
                   <InputLabel>State*</InputLabel>
                   <Select
+                    label={"State"}
+                    arial-label={"State"}
                     name="state"
                     required
                     value={formData?.state}
@@ -357,6 +369,8 @@ const UpdateUser = () => {
                 <FormControl fullWidth>
                   <InputLabel>District*</InputLabel>
                   <Select
+                    label={"District"}
+                    arial-label={"District"}
                     name="district"
                     required
                     value={formData?.district}

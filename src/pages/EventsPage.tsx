@@ -601,6 +601,8 @@ const EventsPage = () => {
                         <FormControl fullWidth margin="normal">
                           <InputLabel>Country*</InputLabel>
                           <Select
+                            aria-label="Country"
+                            label="Country"
                             name="country"
                             required
                             value={formData.country}
@@ -619,6 +621,8 @@ const EventsPage = () => {
                         <FormControl fullWidth margin="normal">
                           <InputLabel>State*</InputLabel>
                           <Select
+                            aria-label="State"
+                            label={"State"}
                             name="state"
                             required
                             value={formData.state}
@@ -645,6 +649,8 @@ const EventsPage = () => {
                         <FormControl fullWidth margin="normal">
                           <InputLabel>District*</InputLabel>
                           <Select
+                            aria-label="District"
+                            label="District"
                             name="district"
                             required
                             value={formData.district}
@@ -703,6 +709,7 @@ const EventsPage = () => {
                           onChange={handleChange}
                           fullWidth
                           margin="normal"
+                          style={{ marginBottom: "2%" }}
                         />
 
                         <LocalizationProvider
