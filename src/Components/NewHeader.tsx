@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
-import logo from "./assets/Dharshanyog Dham Logo.jpg";
+// import logo from "./assets/Dharshanyog Dham Logo.jpg";
+import logo from "./assets/logoNew.png";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -14,6 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Box, Typography } from "@mui/material";
+
 const NewHeader = () => {
   const isloggedIn = localStorage.getItem("authToken");
   const user: any = localStorage.getItem("userDetail");
@@ -27,7 +29,7 @@ const NewHeader = () => {
   const open = Boolean(profileDropMenu);
   const navigate = useNavigate();
   const iRef = useRef(0);
-  const txt =
+  let txt =
     "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
   const speed = 50;
 
@@ -40,6 +42,53 @@ const NewHeader = () => {
   };
   const handleClick = (event: any, pageName: any, route: any) => {
     const page: any = navOptions.find((p: any) => p.name === pageName);
+
+    switch (page.name) {
+      case 'KNOWLEDGE':
+        txt = 'Knowledge';
+        break;
+      case 'PROGRAM SCHEDULE':
+        txt = 'Learn more about program-schedule';
+        break;
+      case 'CONTACT US':
+        txt = 'Get In Touch';
+        break;
+      case 'ABOUT US':
+        txt = 'About The Organization';
+        break;
+      case 'EVENTS':
+        txt = 'Event List';
+        break;
+      case 'LOG IN':
+        txt = '';
+        break;
+      default:
+        txt = '|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||';
+    }
+    console.log("txt :: ", txt);
+    const demoElement: any = document.getElementById("demo");
+    if (demoElement) {
+      demoElement.innerHTML = txt;
+      demoElement.style.textAlign = "center";
+      // demoElement.style.fontSize = "100px";
+      // if (page.name != "EVENTS") {
+      //   demoElement.style.paddingTop = "50px";
+      // }
+    }
+
+    const demoImage = document.getElementById("myDiv");
+
+    console.log("page.name  :: ", page.name);
+    if (demoImage && page.name == "HOME") {
+
+      demoElement.style.paddingTop = "0px";
+      demoImage.className = "container";
+    }
+    if (demoImage && page.name !== "HOME") {
+      demoElement.style.paddingTop = "20px";
+      demoImage.className = "newContainer";
+    }
+
     if (!Object.keys(page).includes("options")) {
       navigate(route);
     }
@@ -89,7 +138,8 @@ const NewHeader = () => {
 
   return (
     <>
-      <div className="container">
+      {/* <div className="container"> */}
+      <div className="container" id="myDiv">
         <nav>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
