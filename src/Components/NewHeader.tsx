@@ -18,19 +18,18 @@ import { Box, Typography } from "@mui/material";
 
 const NewHeader = () => {
   const isloggedIn = localStorage.getItem("authToken");
+  console.log("isloggedIn :: ", isloggedIn);
+
   const user: any = localStorage.getItem("userDetail");
   const userDetail: any = JSON.parse(user);
   const [navOptions, setNavOptions] = useState<any>(pages);
   const [anchorEl, setAnchorEl] = React.useState<any>({});
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [profileDropMenu, setProfileDropMenu] = useState<any>(null);
   const open = Boolean(profileDropMenu);
   const navigate = useNavigate();
   const iRef = useRef(0);
-  let txt =
-    "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
+  let txt = "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
   const speed = 50;
 
   const handleProfileClick = (event: any) => {
@@ -40,6 +39,7 @@ const NewHeader = () => {
   const handleCloseProfile = () => {
     setProfileDropMenu(null);
   };
+
   const handleClick = (event: any, pageName: any, route: any) => {
     const page: any = navOptions.find((p: any) => p.name === pageName);
 
@@ -60,7 +60,7 @@ const NewHeader = () => {
         txt = 'Event List';
         break;
       case 'LOG IN':
-        txt = '';
+        txt = 'LOG IN';
         break;
       default:
         txt = '|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||';
@@ -70,14 +70,9 @@ const NewHeader = () => {
     if (demoElement) {
       demoElement.innerHTML = txt;
       demoElement.style.textAlign = "center";
-      // demoElement.style.fontSize = "100px";
-      // if (page.name != "EVENTS") {
-      //   demoElement.style.paddingTop = "50px";
-      // }
     }
 
     const demoImage = document.getElementById("myDiv");
-
     console.log("page.name  :: ", page.name);
     if (demoImage && page.name == "HOME") {
       demoElement.style.paddingTop = "0px";
@@ -118,9 +113,19 @@ const NewHeader = () => {
 
   useEffect(() => {
     if (isloggedIn) {
+      const demoElement: any = document.getElementById("demo");
+      if (demoElement && localStorage.getItem("authToken")) {
+        demoElement.innerHTML = "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
+      }
+      const demoImage = document.getElementById("myDiv");
+      if (demoImage) {
+        demoElement.style.paddingTop = "0px";
+        demoImage.className = "container";
+      }
       setNavOptions([...pages.filter((item: any) => item.name !== "LOG IN")]);
     }
   }, [isloggedIn]);
+
   useEffect(() => {
     const typeWriter = () => {
       const demoElement = document.getElementById("demo");
