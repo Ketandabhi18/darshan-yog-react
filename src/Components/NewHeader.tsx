@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./newHeader.css";
 import { pages } from "../config/constants";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
@@ -15,6 +15,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Box, Typography } from "@mui/material";
 const NewHeader = () => {
+  const location = useLocation();
   const isloggedIn = localStorage.getItem("authToken");
   const user: any = localStorage.getItem("userDetail");
   const userDetail: any = JSON.parse(user);
@@ -27,7 +28,7 @@ const NewHeader = () => {
   const open = Boolean(profileDropMenu);
   const navigate = useNavigate();
   const iRef = useRef(0);
-  const txt =
+  let txt =
     "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
   const speed = 50;
 
@@ -40,6 +41,35 @@ const NewHeader = () => {
   };
   const handleClick = (event: any, pageName: any, route: any) => {
     const page: any = navOptions.find((p: any) => p.name === pageName);
+    switch (page.name) {
+      case "EVENTS":
+        txt = "Event List";
+        break;
+      case "LOG IN":
+        txt = " Log In";
+        break;
+      default:
+        txt =
+          "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
+    }
+    console.log("txt :: ", txt);
+    const demoElement: any = document.getElementById("demo");
+    if (demoElement) {
+      demoElement.innerHTML = txt;
+      demoElement.style.textAlign = "center";
+    }
+
+    const demoImage = document.getElementById("myDiv");
+
+    console.log("page.name  :: ", page.name);
+    if (demoImage && page.name == "HOME") {
+      demoElement.style.paddingTop = "0px";
+      demoImage.className = "container";
+    }
+    if (demoImage && page.name !== "HOME") {
+      demoElement.style.paddingTop = "0px";
+      demoImage.className = "newContainer";
+    }
     if (!Object.keys(page).includes("options")) {
       navigate(route);
     }
@@ -70,10 +100,20 @@ const NewHeader = () => {
 
   useEffect(() => {
     if (isloggedIn) {
+      const demoElement: any = document.getElementById("demo");
+      if (demoElement && localStorage.getItem("authToken")) {
+        demoElement.innerHTML = "Event List";
+      }
+      const demoImage = document.getElementById("myDiv");
+      if (demoImage) {
+        demoElement.style.paddingTop = "0px";
+        demoImage.className = "newContainer";
+      }
       setNavOptions([...pages.filter((item: any) => item.name !== "LOG IN")]);
     }
   }, [isloggedIn]);
   useEffect(() => {
+    console.log("location :: ", location);
     const typeWriter = () => {
       const demoElement = document.getElementById("demo");
 
@@ -187,13 +227,16 @@ const NewHeader = () => {
                 xs: "none",
                 md: "flex",
 
-                justifyContent: "space-evenly",
+                // justifyContent: "space-evenly",
               },
               // mr: 2,
             }}
           >
             {navOptions.map((page: any) => (
-              <div key={page.name} style={{ position: "relative" }}>
+              <div
+                key={page.name}
+                style={{ position: "relative", left: "85%" }}
+              >
                 <Button
                   onClick={(event: any) =>
                     handleClick(event, page.name, page.route ? page.route : "/")
@@ -342,6 +385,21 @@ const NewHeader = () => {
             <h1 id="demo" className="text"></h1>
           </div>
         </section>
+
+        {!localStorage.getItem("authToken") && (
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={() => navigate("/event-registration")}
+            sx={{
+              position: "absolute",
+              bottom: "25px",
+              right: "45%",
+            }}
+          >
+            Register
+          </Button>
+        )}
       </div>
     </>
   );

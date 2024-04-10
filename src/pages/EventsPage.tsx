@@ -508,6 +508,7 @@ const EventsPage = () => {
                     View on Map
                   </a>
                   <Button
+                    autoFocus
                     variant="contained"
                     onClick={() => onRegisterClick(event.eventCode)}
                     style={{

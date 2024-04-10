@@ -18,6 +18,7 @@ import { JSX } from "react/jsx-runtime";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import HomeCarouselCard from "../Components/HomeCarouselCard";
+import CardActionArea from "@mui/material/CardActionArea";
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -50,6 +51,86 @@ const videoData: VideoItem[] = [
   },
   // Add more video items as needed
 ];
+
+const videoLinks = [
+  {
+    title: "Video 1",
+    url: "https://youtu.be/ujnC4X8FCTA?si=3laoG1Ae9AzqZJbi7",
+    thumbnail: "https://i.ytimg.com/vi/ujnC4X8FCTA/maxresdefault.jpg",
+  },
+  {
+    title: "Video 2",
+    url: "https://youtu.be/8GA8HrcXLDo?si=9FhYE8jnFkl0EskY",
+    thumbnail: "https://i.ytimg.com/vi/8GA8HrcXLDo/maxresdefault.jpg",
+  },
+  {
+    title: "Video 3",
+    url: "https://youtu.be/cTSx9AOvs8o?si=zVCHpznhroZ0IrVA",
+    thumbnail: "https://i.ytimg.com/vi/cTSx9AOvs8o/maxresdefault.jpg",
+  },
+  {
+    title: "Video 4",
+    url: "https://youtu.be/NvWOMwEVtPg?si=RIglbjTcqNNVGXgo",
+    thumbnail: "https://i.ytimg.com/vi/NvWOMwEVtPg/maxresdefault.jpg",
+  },
+];
+
+const VideoBox = ({ title, url, thumbnail }: any) => {
+  const handleClick = () => {
+    window.location.href = url;
+  };
+
+  const cardStyle: any = {
+    maxWidth: "345px",
+    width: "200px", // Fixed width for each box
+    height: "200px", // Adjust the height as needed
+    margin: "20px",
+    cursor: "pointer",
+    borderRadius: "10px",
+    // transition: "transform 0.3s ease",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+  };
+
+  const hoverStyle: any = {
+    // transform: "scale(1.05)",
+  };
+
+  const contentStyle: any = {
+    padding: "10px",
+    textAlign: "center",
+  };
+
+  return (
+    <Card
+      style={cardStyle}
+      onClick={handleClick}
+      // onMouseEnter={(e: any) =>
+      //   (e.currentTarget.style = { ...cardStyle, ...hoverStyle })
+      // }
+      // onMouseLeave={(e: any) => (e.currentTarget.style = cardStyle)}
+    >
+      <CardActionArea>
+        <CardMedia
+          component="img"
+          alt={title}
+          height="140"
+          image={thumbnail}
+          title={title}
+          style={{
+            borderRadius: "10px 10px 0 0",
+            width: "100%",
+            objectFit: "cover",
+          }}
+        />
+        <div style={contentStyle}>
+          <Typography gutterBottom variant="h6" component="h2">
+            {title}
+          </Typography>
+        </div>
+      </CardActionArea>
+    </Card>
+  );
+};
 
 const Home = () => {
   const [index, setIndex] = React.useState(0);
@@ -296,7 +377,7 @@ const Home = () => {
       </div> */}
 
       <section
-        style={{ background: "rgb(206,206,206)", padding: "50px 0" }}
+        style={{ background: "#eeeded", padding: "50px 0" }}
         id="announcement"
       >
         <Container>
@@ -311,8 +392,7 @@ const Home = () => {
             {" "}
             <Typography variant="h4">Photo & Video</Typography>
           </div>
-          <Grid container spacing={3}>
-            {/* Video Section */}
+          {/* <Grid container spacing={3}>
             {homecardCarouselData.map((item: any, index: any) => (
               <HomeCarouselCard
                 key={index}
@@ -320,9 +400,24 @@ const Home = () => {
                 name={item.name}
               />
             ))}
+          </Grid> */}
 
-            {/* Repeat the above structure for "5 Minutes Satsang" and "Global Event" sections */}
-          </Grid>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+          >
+            {videoLinks.map((video, index) => (
+              <VideoBox
+                key={index}
+                title={video.title}
+                url={video.url}
+                thumbnail={video.thumbnail}
+              />
+            ))}
+          </div>
         </Container>
       </section>
     </>
