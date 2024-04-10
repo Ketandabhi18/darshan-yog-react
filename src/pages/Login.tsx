@@ -54,7 +54,7 @@ const Login: FunctionComponent = () => {
   const [backDrop, setBackDrop] = useState<any>(false);
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("location :: ", location);
+  console.log("location :: logIn :: ", location);
   const handleVerfiyOtp = async (event: any) => {
     event.preventDefault();
     setBackDrop(true);
@@ -123,7 +123,7 @@ const Login: FunctionComponent = () => {
                 });
             } else {
               setBackDrop(false);
-              navigate("/");
+              navigate("/events");
               loginwithPassword
                 ? setAlertMessage("Login Successfully")
                 : setAlertMessage("Otp Verified Successfully");
@@ -322,7 +322,7 @@ const Login: FunctionComponent = () => {
       setAlertType("success");
       setOpenAlert(true);
       setTimeout(() => {
-        navigate("/");
+        navigate("/events");
       }, 2000);
     }
     console.log("res :: register event :: ", res);

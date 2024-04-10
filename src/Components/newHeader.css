@@ -19,7 +19,6 @@
   min-height: 50vh;
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)),
     url(assets/bg2.png);
-  /* background-color: burlywood; */
   background-size: cover;
   background-position: center;
   padding: 10px 8%;
@@ -30,7 +29,6 @@ nav {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 10px 0;
 }
 
@@ -125,8 +123,6 @@ nav ul li a:hover:before {
   .text {
     font-size: 2em;
   }
-
- 
 }
 
 /* For large devices (desktops, 992px and above) */

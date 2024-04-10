@@ -9,6 +9,7 @@ import UpdateUser from "./pages/UpdateUser";
 import EventsPage from "./pages/EventsPage";
 import EventDetailPage from "./pages/EventDetail";
 import UpdatePassword from "./pages/UpdatePassword";
+import SinglePageEventRegister from "./pages/SinglePageEventRegister";
 
 const RoutesAll = () => {
   return (
@@ -25,6 +26,10 @@ const RoutesAll = () => {
           <Route path="/:id" element={<ViewDetails />} />
           <Route path="/event-detail" element={<EventDetailPage />} />
           <Route path="/update-password" element={<UpdatePassword />} />
+          <Route
+            path="/event-registration"
+            element={<SinglePageEventRegister />}
+          />
         </Routes>
       </div>
     </>
