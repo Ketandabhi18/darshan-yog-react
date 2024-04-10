@@ -5,8 +5,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
-// import logo from "./assets/Dharshanyog Dham Logo.jpg";
-import logo from "./assets/logoNew.png";
+import logo from "./assets/Dharshanyog Dham Logo.jpg";
+// import logo from "./assets/logoNew.png";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -44,7 +44,7 @@ const NewHeader = () => {
 
   const handleClick = (event: any, pageName: any, route: any) => {
     const page: any = navOptions.find((p: any) => p.name === pageName);
-    switch (page.name) {
+    /* switch (page.name) {
       case "EVENTS":
         txt = "Event List";
         break;
@@ -71,7 +71,7 @@ const NewHeader = () => {
     if (demoImage && page.name !== "HOME") {
       demoElement.style.paddingTop = "0px";
       demoImage.className = "newContainer";
-    }
+    } */
     if (!Object.keys(page).includes("options")) {
       navigate(route);
     }
@@ -102,7 +102,7 @@ const NewHeader = () => {
 
   useEffect(() => {
     if (isloggedIn) {
-      const demoElement: any = document.getElementById("demo");
+/*       const demoElement: any = document.getElementById("demo");
       if (demoElement && localStorage.getItem("authToken")) {
         demoElement.innerHTML = "Event List";
       }
@@ -110,7 +110,7 @@ const NewHeader = () => {
       if (demoImage) {
         demoElement.style.paddingTop = "0px";
         demoImage.className = "newContainer";
-      }
+      } */
       setNavOptions([...pages.filter((item: any) => item.name !== "LOG IN")]);
     }
   }, [isloggedIn]);
@@ -132,7 +132,6 @@ const NewHeader = () => {
 
   return (
     <>
-      {/* <div className="container"> */}
       <div className="container">
         <nav>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -247,7 +246,7 @@ const NewHeader = () => {
                   }
                   sx={{
                     my: 2,
-                    color: "white",
+                    color: "black",
                     display: "block",
                     position: "relative",
                     overflow: "hidden",
@@ -384,11 +383,11 @@ const NewHeader = () => {
           )}
         </nav>
 
-        <section className="box">
+        {/* <section className="box">
           <div>
             <h1 id="demo" className="text"></h1>
           </div>
-        </section>
+        </section> */}
 
         {!localStorage.getItem("authToken") && (
           <Button

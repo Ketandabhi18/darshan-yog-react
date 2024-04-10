@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
@@ -19,6 +19,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import HomeCarouselCard from "../Components/HomeCarouselCard";
 import CardActionArea from "@mui/material/CardActionArea";
+
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -104,10 +105,10 @@ const VideoBox = ({ title, url, thumbnail }: any) => {
     <Card
       style={cardStyle}
       onClick={handleClick}
-      // onMouseEnter={(e: any) =>
-      //   (e.currentTarget.style = { ...cardStyle, ...hoverStyle })
-      // }
-      // onMouseLeave={(e: any) => (e.currentTarget.style = cardStyle)}
+    // onMouseEnter={(e: any) =>
+    //   (e.currentTarget.style = { ...cardStyle, ...hoverStyle })
+    // }
+    // onMouseLeave={(e: any) => (e.currentTarget.style = cardStyle)}
     >
       <CardActionArea>
         <CardMedia
@@ -133,8 +134,16 @@ const VideoBox = ({ title, url, thumbnail }: any) => {
 };
 
 const Home = () => {
-  const [index, setIndex] = React.useState(0);
+
+  const [index, setIndex] = useState(0);
   const theme = useTheme();
+
+  const iRef = useRef(0);
+  let txt =
+    "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
+  const speed = 50;
+
+
   const isSmScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const items = [
     {
@@ -354,6 +363,21 @@ const Home = () => {
     );
   };
 
+  useEffect(() => {
+    const typeWriter = () => {
+      const demoElement = document.getElementById("demo");
+
+      if (demoElement && iRef.current < txt.length) {
+        demoElement.innerHTML += txt.charAt(iRef.current);
+        iRef.current += 1;
+        setTimeout(typeWriter, speed);
+      }
+    };
+
+    typeWriter();
+  }, [txt, speed]);
+
+
   return (
     <>
       {/* <div style={{ position: "relative" }}>
@@ -375,6 +399,26 @@ const Home = () => {
           ))}
         </Carousel>
       </div> */}
+
+      <section
+        style={{
+          backgroundColor: "lightcyan",
+          // backgroundImage: "src/Components/assets/bg2.png",
+          // backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)),url(Components/assets/bg2.png)',
+          height: "500px",
+        }}>
+
+        <div style={{ position: "absolute", top: "50%" }}>
+          <h1 id="demo"
+            style={{
+              alignItems: "center",
+              display: "flex",
+              color: "black"
+            }}>
+          </h1>
+        </div>
+
+      </section >
 
       <section
         style={{ background: "#eeeded", padding: "50px 0" }}
