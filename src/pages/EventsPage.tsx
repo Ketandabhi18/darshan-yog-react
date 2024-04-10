@@ -508,6 +508,7 @@ const EventsPage = () => {
                     View on Map
                   </a>
                   <Button
+                    autoFocus
                     variant="contained"
                     onClick={() => onRegisterClick(event.eventCode)}
                     style={{
@@ -723,11 +724,11 @@ const EventsPage = () => {
                                   value={
                                     formData.dateOfBirth
                                       ? new Date(
-                                          formData.dateOfBirth
-                                            .split("-")
-                                            .reverse()
-                                            .join("-")
-                                        )
+                                        formData.dateOfBirth
+                                          .split("-")
+                                          .reverse()
+                                          .join("-")
+                                      )
                                       : null
                                   }
                                   onChange={(e: any) => {
@@ -735,12 +736,12 @@ const EventsPage = () => {
                                       .getDate()
                                       .toString()
                                       .padStart(2, "0")}-${(
-                                      new Date(e).getMonth() + 1
-                                    )
-                                      .toString()
-                                      .padStart(2, "0")}-${new Date(
-                                      e
-                                    ).getFullYear()}`;
+                                        new Date(e).getMonth() + 1
+                                      )
+                                        .toString()
+                                        .padStart(2, "0")}-${new Date(
+                                          e
+                                        ).getFullYear()}`;
                                     setFormData({
                                       ...formData,
                                       ["dateOfBirth"]: value,

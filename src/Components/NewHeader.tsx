@@ -80,12 +80,11 @@ const NewHeader = () => {
 
     console.log("page.name  :: ", page.name);
     if (demoImage && page.name == "HOME") {
-
       demoElement.style.paddingTop = "0px";
       demoImage.className = "container";
     }
     if (demoImage && page.name !== "HOME") {
-      demoElement.style.paddingTop = "20px";
+      demoElement.style.paddingTop = "100px";
       demoImage.className = "newContainer";
     }
 
