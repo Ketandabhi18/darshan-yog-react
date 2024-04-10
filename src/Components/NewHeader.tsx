@@ -133,7 +133,7 @@ const NewHeader = () => {
   return (
     <>
       {/* <div className="container"> */}
-      <div className="container" id="myDiv">
+      <div className="container">
         <nav>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton

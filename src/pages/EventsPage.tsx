@@ -546,12 +546,39 @@ const EventsPage = () => {
                         p: 4,
                       }}
                     >
+                      <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" }, mb: 2 }}>
+                        <Stack spacing={2}>
+                        <Stack spacing={2} direction={'row'}>
+                          
+                          <Typography variant="h6" gutterBottom>
+                            Register for {event.eventName}
+                          </Typography>
+                          <IconButton onClick={handleClose}>
+                            <CloseOutlined />
+                          </IconButton>
+                          </Stack>
+                          {registerCheck && (
+                            <Typography variant="h6" gutterBottom color="error">
+                              You are already registered for this event with Reg
+                              id {registerId}
+                            </Typography>
+                          )}
+                          
+
+                        </Stack>
+                      </Box>
                       <Box
                         sx={{
-                          display: "flex",
+                          // display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
-                          mb: 2,
+                          mb: 2, flexGrow: 1,
+                          display: {
+                            xs: "none",
+                            md: "flex",
+            
+                            // justifyContent: "space-evenly",
+                          },
                         }}
                       >
                         <Typography variant="h6" gutterBottom>
