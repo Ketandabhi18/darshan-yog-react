@@ -146,9 +146,10 @@ const EventsPage = () => {
     let user: any = localStorage.getItem("userDetail");
     user = JSON.parse(user);
     if (!authToken) {
-      navigate("/log-in", {
-        state: { eventCode: eventCode },
-      });
+      // navigate("/log-in", {
+      //   state: { eventCode: eventCode },
+      // });
+      navigate("/event-registration");
     } else {
       const checkRegistered = axios
         .get(`${baseUrl}/events/event-registrations`, {
@@ -368,7 +369,7 @@ const EventsPage = () => {
             textTransform: "uppercase",
           }}
         >
-          Event List
+          Our Events
         </Typography>
 
         {skeletonopen && (
@@ -548,10 +549,53 @@ const EventsPage = () => {
                     >
                       <Box
                         sx={{
-                          display: "flex",
+                          flexGrow: 1,
+                          display: { xs: "flex", md: "none" },
+                          mb: 2,
+                        }}
+                      >
+                        <Stack spacing={2}>
+                          {registerCheck && (
+                            <Typography
+                              variant="h6"
+                              gutterBottom
+                              color="error"
+                              style={{
+                                backgroundColor: "red",
+                                color: "white",
+                                fontSize: "13px",
+                                borderRadius: "5px",
+                                padding: "5px",
+                              }}
+                            >
+                              You are already registered for this event
+                              {/*with Reg  id {registerId} */}
+                            </Typography>
+                          )}
+
+                          <Stack spacing={2} direction={"row"}>
+                            <Typography variant="h6" gutterBottom>
+                              Register for {event.eventName}
+                            </Typography>
+                            <IconButton onClick={handleClose}>
+                              <CloseOutlined />
+                            </IconButton>
+                          </Stack>
+                        </Stack>
+                      </Box>
+                      <Box
+                        sx={{
+                          // display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
                           mb: 2,
+                          flexGrow: 1,
+                          display: {
+                            xs: "none",
+                            md: "flex",
+
+                            // justifyContent: "space-evenly",
+                          },
                         }}
                       >
                         <Typography variant="h6" gutterBottom>
@@ -559,9 +603,20 @@ const EventsPage = () => {
                         </Typography>
 
                         {registerCheck && (
-                          <Typography variant="h6" gutterBottom color="error">
-                            You are already registered for this event with Reg
-                            id {registerId}
+                          <Typography
+                            variant="h6"
+                            gutterBottom
+                            color="error"
+                            style={{
+                              backgroundColor: "red",
+                              color: "white",
+                              borderRadius: "5px",
+                              paddingLeft: "10px",
+                              paddingRight: "10px",
+                            }}
+                          >
+                            You are already registered for this event
+                            {/* {/ with Reg id {registerId} /} */}
                           </Typography>
                         )}
                         <IconButton onClick={handleClose}>

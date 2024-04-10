@@ -16,7 +16,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Box, Typography } from "@mui/material";
 const NewHeader = () => {
   const location = useLocation();
-  const isloggedIn = localStorage.getItem("authToken");
+  const [isloggedIn, setIsLoggedIn] = useState<any>(
+    localStorage.getItem("authToken")
+  );
   const user: any = localStorage.getItem("userDetail");
   const userDetail: any = JSON.parse(user);
   const [navOptions, setNavOptions] = useState<any>(pages);
@@ -41,13 +43,15 @@ const NewHeader = () => {
   };
   const handleClick = (event: any, pageName: any, route: any) => {
     const page: any = navOptions.find((p: any) => p.name === pageName);
+    console.log("handleClick :: page.name  :: ", page.name, location);
     switch (page.name) {
       case "EVENTS":
-        txt = "Event List";
+        txt = "Our Events";
         break;
       case "LOG IN":
         txt = " Log In";
         break;
+
       default:
         txt =
           "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
@@ -61,7 +65,6 @@ const NewHeader = () => {
 
     const demoImage = document.getElementById("myDiv");
 
-    console.log("page.name  :: ", page.name);
     if (demoImage && page.name == "HOME") {
       demoElement.style.paddingTop = "0px";
       demoImage.className = "container";
@@ -99,11 +102,21 @@ const NewHeader = () => {
   }, [anchorEl]);
 
   useEffect(() => {
-    if (isloggedIn) {
+    if (localStorage.getItem("authToken")) {
       const demoElement: any = document.getElementById("demo");
       if (demoElement && localStorage.getItem("authToken")) {
-        demoElement.innerHTML = "Event List";
+        console.log("location :: isloggedIn :: newHeader :: ", location);
+        if (location.pathname == "/events") {
+          demoElement.innerHTML = "Our Events";
+        }
+        // if (location.pathname == "/update-user") {
+        //   demoElement.innerHTML = "Update Profile";
+        // }
+        // if (location.pathname == "/update-password") {
+        //   demoElement.innerHTML = "Update Password";
+        // }
       }
+
       const demoImage = document.getElementById("myDiv");
       if (demoImage) {
         demoElement.style.paddingTop = "0px";
@@ -111,7 +124,7 @@ const NewHeader = () => {
       }
       setNavOptions([...pages.filter((item: any) => item.name !== "LOG IN")]);
     }
-  }, [isloggedIn]);
+  }, [localStorage.getItem("authToken")]);
   useEffect(() => {
     console.log("location :: ", location);
     const typeWriter = () => {
@@ -123,13 +136,15 @@ const NewHeader = () => {
         setTimeout(typeWriter, speed);
       }
     };
-
-    typeWriter();
+    if (location.pathname == "/") {
+      typeWriter();
+    } else {
+    }
   }, [txt, speed]);
 
   return (
     <>
-      <div className="container">
+      <div className="container" id="myDiv">
         <nav>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -345,6 +360,7 @@ const NewHeader = () => {
                 <MenuItem
                   onClick={() => {
                     handleCloseProfile();
+                    setIsLoggedIn(isloggedIn ? true : false);
                     navigate("update-user");
                   }}
                 >
@@ -386,14 +402,14 @@ const NewHeader = () => {
           </div>
         </section>
 
-        {!localStorage.getItem("authToken") && (
+        {location.pathname === "/" && !localStorage.getItem("authToken") && (
           <Button
             type="submit"
             variant="contained"
             onClick={() => navigate("/event-registration")}
             sx={{
               position: "absolute",
-              bottom: "25px",
+              bottom: "160px",
               right: "45%",
             }}
           >

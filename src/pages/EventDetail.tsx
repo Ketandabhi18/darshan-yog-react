@@ -39,48 +39,49 @@ const EventDetailPage = () => {
           variant="h5"
           gutterBottom
           style={{
-            color: "#333",
+            color: "black",
             marginBottom: "20px",
             textAlign: "center",
             textTransform: "uppercase",
+            paddingBottom: "20px",
           }}
         >
           {eventName}
         </Typography>
         <Grid container spacing={2} style={{ marginBottom: "20px" }}>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={8}>
             <Typography variant="body1">
-              <strong style={{ color: "#555" }}>Start Date: </strong>{" "}
+              <strong style={{ color: "black" }}>Start Date: </strong>{" "}
               {startDateTime}
             </Typography>
             <Typography variant="body1">
-              <strong style={{ color: "#555" }}>End Date: </strong>{" "}
+              <strong style={{ color: "black" }}>End Date: </strong>{" "}
               {endDateTime}
             </Typography>
             <Typography variant="body1">
-              <strong style={{ color: "#555" }}>Last Date to Register:</strong>{" "}
+              <strong style={{ color: "black" }}>Last Date to Register:</strong>{" "}
               {lastDateToReg}
             </Typography>
             <Typography variant="body1">
-              <strong style={{ color: "#555" }}>Organiser:</strong>{" "}
+              <strong style={{ color: "black" }}>Organiser:</strong>{" "}
               {organiserName}
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={4}>
             <Typography variant="body1">
-              <strong style={{ color: "#555" }}>City:</strong> {city}
+              <strong style={{ color: "black" }}>City:</strong> {city}
             </Typography>
             <Typography variant="body1">
-              <strong style={{ color: "#555" }}>District:</strong> {district}
+              <strong style={{ color: "black" }}>District:</strong> {district}
             </Typography>
             <Typography variant="body1">
-              <strong style={{ color: "#555" }}>State:</strong> {state}
+              <strong style={{ color: "black" }}>State:</strong> {state}
             </Typography>
             <Typography variant="body1">
-              <strong style={{ color: "#555" }}>Country:</strong> {country}
+              <strong style={{ color: "black" }}>Country:</strong> {country}
             </Typography>
             <Typography variant="body1">
-              <strong style={{ color: "#555" }}>Pincode:</strong> {pincode}
+              <strong style={{ color: "black" }}>Pincode:</strong> {pincode}
             </Typography>
           </Grid>
         </Grid>
