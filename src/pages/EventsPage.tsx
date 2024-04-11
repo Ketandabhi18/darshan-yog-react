@@ -559,7 +559,7 @@ const EventsPage = () => {
                           {registerCheck && (
                             <Typography variant="h6" gutterBottom color="error" style={{ backgroundColor: "red", color: "white", fontSize: "13px", borderRadius: "5px", padding: "5px" }}>
                               You are already registered for this event
-                              {/*with Reg  id {registerId} */}
+                              with Reg  id {registerId}
                             </Typography>
                           )}
                           <Stack spacing={2} direction={'row'}>
@@ -592,7 +592,7 @@ const EventsPage = () => {
                         {registerCheck && (
                           <Typography variant="h6" gutterBottom color="error" style={{ backgroundColor: "red", color: "white", borderRadius: "5px", paddingLeft: "10px", paddingRight: "10px" }}>
                             You are already registered for this event
-                            {/* with Reg id {registerId} */}
+                            with Reg id {registerId}
                           </Typography>
                         )}
                         <IconButton onClick={handleClose}>

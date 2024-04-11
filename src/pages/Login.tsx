@@ -353,6 +353,11 @@ const Login: FunctionComponent = () => {
         </Alert>
       </Snackbar>
       <ThemeProvider theme={defaultTheme}>
+        <div className="hero-event">
+          <div className="hero-content">
+            <h1 style={{ paddingTop: '25px' }}>LOG IN</h1>
+          </div>
+        </div>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <Box
@@ -624,8 +629,8 @@ const Login: FunctionComponent = () => {
                             .getDate()
                             .toString()
                             .padStart(2, "0")}-${(new Date(e).getMonth() + 1)
-                            .toString()
-                            .padStart(2, "0")}-${new Date(e).getFullYear()}`;
+                              .toString()
+                              .padStart(2, "0")}-${new Date(e).getFullYear()}`;
                           setFormData({ ...formData, dateOfBirth: value });
                         }}
                         label="Date Of Birth"

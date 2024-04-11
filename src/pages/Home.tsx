@@ -458,9 +458,10 @@ const Home = () => {
     let user: any = localStorage.getItem("userDetail");
     user = JSON.parse(user);
     if (!authToken) {
-      navigate("/log-in", {
-        state: { eventCode: eventCode },
-      });
+      // navigate("/log-in", {
+      //   state: { eventCode: eventCode },
+      // });
+      navigate("/event-registration");
     } else {
       const checkRegistered = axios
         .get(`${baseUrl}/events/event-registrations`, {
@@ -684,26 +685,15 @@ const Home = () => {
         <div className="hero-content">
           <h1 id="demo" className="text"></h1>
 
-          {/*  <Container
-            maxWidth="md"
-            style={{
-              textAlign: "left",
-              backgroundColor: "#f4f4f4",
-              borderRadius: "6px",
-            }}
-          >
-           
-          </Container> */}
-
-          {/* <div className="event-container"> */}
-          <Container
-            maxWidth="md"
-            style={{
-              textAlign: "left",
-              backgroundColor: "#f4f4f4",
-              borderRadius: "6px",
-            }}
-          >
+          <div className="event-container">
+            {/* <Container
+              maxWidth="md"
+              style={{
+                textAlign: "left",
+                backgroundColor: "#f4f4f4",
+                borderRadius: "6px",
+              }}
+            > */}
             <div className="marquee-container">
               <h1 className="marquee">Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </h1>
             </div>
@@ -896,7 +886,7 @@ const Home = () => {
                               {registerCheck && (
                                 <Typography variant="h6" gutterBottom color="error" style={{ backgroundColor: "red", color: "white", fontSize: "13px", borderRadius: "5px", padding: "5px" }}>
                                   You are already registered for this event
-                                  {/*with Reg  id {registerId} */}
+                                  with Reg  id {registerId}
                                 </Typography>
                               )}
                               <Stack spacing={2} direction={'row'}>
@@ -929,7 +919,7 @@ const Home = () => {
                             {registerCheck && (
                               <Typography variant="h6" gutterBottom color="error" style={{ backgroundColor: "red", color: "white", borderRadius: "5px", paddingLeft: "10px", paddingRight: "10px" }}>
                                 You are already registered for this event
-                                {/* with Reg id {registerId} */}
+                                with Reg id {registerId}
                               </Typography>
                             )}
                             <IconButton onClick={handleClose}>
@@ -1377,8 +1367,8 @@ const Home = () => {
                 </Card>
               );
             })}
-          </Container>
-
+            {/*  </Container> */}
+          </div>
           {/*   {!localStorage.getItem("authToken") && (
             // <Button
             //   type="submit"
