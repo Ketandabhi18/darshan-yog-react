@@ -140,7 +140,7 @@ const NewHeader = () => {
     };
     if (location.pathname == "/") {
       typeWriter();
-    } else if (location.pathname == '/events') {
+    } else if (location.pathname == "/events") {
       const demoElement: any = document.getElementById("demo");
       demoElement.innerHTML = "Our Events";
       demoElement.style.textAlign = "center";
@@ -149,7 +149,7 @@ const NewHeader = () => {
         demoElement.style.paddingTop = "0px";
         demoImage.className = "newContainer";
       }
-    } else if (location.pathname == '/log-in') {
+    } else if (location.pathname == "/log-in") {
       const demoElement: any = document.getElementById("demo");
       demoElement.innerHTML = "Log In";
       demoElement.style.textAlign = "center";
@@ -158,7 +158,7 @@ const NewHeader = () => {
         demoElement.style.paddingTop = "0px";
         demoImage.className = "newContainer";
       }
-    } else if (location.pathname == '/update-user') {
+    } else if (location.pathname == "/update-user") {
       const demoElement: any = document.getElementById("demo");
       demoElement.innerHTML = "Update Profile";
       demoElement.style.textAlign = "center";
@@ -167,7 +167,7 @@ const NewHeader = () => {
         demoElement.style.paddingTop = "0px";
         demoImage.className = "newContainer";
       }
-    } else if (location.pathname == '/update-password') {
+    } else if (location.pathname == "/update-password") {
       const demoElement: any = document.getElementById("demo");
       demoElement.innerHTML = "Update Password";
       demoElement.style.textAlign = "center";
@@ -176,9 +176,17 @@ const NewHeader = () => {
         demoElement.style.paddingTop = "0px";
         demoImage.className = "newContainer";
       }
+    } else if (location.pathname == "/event-registration") {
+      const demoElement: any = document.getElementById("demo");
+      demoElement.innerHTML = "Registration";
+      demoElement.style.textAlign = "center";
+      const demoImage = document.getElementById("myDiv");
+      if (demoImage) {
+        demoElement.style.paddingTop = "0px";
+        demoImage.className = "newContainer";
+      }
     }
   }, [txt, speed]);
-
 
   return (
     <>
@@ -439,7 +447,8 @@ const NewHeader = () => {
                     isloggedIn = null;
 
                     const demoElement: any = document.getElementById("demo");
-                    demoElement.innerHTML = "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
+                    demoElement.innerHTML =
+                      "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
                     demoElement.style.textAlign = "center";
                     const demoImage = document.getElementById("myDiv");
                     if (demoImage) {
@@ -470,7 +479,17 @@ const NewHeader = () => {
           <Button
             type="submit"
             variant="contained"
-            onClick={() => navigate("/event-registration")}
+            onClick={() => {
+              const demoElement: any = document.getElementById("demo");
+              demoElement.innerHTML = "Registration";
+              demoElement.style.textAlign = "center";
+              const demoImage = document.getElementById("myDiv");
+              if (demoImage) {
+                demoElement.style.paddingTop = "0px";
+                demoImage.className = "newContainer";
+              }
+              navigate("/event-registration");
+            }}
             sx={{
               position: "absolute",
               bottom: "160px",

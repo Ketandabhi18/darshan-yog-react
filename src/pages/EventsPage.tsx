@@ -568,8 +568,8 @@ const EventsPage = () => {
                                 padding: "5px",
                               }}
                             >
-                              You are already registered for this event
-                              {/*with Reg  id {registerId} */}
+                              You are already registered for this event with Reg
+                              id {registerId}
                             </Typography>
                           )}
 
@@ -615,8 +615,8 @@ const EventsPage = () => {
                               paddingRight: "10px",
                             }}
                           >
-                            You are already registered for this event
-                            {/* {/ with Reg id {registerId} /} */}
+                            You are already registered for this event with Reg
+                            id {registerId}
                           </Typography>
                         )}
                         <IconButton onClick={handleClose}>

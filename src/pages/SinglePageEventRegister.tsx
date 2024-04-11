@@ -1,10 +1,8 @@
-import { FunctionComponent, useState } from "react";
-import Avatar from "@mui/material/Avatar";
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -16,8 +14,6 @@ import {
   CircularProgress,
   FormControl,
   Grid,
-  IconButton,
-  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -44,7 +40,6 @@ const SinglePageEventRegister = () => {
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<any>("success");
-  const [loginwithPassword, setLoginWithPassword] = useState(false);
   const [openEventForm, setOpenEventForm] = useState(false);
   const [formData, setFormData] = useState<any>({
     groupDetails: [],
@@ -52,7 +47,6 @@ const SinglePageEventRegister = () => {
   const [backDrop, setBackDrop] = useState<any>(false);
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("location :: ", location);
   const handleVerfiyOtp = async (event: any) => {
     event.preventDefault();
     setBackDrop(true);
@@ -96,21 +90,30 @@ const SinglePageEventRegister = () => {
                       o.eventCode === "YOGDHAM_FEB24" &&
                       o.mobileNumber === `${countrycode}${mobile}`
                   );
-                  console.log("registeredEvent :: ", registeredEvent);
                   if (registeredEvent) {
                     setBackDrop(false);
                     setAlertType("error");
                     setAlertMessage(
-                      "You have already registered for this event."
+                      `You have already registered for this event with Reg Id : ${registeredEvent.eventRegId}.`
                     );
                     setOpenAlert(true);
-                    setTimeout(() => {
-                      navigate("/events");
-                    }, 1000);
+                    const userDetail: any = localStorage.getItem("userDetail");
+                    if (localStorage.getItem("userDetail")) {
+                      setFormData((prevFormData: any) => {
+                        return {
+                          ...JSON.parse(userDetail),
+                          arrivalDate: registeredEvent.arrivalDate,
+                          departureDate: registeredEvent.departureDate,
+                          groupDetails: registeredEvent.groupDetails,
+                          notes: registeredEvent.notes,
+                          eventCode: "YOGDHAM_FEB24",
+                        };
+                      });
+                      setOpenEventForm(true);
+                    }
                   } else {
                     let user: any = localStorage.getItem("userDetail");
                     user = JSON.parse(user);
-                    console.log("first if");
                     setFormData((prevFormData: any) => {
                       return {
                         ...prevFormData,
@@ -127,7 +130,6 @@ const SinglePageEventRegister = () => {
             setAlertMessage("Invalid Otp !!");
             setAlertType("error");
             setOpenAlert(true);
-            console.log("login failed :: due to invalid creds");
           }
         })
         .catch((error) => {
@@ -141,13 +143,11 @@ const SinglePageEventRegister = () => {
     try {
       setBackDrop(true);
       const mobileNumber = `${countrycode}${mobile}`;
-      console.log("mobile :: in get otp ", mobileNumber);
       axios
         .post(`${baseUrl}/get-otp`, {
           username: mobileNumber,
         })
         .then((res) => {
-          console.log("data :: get otp :: ", res);
           if (res.data.status === 200) {
             setBackDrop(false);
             setAlertMessage(res.data.message);
@@ -218,7 +218,6 @@ const SinglePageEventRegister = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setBackDrop(true);
-    console.log("formData :: ", formData);
     const {
       email,
       firstName,
@@ -310,8 +309,12 @@ const SinglePageEventRegister = () => {
       setTimeout(() => {
         navigate("/");
       }, 2000);
+    } else {
+      setBackDrop(false);
+      setAlertType("error");
+      setAlertMessage(res.data.message);
+      setOpenAlert(true);
     }
-    console.log("res :: register event :: ", res);
   };
 
   const defaultTheme = createTheme();
@@ -432,37 +435,42 @@ const SinglePageEventRegister = () => {
                   onChange={(e) => setMobile(e.target.value)}
                 />
               </div>
-              <div
-                style={{
-                  marginBottom: "2%",
-                  display: "flex",
-                  alignItems: "baseline",
-                }}
-              >
-                <TextField
-                  margin="normal"
-                  onChange={(e) => setOtp(e.target.value)}
-                  required
-                  fullWidth
-                  name="password"
-                  label="OTP"
-                  id="password"
-                  autoComplete="current-password"
-                />
-
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ margin: "2%", width: "50%", borderRadius: "40px" }}
-                  onClick={handleVerfiyOtp}
+              {!openEventForm && (
+                <div
+                  style={{
+                    marginBottom: "2%",
+                    display: "flex",
+                    alignItems: "baseline",
+                  }}
                 >
-                  Verify Otp
-                </Button>
-              </div>
+                  <TextField
+                    margin="normal"
+                    onChange={(e) => setOtp(e.target.value)}
+                    required
+                    fullWidth
+                    name="password"
+                    label="OTP"
+                    id="password"
+                    autoComplete="current-password"
+                  />
+
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ margin: "2%", width: "50%", borderRadius: "40px" }}
+                    onClick={handleVerfiyOtp}
+                  >
+                    Verify Otp
+                  </Button>
+                </div>
+              )}
             </>
           )}
 
-          <form onSubmit={handleSubmit} style={{ marginBottom: "2%" }}>
+          <form
+            onSubmit={handleSubmit}
+            style={{ marginBottom: "2%", marginTop: "2%" }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -470,8 +478,9 @@ const SinglePageEventRegister = () => {
                   fullWidth
                   label="Email"
                   name="email"
-                  value={formData?.email}
+                  value={formData?.email ?? ""}
                   onChange={handleChange}
+                  InputLabelProps={{ shrink: true }}
                 />
               </Grid>
 
@@ -482,8 +491,9 @@ const SinglePageEventRegister = () => {
                   label="First Name"
                   name="firstName"
                   required
-                  value={formData?.firstName}
+                  value={formData?.firstName ?? ""}
                   onChange={handleChange}
+                  InputLabelProps={{ shrink: true }}
                 />
               </Grid>
 
@@ -493,8 +503,9 @@ const SinglePageEventRegister = () => {
                   disabled={openEventForm ? false : true}
                   label="Middle Name"
                   name="middleName"
-                  value={formData?.middleName}
+                  value={formData?.middleName ?? ""}
                   onChange={handleChange}
+                  InputLabelProps={{ shrink: true }}
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
@@ -503,8 +514,9 @@ const SinglePageEventRegister = () => {
                   disabled={openEventForm ? false : true}
                   label="Last Name"
                   name="lastName"
-                  value={formData?.lastName}
+                  value={formData?.lastName ?? ""}
                   onChange={handleChange}
+                  InputLabelProps={{ shrink: true }}
                 />
               </Grid>
 
@@ -515,7 +527,7 @@ const SinglePageEventRegister = () => {
                     disabled={openEventForm ? false : true}
                     label={"Gender"}
                     arial-label={"Gender"}
-                    value={formData?.gender}
+                    value={formData?.gender ?? "Male"}
                     onChange={handleChange}
                     name="gender"
                   >
@@ -531,7 +543,13 @@ const SinglePageEventRegister = () => {
               >
                 <Grid item xs={12} sm={6}>
                   <DatePicker
-                    disabled={openEventForm ? false : true}
+                    value={
+                      formData.dateOfBirth
+                        ? new Date(
+                            formData.dateOfBirth.split("-").reverse().join("-")
+                          )
+                        : null
+                    }
                     onChange={(e: any) => {
                       const value = `${new Date(e)
                         .getDate()
@@ -539,7 +557,10 @@ const SinglePageEventRegister = () => {
                         .padStart(2, "0")}-${(new Date(e).getMonth() + 1)
                         .toString()
                         .padStart(2, "0")}-${new Date(e).getFullYear()}`;
-                      setFormData({ ...formData, dateOfBirth: value });
+                      setFormData({
+                        ...formData,
+                        ["dateOfBirth"]: value,
+                      });
                     }}
                     label="Date Of Birth"
                     slotProps={{
@@ -557,7 +578,7 @@ const SinglePageEventRegister = () => {
                       disabled={openEventForm ? false : true}
                       label={"Educational Qualification"}
                       arial-label={"Educational Qualification"}
-                      value={formData?.edQualification}
+                      value={formData?.edQualification ?? ""}
                       onChange={handleChange}
                       name="edQualification"
                     >
@@ -579,7 +600,7 @@ const SinglePageEventRegister = () => {
                       disabled={openEventForm ? false : true}
                       label={"Profession"}
                       arial-label={"Profession"}
-                      value={formData?.profession}
+                      value={formData?.profession ?? ""}
                       onChange={handleChange}
                       name="profession"
                     >
@@ -598,8 +619,9 @@ const SinglePageEventRegister = () => {
                     fullWidth
                     label="Guardian Name"
                     name="guardianName"
-                    value={formData?.guardianName}
+                    value={formData?.guardianName ?? ""}
                     onChange={handleChange}
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -609,7 +631,7 @@ const SinglePageEventRegister = () => {
                       disabled={openEventForm ? false : true}
                       label={"Marital Status"}
                       arial-label={"Marital Status"}
-                      value={formData?.maritalStatus}
+                      value={formData?.maritalStatus ?? ""}
                       onChange={handleChange}
                       name="maritalStatus"
                     >
@@ -624,8 +646,9 @@ const SinglePageEventRegister = () => {
                     fullWidth
                     label="Blood Group"
                     name="bloodGroup"
-                    value={formData?.bloodGroup}
+                    value={formData?.bloodGroup ?? ""}
                     onChange={handleChange}
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
 
@@ -638,7 +661,7 @@ const SinglePageEventRegister = () => {
                       arial-label={"Country"}
                       name="country"
                       required
-                      value={formData?.country}
+                      value={formData?.country ?? ""}
                       onChange={handleChange}
                     >
                       <MenuItem value="india">India</MenuItem>
@@ -656,7 +679,7 @@ const SinglePageEventRegister = () => {
                       arial-label={"State"}
                       name="state"
                       required
-                      value={formData?.state}
+                      value={formData?.state ?? ""}
                       onChange={(event) => {
                         handleStateChange(event);
                         handleChange(event);
@@ -676,7 +699,7 @@ const SinglePageEventRegister = () => {
                     disabled={openEventForm ? false : true}
                     label="City / Village"
                     name="city"
-                    value={formData?.city}
+                    value={formData?.city ?? ""}
                     onChange={handleChange}
                     fullWidth
                   />
@@ -695,7 +718,7 @@ const SinglePageEventRegister = () => {
                       arial-label={"District"}
                       name="district"
                       required
-                      value={formData?.district}
+                      value={formData?.district ?? ""}
                       onChange={handleChange}
                       //   disabled={!formData?.state || formData?.state === ""}
                     >
@@ -717,9 +740,10 @@ const SinglePageEventRegister = () => {
                     disabled={openEventForm ? false : true}
                     label="Address 1"
                     name="addrLine1"
-                    value={formData?.addrLine1}
+                    value={formData?.addrLine1 ?? ""}
                     onChange={handleChange}
                     fullWidth
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -727,9 +751,10 @@ const SinglePageEventRegister = () => {
                     disabled={openEventForm ? false : true}
                     label="Address 2"
                     name="addrLine2"
-                    value={formData?.addrLine2}
+                    value={formData?.addrLine2 ?? ""}
                     onChange={handleChange}
                     fullWidth
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -738,13 +763,14 @@ const SinglePageEventRegister = () => {
                     label="Pincode"
                     name="pincode"
                     type="number"
-                    value={formData?.pincode}
+                    value={formData?.pincode ?? ""}
                     onChange={handleChange}
                     fullWidth
                     inputProps={{
                       min: 100000, // example minimum value
                       max: 999999, // example maximum value
                     }}
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
 
@@ -754,6 +780,11 @@ const SinglePageEventRegister = () => {
                       disabled={openEventForm ? false : true}
                       label="Arrival Date"
                       name="arrivalDate"
+                      value={
+                        formData.arrivalDate
+                          ? new Date(formData?.arrivalDate)
+                          : new Date()
+                      }
                       onChange={(e: any) => {
                         const convertedDate =
                           new Date(e)
@@ -782,6 +813,11 @@ const SinglePageEventRegister = () => {
                       disabled={openEventForm ? false : true}
                       label="Departure Date"
                       name="departureDate"
+                      value={
+                        formData.departureDate
+                          ? new Date(formData?.departureDate)
+                          : new Date()
+                      }
                       onChange={(e: any) => {
                         const convertedDate =
                           new Date(e)
@@ -812,7 +848,7 @@ const SinglePageEventRegister = () => {
                   <Select
                     disabled={openEventForm ? false : true}
                     name="pickupPlace"
-                    value={formData?.pickupPlace}
+                    value={formData?.pickupPlace ?? ""}
                     onChange={handleChange}
                   >
                     <MenuItem value="Kalupur Railway Station">
@@ -935,7 +971,7 @@ const SinglePageEventRegister = () => {
                   disabled={openEventForm ? false : true}
                   label="Anything else you want to inform us"
                   name="notes"
-                  value={formData?.notes}
+                  value={formData?.notes ?? ""}
                   onChange={handleChange}
                   fullWidth
                   multiline
@@ -953,7 +989,7 @@ const SinglePageEventRegister = () => {
                 }}
                 disabled={openEventForm ? false : true}
               >
-                Submit
+                {localStorage.getItem("userDetail") ? "Update" : "Submit"}
               </Button>
             </Grid>
           </form>
