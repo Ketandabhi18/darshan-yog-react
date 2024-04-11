@@ -86,6 +86,8 @@ const EventsPage = () => {
   });
   const [errors, setErrors] = useState<any>({});
   const [registerCheck, setRegisterCheck] = useState<any>(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<any>("success");
   const [registerId, setRegisterId] = useState<any>();
   const authToken = localStorage.getItem("authToken") || "";
   const handleOpen = (eventCode: any) => {
@@ -291,9 +293,23 @@ const EventsPage = () => {
           }
         );
         console.log("Register event :: res ::", res);
+        if (res.data.status === 200) {
+          setBackDrop(false);
+          setAlertType("success");
+          setAlertMessage(res.data.message);
+          setOpenAlert(true);
+          setOpen(false);
+        } else {
+          setBackDrop(false);
+          setAlertType("error");
+          setAlertMessage(res.data.message);
+          setOpenAlert(true);
+        }
+      } else {
         setBackDrop(false);
+        setAlertType("error");
+        setAlertMessage(data.message);
         setOpenAlert(true);
-        setOpen(false);
       }
     } catch (error) {
       console.log("error :: ", error);
@@ -340,13 +356,14 @@ const EventsPage = () => {
       >
         <Alert
           onClose={() => setOpenAlert(false)}
-          severity="success"
+          severity={alertType}
           variant="filled"
           sx={{ width: "100%" }}
         >
-          {registerCheck
+          {/* {registerCheck
             ? "Registration Successfully updated."
-            : " Registration Successfully Done."}
+            : " Registration Successfully Done."} */}
+          {alertMessage}
         </Alert>
       </Snackbar>
 
