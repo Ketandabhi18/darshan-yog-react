@@ -146,9 +146,10 @@ const EventsPage = () => {
     let user: any = localStorage.getItem("userDetail");
     user = JSON.parse(user);
     if (!authToken) {
-      navigate("/log-in", {
-        state: { eventCode: eventCode },
-      });
+      navigate("/event-registration");
+      // navigate("/log-in", {
+      //   state: { eventCode: eventCode },
+      // });
     } else {
       const checkRegistered = axios
         .get(`${baseUrl}/events/event-registrations`, {
@@ -351,10 +352,9 @@ const EventsPage = () => {
 
       <div className="hero-event">
         <div className="hero-content">
-          <h1 style={{ paddingTop: '25px' }}>Event List</h1>
+          <h1 style={{ paddingTop: "25px" }}>Event List</h1>
         </div>
       </div>
-
 
       <Container
         maxWidth="md"
@@ -554,15 +554,32 @@ const EventsPage = () => {
                         p: 4,
                       }}
                     >
-                      <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" }, mb: 2 }}>
+                      <Box
+                        sx={{
+                          flexGrow: 1,
+                          display: { xs: "flex", md: "none" },
+                          mb: 2,
+                        }}
+                      >
                         <Stack spacing={2}>
                           {registerCheck && (
-                            <Typography variant="h6" gutterBottom color="error" style={{ backgroundColor: "red", color: "white", fontSize: "13px", borderRadius: "5px", padding: "5px" }}>
-                              You are already registered for this event
-                              with Reg  id {registerId}
+                            <Typography
+                              variant="h6"
+                              gutterBottom
+                              color="error"
+                              style={{
+                                backgroundColor: "red",
+                                color: "white",
+                                fontSize: "13px",
+                                borderRadius: "5px",
+                                padding: "5px",
+                              }}
+                            >
+                              You are already registered for this event with Reg
+                              id {registerId}
                             </Typography>
                           )}
-                          <Stack spacing={2} direction={'row'}>
+                          <Stack spacing={2} direction={"row"}>
                             <Typography variant="h6" gutterBottom>
                               Register for {event.eventName}
                             </Typography>
@@ -578,7 +595,8 @@ const EventsPage = () => {
                           // display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
-                          mb: 2, flexGrow: 1,
+                          mb: 2,
+                          flexGrow: 1,
                           display: {
                             xs: "none",
                             md: "flex",
@@ -590,9 +608,20 @@ const EventsPage = () => {
                           Register for {event.eventName}
                         </Typography>
                         {registerCheck && (
-                          <Typography variant="h6" gutterBottom color="error" style={{ backgroundColor: "red", color: "white", borderRadius: "5px", paddingLeft: "10px", paddingRight: "10px" }}>
-                            You are already registered for this event
-                            with Reg id {registerId}
+                          <Typography
+                            variant="h6"
+                            gutterBottom
+                            color="error"
+                            style={{
+                              backgroundColor: "red",
+                              color: "white",
+                              borderRadius: "5px",
+                              paddingLeft: "10px",
+                              paddingRight: "10px",
+                            }}
+                          >
+                            You are already registered for this event with Reg
+                            id {registerId}
                           </Typography>
                         )}
                         <IconButton onClick={handleClose}>
@@ -647,7 +676,9 @@ const EventsPage = () => {
                                 onChange={handleChange}
                               >
                                 <MenuItem value="india">India</MenuItem>
-                                <MenuItem value="afghanistan">Afghanistan</MenuItem>
+                                <MenuItem value="afghanistan">
+                                  Afghanistan
+                                </MenuItem>
                               </Select>
                             </FormControl>
                           </Grid>
@@ -698,7 +729,9 @@ const EventsPage = () => {
                                 required
                                 value={formData.district}
                                 onChange={handleChange}
-                                disabled={!formData.state || formData.state === ""}
+                                disabled={
+                                  !formData.state || formData.state === ""
+                                }
                               >
                                 {formData.state &&
                                   statesWithDistricts[formData.state] &&
@@ -729,7 +762,7 @@ const EventsPage = () => {
                             />
                           </Grid>
 
-                          <Grid item xs={12} >
+                          <Grid item xs={12}>
                             <TextField
                               label="Address 1"
                               name="addrLine1"
@@ -765,18 +798,17 @@ const EventsPage = () => {
                             dateAdapter={AdapterDateFns}
                             adapterLocale={enGB}
                           >
-
                             <Grid item xs={12} sm={6}>
                               <FormControl fullWidth>
                                 <DatePicker
                                   value={
                                     formData.dateOfBirth
                                       ? new Date(
-                                        formData.dateOfBirth
-                                          .split("-")
-                                          .reverse()
-                                          .join("-")
-                                      )
+                                          formData.dateOfBirth
+                                            .split("-")
+                                            .reverse()
+                                            .join("-")
+                                        )
                                       : null
                                   }
                                   onChange={(e: any) => {
@@ -784,12 +816,12 @@ const EventsPage = () => {
                                       .getDate()
                                       .toString()
                                       .padStart(2, "0")}-${(
-                                        new Date(e).getMonth() + 1
-                                      )
-                                        .toString()
-                                        .padStart(2, "0")}-${new Date(
-                                          e
-                                        ).getFullYear()}`;
+                                      new Date(e).getMonth() + 1
+                                    )
+                                      .toString()
+                                      .padStart(2, "0")}-${new Date(
+                                      e
+                                    ).getFullYear()}`;
                                     setFormData({
                                       ...formData,
                                       ["dateOfBirth"]: value,
@@ -874,7 +906,6 @@ const EventsPage = () => {
                                 />
                               </FormControl>
                             </Grid>
-
                           </LocalizationProvider>
 
                           <Grid item xs={12}>
@@ -902,8 +933,7 @@ const EventsPage = () => {
                             </FormControl>
                           </Grid>
 
-                          <Grid item xs={12} >
-
+                          <Grid item xs={12}>
                             <Box mb={2}>
                               <Typography variant="subtitle1">
                                 Group Details:
@@ -992,7 +1022,12 @@ const EventsPage = () => {
                                   </Box>
                                 )
                               )}
-                              <div style={{ display: "flex", justifyContent: 'center' }}>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                }}
+                              >
                                 <Button
                                   variant="contained"
                                   onClick={addGroupMember}
@@ -1003,8 +1038,8 @@ const EventsPage = () => {
                               </div>
                             </Box>
                           </Grid>
-                          
-                          <Grid item xs={12} >
+
+                          <Grid item xs={12}>
                             <TextField
                               label="Anything else you want to inform us"
                               name="notes"
@@ -1017,7 +1052,9 @@ const EventsPage = () => {
                             />
                           </Grid>
                         </Grid>
-                        <div style={{ display: "flex", justifyContent: 'center' }}>
+                        <div
+                          style={{ display: "flex", justifyContent: "center" }}
+                        >
                           <Button
                             type="submit"
                             variant="contained"
@@ -1031,7 +1068,6 @@ const EventsPage = () => {
                             {registerCheck ? "Update" : "Submit"}
                           </Button>
                         </div>
-
                       </form>
                     </Box>
                   </>
@@ -1040,7 +1076,7 @@ const EventsPage = () => {
             </Card>
           );
         })}
-      </Container >
+      </Container>
     </>
   );
 };
