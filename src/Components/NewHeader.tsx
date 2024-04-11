@@ -19,8 +19,6 @@ import { Box, Typography } from "@mui/material";
 const NewHeader = () => {
   const location = useLocation();
   const isloggedIn = localStorage.getItem("authToken");
-  console.log("isloggedIn :: ", isloggedIn);
-
   const user: any = localStorage.getItem("userDetail");
   const userDetail: any = JSON.parse(user);
   const [navOptions, setNavOptions] = useState<any>(pages);
@@ -30,8 +28,7 @@ const NewHeader = () => {
   const open = Boolean(profileDropMenu);
   const navigate = useNavigate();
   const iRef = useRef(0);
-  let txt =
-    "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
+  let txt = "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
   const speed = 50;
 
   const handleProfileClick = (event: any) => {
@@ -97,29 +94,18 @@ const NewHeader = () => {
   };
 
   useEffect(() => {
-    // console.log("Updated anchorEl:", anchorEl);
   }, [anchorEl]);
 
   useEffect(() => {
     if (isloggedIn) {
-/*       const demoElement: any = document.getElementById("demo");
-      if (demoElement && localStorage.getItem("authToken")) {
-        demoElement.innerHTML = "Event List";
-      }
-      const demoImage = document.getElementById("myDiv");
-      if (demoImage) {
-        demoElement.style.paddingTop = "0px";
-        demoImage.className = "newContainer";
-      } */
       setNavOptions([...pages.filter((item: any) => item.name !== "LOG IN")]);
     }
   }, [isloggedIn]);
 
-  useEffect(() => {
+ /*  useEffect(() => {
     console.log("location :: ", location);
     const typeWriter = () => {
       const demoElement = document.getElementById("demo");
-
       if (demoElement && iRef.current < txt.length) {
         demoElement.innerHTML += txt.charAt(iRef.current);
         iRef.current += 1;
@@ -128,7 +114,7 @@ const NewHeader = () => {
     };
 
     typeWriter();
-  }, [txt, speed]);
+  }, [txt, speed]); */
 
   return (
     <>
