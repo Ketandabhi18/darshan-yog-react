@@ -16,9 +16,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Box, Typography } from "@mui/material";
 const NewHeader = () => {
   const location = useLocation();
-  const [isloggedIn, setIsLoggedIn] = useState<any>(
-    localStorage.getItem("authToken")
-  );
+  let isloggedIn = localStorage.getItem("authToken");
   const user: any = localStorage.getItem("userDetail");
   const userDetail: any = JSON.parse(user);
   const [navOptions, setNavOptions] = useState<any>(pages);
@@ -32,7 +30,7 @@ const NewHeader = () => {
   const iRef = useRef(0);
   let txt =
     "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
-  const speed = 50;
+  let speed = 50;
 
   const handleProfileClick = (event: any) => {
     setProfileDropMenu(event.currentTarget);
@@ -102,29 +100,33 @@ const NewHeader = () => {
   }, [anchorEl]);
 
   useEffect(() => {
-    if (localStorage.getItem("authToken")) {
+    // debugger
+    if (isloggedIn) {
       const demoElement: any = document.getElementById("demo");
       if (demoElement && localStorage.getItem("authToken")) {
         console.log("location :: isloggedIn :: newHeader :: ", location);
         if (location.pathname == "/events") {
           demoElement.innerHTML = "Our Events";
+          const demoImage = document.getElementById("myDiv");
+          if (demoImage) {
+            demoElement.style.paddingTop = "0px";
+            demoImage.className = "newContainer";
+          }
         }
-        // if (location.pathname == "/update-user") {
-        //   demoElement.innerHTML = "Update Profile";
-        // }
-        // if (location.pathname == "/update-password") {
-        //   demoElement.innerHTML = "Update Password";
-        // }
       }
-
-      const demoImage = document.getElementById("myDiv");
-      if (demoImage) {
-        demoElement.style.paddingTop = "0px";
-        demoImage.className = "newContainer";
-      }
+      // else {
+      //   const demoElement: any = document.getElementById("demo");
+      //   demoElement.innerHTML = "kjdfaksdfhkahsfkasdkjfahsjldkfhalsdkjfhashkfj nakshjklashfklaskdf";
+      //   demoElement.style.textAlign = "center";
+      //   const demoImage = document.getElementById("myDiv");
+      //   if (demoImage) {
+      //     demoElement.style.paddingTop = "0px";
+      //     demoImage.className = "container";
+      //   }
+      // }
       setNavOptions([...pages.filter((item: any) => item.name !== "LOG IN")]);
     }
-  }, [localStorage.getItem("authToken")]);
+  }, [isloggedIn]);
   useEffect(() => {
     console.log("location :: ", location);
     const typeWriter = () => {
@@ -138,9 +140,45 @@ const NewHeader = () => {
     };
     if (location.pathname == "/") {
       typeWriter();
-    } else {
+    } else if (location.pathname == '/events') {
+      const demoElement: any = document.getElementById("demo");
+      demoElement.innerHTML = "Our Events";
+      demoElement.style.textAlign = "center";
+      const demoImage = document.getElementById("myDiv");
+      if (demoImage) {
+        demoElement.style.paddingTop = "0px";
+        demoImage.className = "newContainer";
+      }
+    } else if (location.pathname == '/log-in') {
+      const demoElement: any = document.getElementById("demo");
+      demoElement.innerHTML = "Log In";
+      demoElement.style.textAlign = "center";
+      const demoImage = document.getElementById("myDiv");
+      if (demoImage) {
+        demoElement.style.paddingTop = "0px";
+        demoImage.className = "newContainer";
+      }
+    } else if (location.pathname == '/update-user') {
+      const demoElement: any = document.getElementById("demo");
+      demoElement.innerHTML = "Update Profile";
+      demoElement.style.textAlign = "center";
+      const demoImage = document.getElementById("myDiv");
+      if (demoImage) {
+        demoElement.style.paddingTop = "0px";
+        demoImage.className = "newContainer";
+      }
+    } else if (location.pathname == '/update-password') {
+      const demoElement: any = document.getElementById("demo");
+      demoElement.innerHTML = "Update Password";
+      demoElement.style.textAlign = "center";
+      const demoImage = document.getElementById("myDiv");
+      if (demoImage) {
+        demoElement.style.paddingTop = "0px";
+        demoImage.className = "newContainer";
+      }
     }
   }, [txt, speed]);
+
 
   return (
     <>
@@ -360,7 +398,14 @@ const NewHeader = () => {
                 <MenuItem
                   onClick={() => {
                     handleCloseProfile();
-                    setIsLoggedIn(isloggedIn ? true : false);
+                    const demoElement: any = document.getElementById("demo");
+                    demoElement.innerHTML = "Update Profile";
+                    demoElement.style.textAlign = "center";
+                    const demoImage = document.getElementById("myDiv");
+                    if (demoImage) {
+                      demoElement.style.paddingTop = "0px";
+                      demoImage.className = "newContainer";
+                    }
                     navigate("update-user");
                   }}
                 >
@@ -370,6 +415,14 @@ const NewHeader = () => {
                 <MenuItem
                   onClick={() => {
                     handleCloseProfile();
+                    const demoElement: any = document.getElementById("demo");
+                    demoElement.innerHTML = "Update Password";
+                    demoElement.style.textAlign = "center";
+                    const demoImage = document.getElementById("myDiv");
+                    if (demoImage) {
+                      demoElement.style.paddingTop = "0px";
+                      demoImage.className = "newContainer";
+                    }
                     navigate("/update-password");
                   }}
                 >
@@ -383,6 +436,17 @@ const NewHeader = () => {
                     handleCloseProfile();
                     localStorage.clear();
                     setNavOptions(pages);
+                    isloggedIn = null;
+
+                    const demoElement: any = document.getElementById("demo");
+                    demoElement.innerHTML = "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
+                    demoElement.style.textAlign = "center";
+                    const demoImage = document.getElementById("myDiv");
+                    if (demoImage) {
+                      demoElement.style.paddingTop = "0px";
+                      demoImage.className = "container";
+                    }
+
                     navigate("/");
                   }}
                 >

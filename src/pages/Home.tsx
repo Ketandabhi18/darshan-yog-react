@@ -390,7 +390,7 @@ const Home = () => {
             }}
           >
             {" "}
-            <Typography variant="h4">Photo & Video</Typography>
+            <Typography variant="h4">Usefull Videos</Typography>
           </div>
           {/* <Grid container spacing={3}>
             {homecardCarouselData.map((item: any, index: any) => (
