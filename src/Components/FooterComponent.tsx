@@ -18,7 +18,7 @@ import { Button, Grid, TextField } from "@mui/material";
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary">
+    <Typography variant="body2" color="white">
       {"Copyright © "}
       2024 Darshanyog Mahavidyalaya
       {"."}
@@ -242,7 +242,7 @@ const FooterComponent = () => {
           style={{
             display: "flex",
             justifyContent: "center",
-            backgroundColor: "rgb(183 181 179 / 82%)",
+            backgroundColor: "#990000",
           }}
         >
           <Box

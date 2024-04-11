@@ -6,7 +6,7 @@
 
 .container {
   padding: 10px 8%;
-  /* width: 50%; */
+  width: 100%;
   /* min-height: 100vh; */
  /*  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)),
     url(assets/bg2.png);
@@ -17,6 +17,7 @@
 nav {
   width: 100%;
   display: flex;
+  /* background-color: #fef7e5; */
   align-items: center;
   padding: 10px 0;
 }

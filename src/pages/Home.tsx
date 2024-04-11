@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { ViewCarousel } from "@mui/icons-material";
-
+import "./home.css";
 import Carousel from "react-material-ui-carousel";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
@@ -19,6 +19,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import HomeCarouselCard from "../Components/HomeCarouselCard";
 import CardActionArea from "@mui/material/CardActionArea";
+import { useNavigate } from "react-router-dom";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -137,8 +138,10 @@ const Home = () => {
 
   const [index, setIndex] = useState(0);
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const iRef = useRef(0);
+
   let txt =
     "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
   const speed = 50;
@@ -373,7 +376,6 @@ const Home = () => {
         setTimeout(typeWriter, speed);
       }
     };
-
     typeWriter();
   }, [txt, speed]);
 
@@ -400,25 +402,31 @@ const Home = () => {
         </Carousel>
       </div> */}
 
-      <section
-        style={{
-          backgroundColor: "lightcyan",
-          // backgroundImage: "src/Components/assets/bg2.png",
-          // backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)),url(Components/assets/bg2.png)',
-          height: "500px",
-        }}>
 
-        <div style={{ position: "absolute", top: "50%" }}>
-          <h1 id="demo"
-            style={{
-              alignItems: "center",
-              display: "flex",
-              color: "black"
-            }}>
-          </h1>
+      <div className="hero-section">
+        <div className="hero-content">
+          <h1 id="demo" className="text"></h1>
+
+
+          {!localStorage.getItem("authToken") && (
+            // <Button
+            //   type="submit"
+            //   variant="contained"
+            //   onClick={() => navigate("/event-registration")}
+            //   sx={{
+            //     position: "absolute",
+            //     bottom: "25px",
+            //     right: "45%",
+            //   }}
+            // >
+            //   Register
+            // </Button>
+            <div className="button-container">
+              <button className="cta-button" onClick={() => navigate("/event-registration")}>Register</button>
+            </div>
+          )}
         </div>
-
-      </section >
+      </div>
 
       <section
         style={{ background: "#eeeded", padding: "50px 0" }}

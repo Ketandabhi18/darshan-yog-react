@@ -348,6 +348,14 @@ const EventsPage = () => {
             : " Registration Successfully Done."}
         </Alert>
       </Snackbar>
+
+      <div className="hero-event">
+        <div className="hero-content">
+          <h1 style={{ paddingTop: '25px' }}>Event List</h1>
+        </div>
+      </div>
+
+
       <Container
         maxWidth="md"
         style={{
@@ -358,7 +366,7 @@ const EventsPage = () => {
           borderRadius: "8px",
         }}
       >
-        <Typography
+        {/* <Typography
           variant="h4"
           gutterBottom
           style={{
@@ -369,7 +377,7 @@ const EventsPage = () => {
           }}
         >
           Event List
-        </Typography>
+        </Typography> */}
 
         {skeletonopen && (
           <Card
@@ -548,25 +556,23 @@ const EventsPage = () => {
                     >
                       <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" }, mb: 2 }}>
                         <Stack spacing={2}>
-                        <Stack spacing={2} direction={'row'}>
-                          
-                          <Typography variant="h6" gutterBottom>
-                            Register for {event.eventName}
-                          </Typography>
-                          <IconButton onClick={handleClose}>
-                            <CloseOutlined />
-                          </IconButton>
-                          </Stack>
                           {registerCheck && (
-                            <Typography variant="h6" gutterBottom color="error">
-                              You are already registered for this event with Reg
-                              id {registerId}
+                            <Typography variant="h6" gutterBottom color="error" style={{ backgroundColor: "red", color: "white", fontSize: "13px", borderRadius: "5px", padding: "5px" }}>
+                              You are already registered for this event
+                              {/*with Reg  id {registerId} */}
                             </Typography>
                           )}
-                          
-
+                          <Stack spacing={2} direction={'row'}>
+                            <Typography variant="h6" gutterBottom>
+                              Register for {event.eventName}
+                            </Typography>
+                            <IconButton onClick={handleClose}>
+                              <CloseOutlined />
+                            </IconButton>
+                          </Stack>
                         </Stack>
                       </Box>
+
                       <Box
                         sx={{
                           // display: "flex",
@@ -576,7 +582,6 @@ const EventsPage = () => {
                           display: {
                             xs: "none",
                             md: "flex",
-            
                             // justifyContent: "space-evenly",
                           },
                         }}
@@ -584,17 +589,17 @@ const EventsPage = () => {
                         <Typography variant="h6" gutterBottom>
                           Register for {event.eventName}
                         </Typography>
-
                         {registerCheck && (
-                          <Typography variant="h6" gutterBottom color="error">
-                            You are already registered for this event with Reg
-                            id {registerId}
+                          <Typography variant="h6" gutterBottom color="error" style={{ backgroundColor: "red", color: "white", borderRadius: "5px", paddingLeft: "10px", paddingRight: "10px" }}>
+                            You are already registered for this event
+                            {/* with Reg id {registerId} */}
                           </Typography>
                         )}
                         <IconButton onClick={handleClose}>
                           <CloseOutlined />
                         </IconButton>
                       </Box>
+
                       <form>
                         <TextField
                           label="First Name"

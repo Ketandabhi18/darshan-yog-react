@@ -92,12 +92,17 @@ const UpdatePassword = () => {
           Password Successfully Updated.
         </Alert>
       </Snackbar>
-      <Typography
+      <div className="hero-event">
+        <div className="hero-content">
+          <h1 style={{ paddingTop: '25px' }}>Set New Password</h1>
+        </div>
+      </div>
+      {/* <Typography
         variant="h5"
         style={{ textAlign: "center", marginTop: "1%", marginBottom: "1%" }}
       >
         Set New Password
-      </Typography>
+      </Typography> */}
       <form
         onSubmit={handleSubmit}
         style={{

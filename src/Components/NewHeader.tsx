@@ -389,7 +389,7 @@ const NewHeader = () => {
           </div>
         </section> */}
 
-        {!localStorage.getItem("authToken") && (
+        {/* {!localStorage.getItem("authToken") && (
           <Button
             type="submit"
             variant="contained"
@@ -402,7 +402,7 @@ const NewHeader = () => {
           >
             Register
           </Button>
-        )}
+        )} */}
       </div>
     </>
   );

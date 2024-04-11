@@ -132,16 +132,26 @@ const UpdateUser = () => {
           {alertMessage}
         </Alert>
       </Snackbar>
+
+      <div className="hero-event">
+        <div className="hero-content">
+          <h1 style={{ paddingTop: '25px' }}>Update profile</h1>
+        </div>
+      </div>
+
+
       <div
         style={{
           width: "100%",
           justifyContent: "center",
           display: "flex",
           marginTop: "2%",
+          paddingTop: "40px"
         }}
       >
+
         <div style={{ width: "80%" }}>
-          <div
+          {/*  <div
             style={{
               display: "flex",
               justifyContent: "center",
@@ -149,7 +159,7 @@ const UpdateUser = () => {
             }}
           >
             <Typography variant="h5">Update profile</Typography>
-          </div>
+          </div> */}
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -214,11 +224,11 @@ const UpdateUser = () => {
                       value={
                         formData.dateOfBirth
                           ? new Date(
-                              formData.dateOfBirth
-                                .split("-")
-                                .reverse()
-                                .join("-")
-                            )
+                            formData.dateOfBirth
+                              .split("-")
+                              .reverse()
+                              .join("-")
+                          )
                           : new Date()
                       }
                       onChange={(e: any) => {
@@ -226,8 +236,8 @@ const UpdateUser = () => {
                           .getDate()
                           .toString()
                           .padStart(2, "0")}-${(new Date(e).getMonth() + 1)
-                          .toString()
-                          .padStart(2, "0")}-${new Date(e).getFullYear()}`;
+                            .toString()
+                            .padStart(2, "0")}-${new Date(e).getFullYear()}`;
                         setFormData((prevFormData: any) => {
                           return { ...prevFormData, ["dateOfBirth"]: value };
                         });
