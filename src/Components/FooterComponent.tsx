@@ -33,7 +33,7 @@ const FooterComponent = () => {
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-        <Grid container spacing={2} sx={{ backgroundColor: "#f7f7f7" }}>
+        <Grid container spacing={2} sx={{ backgroundColor: "#990000", color: "white" }}>
           <Grid item xs={12} md={6}>
             <Container maxWidth="sm">
               <div style={{ display: "flex" }}>
@@ -50,9 +50,9 @@ const FooterComponent = () => {
                     }}
                   >
                     <LocationCityOutlined />
-                    <p style={{ paddingLeft: "15px", fontSize: "smaller" }}>
+                    <p style={{ paddingLeft: "15px", fontSize: "medium" }}>
                       आर्यवन, रोजड़, पत्रा.: सागपुर, तालुका : तलोद, जिला :
-                      साबरकांठा, गुजरात- 383307
+                      साबरकांठा, <br /> गुजरात- 383307
                     </p>
                   </span>
                   <span
@@ -64,7 +64,7 @@ const FooterComponent = () => {
                     }}
                   >
                     <Phone />
-                    <p style={{ paddingLeft: "15px", fontSize: "smaller" }}>
+                    <p style={{ paddingLeft: "15px", fontSize: "medium" }}>
                       9409615011, 9409415011
                     </p>
                   </span>
@@ -78,7 +78,7 @@ const FooterComponent = () => {
                     }}
                   >
                     <Mail />
-                    <p style={{ paddingLeft: "15px", fontSize: "smaller" }}>
+                    <p style={{ paddingLeft: "15px", fontSize: "medium" }}>
                       darshanyog@gmail.com
                     </p>
                   </span>
@@ -162,6 +162,7 @@ const FooterComponent = () => {
                     </div>
                     <div
                       style={{
+                        // backgroundColor:"white",
                         height: "35px",
                         width: "35px",
                         margin: "15px",
@@ -199,7 +200,7 @@ const FooterComponent = () => {
                 </Typography>
 
                 <div style={{ display: "grid", width: "70%", margin: "auto" }}>
-                  <TextField
+                  {/* <TextField
                     label="Name"
                     variant="standard"
                     style={{ marginBottom: "2%" }}
@@ -226,8 +227,9 @@ const FooterComponent = () => {
                     rows={3}
                     variant="standard"
                     placeholder="Enter Message"
-                  />
-                  <div
+                  /> 
+                  
+                    <div
                     style={{
                       display: "flex",
                       justifyContent: "center",
@@ -235,7 +237,53 @@ const FooterComponent = () => {
                     }}
                   >
                     <Button variant="outlined">Submit</Button>
-                  </div>
+                  </div> */}
+
+                  <label htmlFor="name"></label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter Name"
+                    /* value={formData.name}
+                    onChange={handleChange} */
+                    required
+                  />
+
+                  <label htmlFor="email"></label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter Email"
+                    /* value={formData.email}
+                    onChange={handleChange} */
+                    required
+                  />
+
+                  <label htmlFor="message"></label>
+                  <input
+                    id="message"
+                    name="message"
+                    placeholder="Enter Mobile"
+                    /* value={formData.message}
+                    onChange={handleChange} */
+                    required
+                  />
+
+                  <label htmlFor="message"></label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    placeholder="Enter Message"
+                    /* value={formData.message}
+                    onChange={handleChange} */
+                    required
+                  />
+
+                  <button type="submit" className="submit-button">
+                    Submit
+                  </button>
                 </div>
               </div>
             </Container>
