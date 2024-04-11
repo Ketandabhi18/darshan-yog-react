@@ -15,10 +15,11 @@ import {
   YouTube,
 } from "@mui/icons-material";
 import { Button, Grid, TextField } from "@mui/material";
+import "./footer.css";
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="white">
+    <Typography variant="body2" color="black">
       {"Copyright © "}
       2024 Darshanyog Mahavidyalaya
       {"."}
@@ -178,6 +179,7 @@ const FooterComponent = () => {
               </div>
             </Container>
           </Grid>
+
           <Grid item xs={12} md={6} sx={{ justifyContent: "center" }}>
             <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
               <div
@@ -195,6 +197,7 @@ const FooterComponent = () => {
                 >
                   Message for Us
                 </Typography>
+
                 <div style={{ display: "grid", width: "70%", margin: "auto" }}>
                   <TextField
                     label="Name"
@@ -237,12 +240,14 @@ const FooterComponent = () => {
               </div>
             </Container>
           </Grid>
+
         </Grid>
+
         <div
           style={{
             display: "flex",
             justifyContent: "center",
-            backgroundColor: "#990000",
+            backgroundColor: "white",
           }}
         >
           <Box

@@ -252,7 +252,7 @@ const UpdateUser = () => {
                   </FormControl>
                 </Grid>
               </LocalizationProvider>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>Educational Qualification</InputLabel>
                   <Select
@@ -272,7 +272,7 @@ const UpdateUser = () => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>Profession</InputLabel>
                   <Select
@@ -290,7 +290,7 @@ const UpdateUser = () => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={4}>
                 <TextField
                   fullWidth
                   label="Guardian Name"
@@ -299,7 +299,7 @@ const UpdateUser = () => {
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={4}>
                 <FormControl fullWidth>
                   <InputLabel>Marital Status</InputLabel>
                   <Select
@@ -314,7 +314,7 @@ const UpdateUser = () => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={4}>
                 <TextField
                   fullWidth
                   label="Blood Group"
@@ -340,6 +340,7 @@ const UpdateUser = () => {
                   </Select>
                 </FormControl>
               </Grid>
+              
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>State*</InputLabel>
@@ -413,7 +414,7 @@ const UpdateUser = () => {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   label="Address 2"
                   name="addrLine2"
@@ -422,7 +423,7 @@ const UpdateUser = () => {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   label="Pincode"
                   name="pincode"

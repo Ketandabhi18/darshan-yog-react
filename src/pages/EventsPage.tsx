@@ -601,156 +601,172 @@ const EventsPage = () => {
                       </Box>
 
                       <form>
-                        <TextField
-                          label="First Name"
-                          name="firstName"
-                          value={formData.firstName}
-                          onChange={handleChange}
-                          fullWidth
-                          margin="normal"
-                        />
-                        <FormControl component="fieldset" margin="normal">
-                          <FormLabel component="legend">Gender</FormLabel>
-                          <RadioGroup
-                            aria-label="gender"
-                            name="gender"
-                            value={formData.gender}
-                            onChange={handleChange}
-                            row
-                          >
-                            <FormControlLabel
-                              value="Male"
-                              control={<Radio />}
-                              label="Male"
+                        <Grid container spacing={2}>
+                          <Grid item xs={12}>
+                            <TextField
+                              label="First Name"
+                              name="firstName"
+                              value={formData.firstName}
+                              onChange={handleChange}
+                              fullWidth
                             />
-                            <FormControlLabel
-                              value="Female"
-                              control={<Radio />}
-                              label="Female"
-                            />
-                          </RadioGroup>
-                        </FormControl>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <FormControl component="fieldset" margin="normal">
+                              <FormLabel component="legend">Gender</FormLabel>
+                              <RadioGroup
+                                aria-label="gender"
+                                name="gender"
+                                value={formData.gender}
+                                onChange={handleChange}
+                                row
+                              >
+                                <FormControlLabel
+                                  value="Male"
+                                  control={<Radio />}
+                                  label="Male"
+                                />
+                                <FormControlLabel
+                                  value="Female"
+                                  control={<Radio />}
+                                  label="Female"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                          </Grid>
 
-                        <FormControl fullWidth margin="normal">
-                          <InputLabel>Country*</InputLabel>
-                          <Select
-                            aria-label="Country"
-                            label="Country"
-                            name="country"
-                            required
-                            value={formData.country}
-                            onChange={handleChange}
-                          >
-                            <MenuItem value="india">India</MenuItem>
-                            <MenuItem value="afghanistan">Afghanistan</MenuItem>
-                          </Select>
-                        </FormControl>
-                        {errors.country && (
-                          <FormHelperText error>
-                            {errors.country}
-                          </FormHelperText>
-                        )}
+                          <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                              <InputLabel>Country*</InputLabel>
+                              <Select
+                                aria-label="Country"
+                                label="Country"
+                                name="country"
+                                required
+                                value={formData.country}
+                                onChange={handleChange}
+                              >
+                                <MenuItem value="india">India</MenuItem>
+                                <MenuItem value="afghanistan">Afghanistan</MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Grid>
 
-                        <FormControl fullWidth margin="normal">
-                          <InputLabel>State*</InputLabel>
-                          <Select
-                            aria-label="State"
-                            label={"State"}
-                            name="state"
-                            required
-                            value={formData.state}
-                            onChange={(event) => {
-                              handleStateChange(event);
-                              handleChange(event);
-                            }}
-                          >
-                            {Object.keys(statesWithDistricts).map(
-                              (state, index) => (
-                                <MenuItem key={index} value={state}>
-                                  {state}
-                                </MenuItem>
-                              )
-                            )}
-                          </Select>
-                          {errors.state && (
+                          {errors.country && (
                             <FormHelperText error>
-                              {errors.state}
+                              {errors.country}
                             </FormHelperText>
                           )}
-                        </FormControl>
 
-                        <FormControl fullWidth margin="normal">
-                          <InputLabel>District*</InputLabel>
-                          <Select
-                            aria-label="District"
-                            label="District"
-                            name="district"
-                            required
-                            value={formData.district}
-                            onChange={handleChange}
-                            disabled={!formData.state || formData.state === ""}
-                          >
-                            {formData.state &&
-                              statesWithDistricts[formData.state] &&
-                              statesWithDistricts[formData.state].map(
-                                (district: any, index: any) => (
-                                  <MenuItem key={index} value={district}>
-                                    {district}
-                                  </MenuItem>
-                                )
+                          <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                              <InputLabel>State*</InputLabel>
+                              <Select
+                                aria-label="State"
+                                label={"State"}
+                                name="state"
+                                required
+                                value={formData.state}
+                                onChange={(event) => {
+                                  handleStateChange(event);
+                                  handleChange(event);
+                                }}
+                              >
+                                {Object.keys(statesWithDistricts).map(
+                                  (state, index) => (
+                                    <MenuItem key={index} value={state}>
+                                      {state}
+                                    </MenuItem>
+                                  )
+                                )}
+                              </Select>
+                              {errors.state && (
+                                <FormHelperText error>
+                                  {errors.state}
+                                </FormHelperText>
                               )}
-                          </Select>
+                            </FormControl>
+                          </Grid>
 
-                          {errors.district && (
-                            <FormHelperText error>
-                              {errors.district}
-                            </FormHelperText>
-                          )}
-                        </FormControl>
-                        <TextField
-                          label="City / Village"
-                          name="city"
-                          value={formData.city}
-                          onChange={handleChange}
-                          fullWidth
-                          margin="normal"
-                        />
+                          <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                              <InputLabel>District*</InputLabel>
+                              <Select
+                                aria-label="District"
+                                label="District"
+                                name="district"
+                                required
+                                value={formData.district}
+                                onChange={handleChange}
+                                disabled={!formData.state || formData.state === ""}
+                              >
+                                {formData.state &&
+                                  statesWithDistricts[formData.state] &&
+                                  statesWithDistricts[formData.state].map(
+                                    (district: any, index: any) => (
+                                      <MenuItem key={index} value={district}>
+                                        {district}
+                                      </MenuItem>
+                                    )
+                                  )}
+                              </Select>
 
-                        <TextField
-                          label="Address 1"
-                          name="addrLine1"
-                          value={formData.addrLine1}
-                          onChange={handleChange}
-                          fullWidth
-                          margin="normal"
-                        />
+                              {errors.district && (
+                                <FormHelperText error>
+                                  {errors.district}
+                                </FormHelperText>
+                              )}
+                            </FormControl>
+                          </Grid>
 
-                        <TextField
-                          label="Address 2"
-                          name="addrLine2"
-                          value={formData.addrLine2}
-                          onChange={handleChange}
-                          fullWidth
-                          margin="normal"
-                        />
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              label="City / Village"
+                              name="city"
+                              value={formData.city}
+                              onChange={handleChange}
+                              fullWidth
+                            />
+                          </Grid>
 
-                        <TextField
-                          label="Pincode"
-                          name="pincode"
-                          type="number"
-                          value={formData.pincode}
-                          onChange={handleChange}
-                          fullWidth
-                          margin="normal"
-                          style={{ marginBottom: "2%" }}
-                        />
+                          <Grid item xs={12} >
+                            <TextField
+                              label="Address 1"
+                              name="addrLine1"
+                              value={formData.addrLine1}
+                              onChange={handleChange}
+                              fullWidth
+                            />
+                          </Grid>
 
-                        <LocalizationProvider
-                          dateAdapter={AdapterDateFns}
-                          adapterLocale={enGB}
-                        >
-                          <Grid container spacing={2}>
-                            <Grid item xs={12}>
+                          <Grid item xs={12}>
+                            <TextField
+                              label="Address 2"
+                              name="addrLine2"
+                              value={formData.addrLine2}
+                              onChange={handleChange}
+                              fullWidth
+                            />
+                          </Grid>
+
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              label="Pincode"
+                              name="pincode"
+                              type="number"
+                              value={formData.pincode}
+                              onChange={handleChange}
+                              fullWidth
+                              style={{ marginBottom: "2%" }}
+                            />
+                          </Grid>
+
+                          <LocalizationProvider
+                            dateAdapter={AdapterDateFns}
+                            adapterLocale={enGB}
+                          >
+
+                            <Grid item xs={12} sm={6}>
                               <FormControl fullWidth>
                                 <DatePicker
                                   value={
@@ -788,6 +804,7 @@ const EventsPage = () => {
                                 />
                               </FormControl>
                             </Grid>
+
                             <Grid item xs={12} sm={6}>
                               <FormControl fullWidth>
                                 <DateTimePicker
@@ -822,6 +839,7 @@ const EventsPage = () => {
                                 />
                               </FormControl>
                             </Grid>
+
                             <Grid item xs={12} sm={6}>
                               <FormControl fullWidth>
                                 <DateTimePicker
@@ -856,148 +874,164 @@ const EventsPage = () => {
                                 />
                               </FormControl>
                             </Grid>
-                          </Grid>
-                        </LocalizationProvider>
-                        <FormControl fullWidth margin="normal">
-                          <InputLabel>Pickup place</InputLabel>
-                          <Select
-                            name="pickupPlace"
-                            value={formData.pickupPlace}
-                            onChange={handleChange}
-                          >
-                            <MenuItem value="Kalupur Railway Station">
-                              Kalupur Railway Station
-                            </MenuItem>
-                            <MenuItem value="Sabarmati Railway Station">
-                              Sabarmati Railway Station
-                            </MenuItem>
-                            <MenuItem value="Ahmedabad Airport">
-                              Ahmedabad Airport
-                            </MenuItem>
-                            <MenuItem value="Prantij bus stop">
-                              Prantij bus stop
-                            </MenuItem>
-                            <MenuItem value="Self ">Self </MenuItem>
-                          </Select>
-                        </FormControl>
-                        <Box mb={2}>
-                          <Typography variant="subtitle1">
-                            Group Details:
-                          </Typography>
-                          {formData.groupDetails.map(
-                            (member: any, index: any) => (
-                              <Box
-                                key={index}
-                                sx={{
-                                  border: "1px solid #ccc",
-                                  borderRadius: "8px",
-                                  padding: "16px",
-                                  marginBottom: "16px",
-                                }}
+
+                          </LocalizationProvider>
+
+                          <Grid item xs={12}>
+                            <FormControl fullWidth>
+                              <InputLabel>Pickup place</InputLabel>
+                              <Select
+                                name="pickupPlace"
+                                value={formData.pickupPlace}
+                                onChange={handleChange}
                               >
-                                <Typography
-                                  variant="h6"
-                                  gutterBottom
-                                  style={{ marginBottom: "8px" }}
-                                >
-                                  Participant {index + 1}
-                                </Typography>
-                                <Grid container spacing={2}>
-                                  <Grid item xs={12} sm={6}>
-                                    <TextField
-                                      label="Name"
-                                      name="name"
-                                      required
-                                      value={member.name}
-                                      onChange={(e) =>
-                                        handleGroupDetailsChange(index, e)
-                                      }
-                                      fullWidth
-                                    />
-                                  </Grid>
-                                  <Grid item xs={12} sm={6}>
-                                    <TextField
-                                      label="Relation"
-                                      name="relation"
-                                      value={member.relation}
-                                      onChange={(e) =>
-                                        handleGroupDetailsChange(index, e)
-                                      }
-                                      fullWidth
-                                    />
-                                  </Grid>
-                                  <Grid item xs={12} sm={6}>
-                                    <TextField
-                                      label="Gender"
-                                      name="gender"
-                                      required
-                                      value={member.gender}
-                                      onChange={(e) =>
-                                        handleGroupDetailsChange(index, e)
-                                      }
-                                      fullWidth
-                                    />
-                                  </Grid>
-                                  <Grid item xs={12} sm={6}>
-                                    <TextField
-                                      label="Age"
-                                      name="age"
-                                      required
-                                      value={member.age}
-                                      onChange={(e) =>
-                                        handleGroupDetailsChange(index, e)
-                                      }
-                                      fullWidth
-                                    />
-                                  </Grid>
-                                </Grid>
-                                {errors.groupDetails &&
-                                  errors.groupDetails[index] && (
-                                    <FormHelperText error>
-                                      {errors.groupDetails[index]}
-                                    </FormHelperText>
-                                  )}
+                                <MenuItem value="Kalupur Railway Station">
+                                  Kalupur Railway Station
+                                </MenuItem>
+                                <MenuItem value="Sabarmati Railway Station">
+                                  Sabarmati Railway Station
+                                </MenuItem>
+                                <MenuItem value="Ahmedabad Airport">
+                                  Ahmedabad Airport
+                                </MenuItem>
+                                <MenuItem value="Prantij bus stop">
+                                  Prantij bus stop
+                                </MenuItem>
+                                <MenuItem value="Self ">Self </MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Grid>
+
+                          <Grid item xs={12} >
+
+                            <Box mb={2}>
+                              <Typography variant="subtitle1">
+                                Group Details:
+                              </Typography>
+                              {formData.groupDetails.map(
+                                (member: any, index: any) => (
+                                  <Box
+                                    key={index}
+                                    sx={{
+                                      border: "1px solid #ccc",
+                                      borderRadius: "8px",
+                                      padding: "16px",
+                                      marginBottom: "16px",
+                                    }}
+                                  >
+                                    <Typography
+                                      variant="h6"
+                                      gutterBottom
+                                      style={{ marginBottom: "8px" }}
+                                    >
+                                      Participant {index + 1}
+                                    </Typography>
+                                    <Grid container spacing={2}>
+                                      <Grid item xs={12} sm={6}>
+                                        <TextField
+                                          label="Name"
+                                          name="name"
+                                          required
+                                          value={member.name}
+                                          onChange={(e) =>
+                                            handleGroupDetailsChange(index, e)
+                                          }
+                                          fullWidth
+                                        />
+                                      </Grid>
+                                      <Grid item xs={12} sm={6}>
+                                        <TextField
+                                          label="Relation"
+                                          name="relation"
+                                          value={member.relation}
+                                          onChange={(e) =>
+                                            handleGroupDetailsChange(index, e)
+                                          }
+                                          fullWidth
+                                        />
+                                      </Grid>
+                                      <Grid item xs={12} sm={6}>
+                                        <TextField
+                                          label="Gender"
+                                          name="gender"
+                                          required
+                                          value={member.gender}
+                                          onChange={(e) =>
+                                            handleGroupDetailsChange(index, e)
+                                          }
+                                          fullWidth
+                                        />
+                                      </Grid>
+                                      <Grid item xs={12} sm={6}>
+                                        <TextField
+                                          label="Age"
+                                          name="age"
+                                          required
+                                          value={member.age}
+                                          onChange={(e) =>
+                                            handleGroupDetailsChange(index, e)
+                                          }
+                                          fullWidth
+                                        />
+                                      </Grid>
+                                    </Grid>
+                                    {errors.groupDetails &&
+                                      errors.groupDetails[index] && (
+                                        <FormHelperText error>
+                                          {errors.groupDetails[index]}
+                                        </FormHelperText>
+                                      )}
+                                    <Button
+                                      variant="contained"
+                                      color="secondary"
+                                      onClick={() => removeGroupMember(index)}
+                                      style={{ marginTop: "16px" }}
+                                    >
+                                      Remove
+                                    </Button>
+                                  </Box>
+                                )
+                              )}
+                              <div style={{ display: "flex", justifyContent: 'center' }}>
                                 <Button
                                   variant="contained"
-                                  color="secondary"
-                                  onClick={() => removeGroupMember(index)}
-                                  style={{ marginTop: "16px" }}
+                                  onClick={addGroupMember}
+                                  style={{ marginTop: "10px" }}
                                 >
-                                  Remove
+                                  Add Member
                                 </Button>
-                              </Box>
-                            )
-                          )}
+                              </div>
+                            </Box>
+                          </Grid>
+                          
+                          <Grid item xs={12} >
+                            <TextField
+                              label="Anything else you want to inform us"
+                              name="notes"
+                              value={formData.notes}
+                              onChange={handleChange}
+                              fullWidth
+                              margin="normal"
+                              multiline
+                              rows={3}
+                            />
+                          </Grid>
+                        </Grid>
+                        <div style={{ display: "flex", justifyContent: 'center' }}>
                           <Button
+                            type="submit"
                             variant="contained"
-                            onClick={addGroupMember}
-                            style={{ marginTop: "10px" }}
+                            onClick={handleSubmit}
+                            style={{
+                              backgroundColor: "#007bff",
+                              color: "#fff",
+                              marginTop: "10px",
+                            }}
                           >
-                            Add Member
+                            {registerCheck ? "Update" : "Submit"}
                           </Button>
-                        </Box>
-                        <TextField
-                          label="Anything else you want to inform us"
-                          name="notes"
-                          value={formData.notes}
-                          onChange={handleChange}
-                          fullWidth
-                          margin="normal"
-                          multiline
-                          rows={3}
-                        />
-                        <Button
-                          type="submit"
-                          variant="contained"
-                          onClick={handleSubmit}
-                          style={{
-                            backgroundColor: "#007bff",
-                            color: "#fff",
-                            marginTop: "10px",
-                          }}
-                        >
-                          {registerCheck ? "Update" : "Submit"}
-                        </Button>
+                        </div>
+
                       </form>
                     </Box>
                   </>
@@ -1006,7 +1040,7 @@ const EventsPage = () => {
             </Card>
           );
         })}
-      </Container>
+      </Container >
     </>
   );
 };

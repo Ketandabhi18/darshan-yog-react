@@ -2,17 +2,7 @@
     background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)), url('/src/Components/assets/bg2.png');
     background-size: cover;
     background-position: center;
-    height: 70vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.hero-event {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)), url('/src/Components/assets/bg2.png');
-    background-size: cover;
-    background-position: center;
-    height: 20vh;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -21,22 +11,24 @@
 .hero-content {
     text-align: center;
     color: white;
-    height: 100px;
+    /* height: 100px; */
     width: 85%;
-}
-
-/* .hero-content h1 {
-    font-size: 3rem;
-} */
-
-.hero-content p {
-    font-size: 1.5rem;
 }
 
 .button-container {
     margin-top: 80px;
     display: flex;
     justify-content: center;
+}
+
+.event-container {
+    width: 50%;
+    margin: 0 auto;
+    padding: 0 15px;
+    text-align: left;
+    background-color: #f4f4f4;
+    border-radius: 6px;
+    
 }
 
 .cta-button {
@@ -52,7 +44,7 @@
     /* transition: background-color 0.3s ease, transform 0.2s ease; */
     cursor: pointer;
     position: absolute;
-    bottom: 170px;
+    bottom: -80px;
 }
 
 .cta-button:hover {
@@ -60,6 +52,37 @@
     color: white;
     transform: scale(1.05);
 }
+
+.hero-event {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)), url('/src/Components/assets/bg2.png');
+    background-size: cover;
+    background-position: center;
+    height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.marquee-container {
+    overflow: hidden;
+}
+
+.marquee {
+    white-space: nowrap;
+    animation: marqueeAnimation 13s linear infinite;
+    color: #990000;
+}
+
+@keyframes marqueeAnimation {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
 
 /* .cta-button {
     padding: 10px 20px;
@@ -79,6 +102,16 @@
 
 @media screen and (max-width: 768px) {
     .hero-content {
-        padding: 0 20px;
+        padding: 0 5px;
+    }
+
+    .cta-button {
+        cursor: pointer;
+        position: absolute;
+        bottom: 80px;
+    }
+
+    .hero-section {
+        height: 80vh;
     }
 }
