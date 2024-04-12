@@ -36,6 +36,7 @@ const SinglePageEventRegister = () => {
   const [step, setStep] = useState<any>(false);
   const [mobile, setMobile] = useState<any>();
   const [countrycode, setCountryCode] = useState<any>("+91");
+  const [registerCheck, setRegisterCheck] = useState<any>(false);
   const [otp, setOtp] = useState<any>("");
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -92,6 +93,7 @@ const SinglePageEventRegister = () => {
                   );
                   if (registeredEvent) {
                     setBackDrop(false);
+                    setRegisterCheck(true);
                     setAlertType("error");
                     setAlertMessage(
                       `You have already registered for this event with Reg Id : ${registeredEvent.eventRegId}.`
@@ -310,7 +312,11 @@ const SinglePageEventRegister = () => {
 
     if (res.data.status === 200) {
       setBackDrop(false);
-      setAlertMessage("Registration successfully done");
+      setAlertMessage(
+        registerCheck
+          ? "Registration Details successfully updated"
+          : "Registration successfully done"
+      );
       setAlertType("success");
       setOpenAlert(true);
       setTimeout(() => {

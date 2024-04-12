@@ -647,7 +647,11 @@ const Home = () => {
         if (res.data.status === 200) {
           setBackDrop(false);
           setAlertType("success");
-          setAlertMessage(res.data.message);
+          setAlertMessage(
+            registerCheck
+              ? "Registration Successfully updated."
+              : " Registration Successfully Done."
+          );
           setOpenAlert(true);
           setOpen(false);
         } else {
