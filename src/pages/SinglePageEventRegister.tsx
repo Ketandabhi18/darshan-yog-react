@@ -496,7 +496,7 @@ const SinglePageEventRegister = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   disabled={openEventForm ? false : true}
@@ -509,18 +509,7 @@ const SinglePageEventRegister = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  fullWidth
-                  disabled={openEventForm ? false : true}
-                  label="Middle Name"
-                  name="middleName"
-                  value={formData?.middleName ?? ""}
-                  onChange={handleChange}
-                  InputLabelProps={{ shrink: true }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   disabled={openEventForm ? false : true}
@@ -921,21 +910,21 @@ const SinglePageEventRegister = () => {
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                   <FormControl fullWidth>
-                                  <InputLabel>Gender</InputLabel>
-                                  <Select
-                                    label={"Gender"}
-                                    aria-label={"Gender"}
-                                    value={member.gender}
-                                    onChange={(e) =>
-                                      handleGroupDetailsChange(index, e)
-                                    }
-                                    name="gender"
-                                    fullWidth
-                                  >
-                                    <MenuItem value="Male">Male</MenuItem>
-                                    <MenuItem value="Female">Female</MenuItem>
-                                    <MenuItem value="Others">Others</MenuItem>
-                                  </Select>
+                                    <InputLabel>Gender</InputLabel>
+                                    <Select
+                                      label={"Gender"}
+                                      aria-label={"Gender"}
+                                      value={member.gender}
+                                      onChange={(e) =>
+                                        handleGroupDetailsChange(index, e)
+                                      }
+                                      name="gender"
+                                      fullWidth
+                                    >
+                                      <MenuItem value="Male">Male</MenuItem>
+                                      <MenuItem value="Female">Female</MenuItem>
+                                      <MenuItem value="Others">Others</MenuItem>
+                                    </Select>
                                   </FormControl>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>

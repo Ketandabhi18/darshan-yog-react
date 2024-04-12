@@ -661,11 +661,20 @@ const EventsPage = () => {
 
                       <form>
                         <Grid container spacing={2}>
-                          <Grid item xs={12}>
+                          <Grid item xs={12} sm={6}>
                             <TextField
                               label="First Name"
                               name="firstName"
                               value={formData.firstName}
+                              onChange={handleChange}
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              label="Last Name"
+                              name="lastName"
+                              value={formData.lastName}
                               onChange={handleChange}
                               fullWidth
                             />
