@@ -1381,30 +1381,32 @@ const Home = () => {
                                             />
                                           </Grid>
                                           <Grid item xs={12} sm={6}>
-                                            {/* <InputLabel>Gender</InputLabel> */}
-                                            <Select
-                                              label={"Gender"}
-                                              arial-label={"Gender"}
-                                              value={member.gender}
-                                              onChange={(e) =>
-                                                handleGroupDetailsChange(
-                                                  index,
-                                                  e
-                                                )
-                                              }
-                                              name="gender"
-                                              fullWidth
-                                            >
-                                              <MenuItem value="Male">
-                                                Male
-                                              </MenuItem>
-                                              <MenuItem value="Female">
-                                                Female
-                                              </MenuItem>
-                                              <MenuItem value="Others">
-                                                Others
-                                              </MenuItem>
-                                            </Select>
+                                            <FormControl fullWidth>
+                                              <InputLabel>Gender</InputLabel>
+                                              <Select
+                                                label={"Gender"}
+                                                arial-label={"Gender"}
+                                                value={member.gender}
+                                                onChange={(e) =>
+                                                  handleGroupDetailsChange(
+                                                    index,
+                                                    e
+                                                  )
+                                                }
+                                                name="gender"
+                                                fullWidth
+                                              >
+                                                <MenuItem value="Male">
+                                                  Male
+                                                </MenuItem>
+                                                <MenuItem value="Female">
+                                                  Female
+                                                </MenuItem>
+                                                <MenuItem value="Others">
+                                                  Others
+                                                </MenuItem>
+                                              </Select>
+                                            </FormControl>
                                           </Grid>
                                           <Grid item xs={12} sm={6}>
                                             <TextField

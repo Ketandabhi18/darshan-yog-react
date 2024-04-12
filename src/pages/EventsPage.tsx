@@ -111,7 +111,11 @@ const EventsPage = () => {
 
   const handleGroupDetailsChange = (index: any, e: any) => {
     const { name, value } = e.target;
-    const updatedGroupDetails: any = [...formData.groupDetails];
+    const updatedGroupDetails: any = [
+      ...formData.groupDetails.filter((member: any) => {
+        return member.deletedFlag == false;
+      }),
+    ];
     updatedGroupDetails[index][name] = value;
 
     const newErrors = { ...errors };
@@ -123,8 +127,13 @@ const EventsPage = () => {
   };
 
   const removeGroupMember = (indexToRemove: any) => {
-    const updatedGroupDetails = formData.groupDetails.filter(
-      (member: any, index: any) => index !== indexToRemove
+    const updatedGroupDetails = formData.groupDetails.map(
+      (member: any, index: any) => {
+        if (index === indexToRemove && member.deletedFlag === false) {
+          return { ...member, deletedFlag: true };
+        }
+        return member;
+      }
     );
     setFormData({
       ...formData,
@@ -137,7 +146,7 @@ const EventsPage = () => {
       ...formData,
       groupDetails: [
         ...formData.groupDetails,
-        { name: "", relation: "", gender: "", age: "" },
+        { name: "", relation: "", gender: "", age: "", deletedFlag: false },
       ],
     });
   };
@@ -288,9 +297,7 @@ const EventsPage = () => {
             eventCode,
             arrivalDate,
             departureDate,
-            groupDetails: groupDetails.map((E: any) => {
-              return { ...E, deletedFlag: false };
-            }),
+            groupDetails: groupDetails,
             notes,
             pickUp,
           },
@@ -941,97 +948,126 @@ const EventsPage = () => {
                                 Group Details:
                               </Typography>
                               {formData.groupDetails.map(
-                                (member: any, index: any) => (
-                                  <Box
-                                    key={index}
-                                    sx={{
-                                      border: "1px solid #ccc",
-                                      borderRadius: "8px",
-                                      padding: "16px",
-                                      marginBottom: "16px",
-                                    }}
-                                  >
-                                    <Typography
-                                      variant="h6"
-                                      gutterBottom
-                                      style={{ marginBottom: "8px" }}
-                                    >
-                                      Participant {index + 1}
-                                    </Typography>
-                                    <Grid container spacing={2}>
-                                      <Grid item xs={12} sm={6}>
-                                        <TextField
-                                          label="Name"
-                                          name="name"
-                                          required
-                                          value={member.name}
-                                          onChange={(e) =>
-                                            handleGroupDetailsChange(index, e)
-                                          }
-                                          fullWidth
-                                        />
-                                      </Grid>
-                                      <Grid item xs={12} sm={6}>
-                                        <TextField
-                                          label="Relation"
-                                          name="relation"
-                                          value={member.relation}
-                                          onChange={(e) =>
-                                            handleGroupDetailsChange(index, e)
-                                          }
-                                          fullWidth
-                                        />
-                                      </Grid>
-                                      <Grid item xs={12} sm={6}>
-                                        {/* <InputLabel>Gender</InputLabel> */}
-                                        <Select
-                                          label={"Gender"}
-                                          arial-label={"Gender"}
-                                          value={member.gender}
-                                          onChange={(e) =>
-                                            handleGroupDetailsChange(index, e)
-                                          }
-                                          name="gender"
-                                          fullWidth
+                                (member: any, index: any) => {
+                                  return (
+                                    <>
+                                      {member.deletedFlag === false && (
+                                        <Box
+                                          key={index}
+                                          sx={{
+                                            border: "1px solid #ccc",
+                                            borderRadius: "8px",
+                                            padding: "16px",
+                                            marginBottom: "16px",
+                                          }}
                                         >
-                                          <MenuItem value="Male">Male</MenuItem>
-                                          <MenuItem value="Female">
-                                            Female
-                                          </MenuItem>
-                                          <MenuItem value="Others">
-                                            Others
-                                          </MenuItem>
-                                        </Select>
-                                      </Grid>
-                                      <Grid item xs={12} sm={6}>
-                                        <TextField
-                                          label="Age"
-                                          name="age"
-                                          required
-                                          value={member.age}
-                                          onChange={(e) =>
-                                            handleGroupDetailsChange(index, e)
-                                          }
-                                          fullWidth
-                                        />
-                                      </Grid>
-                                    </Grid>
-                                    {errors.groupDetails &&
-                                      errors.groupDetails[index] && (
-                                        <FormHelperText error>
-                                          {errors.groupDetails[index]}
-                                        </FormHelperText>
+                                          <Typography
+                                            variant="h6"
+                                            gutterBottom
+                                            style={{ marginBottom: "8px" }}
+                                          >
+                                            Participant{" "}
+                                            {formData.groupDetails
+                                              .slice(0, index + 1)
+                                              .findLastIndex(
+                                                (obj: any) => !obj.deletedFlag
+                                              ) + 1}
+                                          </Typography>
+                                          <Grid container spacing={2}>
+                                            <Grid item xs={12} sm={6}>
+                                              <TextField
+                                                label="Name"
+                                                name="name"
+                                                required
+                                                value={member.name}
+                                                onChange={(e) =>
+                                                  handleGroupDetailsChange(
+                                                    index,
+                                                    e
+                                                  )
+                                                }
+                                                fullWidth
+                                              />
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                              <TextField
+                                                label="Relation"
+                                                name="relation"
+                                                value={member.relation}
+                                                onChange={(e) =>
+                                                  handleGroupDetailsChange(
+                                                    index,
+                                                    e
+                                                  )
+                                                }
+                                                fullWidth
+                                              />
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                              <FormControl fullWidth>
+                                                <InputLabel>Gender</InputLabel>
+                                                <Select
+                                                  label={"Gender"}
+                                                  aria-label={"Gender"}
+                                                  value={member.gender}
+                                                  onChange={(e) =>
+                                                    handleGroupDetailsChange(
+                                                      index,
+                                                      e
+                                                    )
+                                                  }
+                                                  name="gender"
+                                                  fullWidth
+                                                >
+                                                  <MenuItem value="Male">
+                                                    Male
+                                                  </MenuItem>
+                                                  <MenuItem value="Female">
+                                                    Female
+                                                  </MenuItem>
+                                                  <MenuItem value="Others">
+                                                    Others
+                                                  </MenuItem>
+                                                </Select>
+                                              </FormControl>
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                              <TextField
+                                                label="Age"
+                                                name="age"
+                                                required
+                                                value={member.age}
+                                                onChange={(e) =>
+                                                  handleGroupDetailsChange(
+                                                    index,
+                                                    e
+                                                  )
+                                                }
+                                                fullWidth
+                                              />
+                                            </Grid>
+                                          </Grid>
+                                          {errors.groupDetails &&
+                                            errors.groupDetails[index] && (
+                                              <FormHelperText error>
+                                                {errors.groupDetails[index]}
+                                              </FormHelperText>
+                                            )}
+                                          <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick={() =>
+                                              removeGroupMember(index)
+                                            }
+                                            style={{ marginTop: "16px" }}
+                                          >
+                                            Remove
+                                          </Button>
+                                        </Box>
                                       )}
-                                    <Button
-                                      variant="contained"
-                                      color="secondary"
-                                      onClick={() => removeGroupMember(index)}
-                                      style={{ marginTop: "16px" }}
-                                    >
-                                      Remove
-                                    </Button>
-                                  </Box>
-                                )
+                                    </>
+                                  );
+                                }
                               )}
                               <div
                                 style={{
