@@ -20,10 +20,33 @@ import Button from "@mui/material/Button";
 import HomeCarouselCard from "../Components/HomeCarouselCard";
 import CardActionArea from "@mui/material/CardActionArea";
 import { useNavigate } from "react-router-dom";
-import { Backdrop, Box, CircularProgress, FormControl, FormControlLabel, FormHelperText, FormLabel, InputLabel, MenuItem, Modal, Radio, RadioGroup, Select, Skeleton, Stack, TextField } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import {
+  Backdrop,
+  Box,
+  CircularProgress,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  FormLabel,
+  InputLabel,
+  MenuItem,
+  Modal,
+  Radio,
+  RadioGroup,
+  Select,
+  Skeleton,
+  Stack,
+  Snackbar,
+  TextField,
+} from "@mui/material";
 import axios from "axios";
 import { baseUrl, statesWithDistricts } from "../config/constants";
-import { LocalizationProvider, DatePicker, DateTimePicker } from "@mui/x-date-pickers";
+import {
+  LocalizationProvider,
+  DatePicker,
+  DateTimePicker,
+} from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { enGB } from "date-fns/locale";
 
@@ -112,10 +135,10 @@ const VideoBox = ({ title, url, thumbnail }: any) => {
     <Card
       style={cardStyle}
       onClick={handleClick}
-    // onMouseEnter={(e: any) =>
-    //   (e.currentTarget.style = { ...cardStyle, ...hoverStyle })
-    // }
-    // onMouseLeave={(e: any) => (e.currentTarget.style = cardStyle)}
+      // onMouseEnter={(e: any) =>
+      //   (e.currentTarget.style = { ...cardStyle, ...hoverStyle })
+      // }
+      // onMouseLeave={(e: any) => (e.currentTarget.style = cardStyle)}
     >
       <CardActionArea>
         <CardMedia
@@ -146,7 +169,6 @@ const Home = () => {
   const [index, setIndex] = useState(0);
   const theme = useTheme();
   const navigate = useNavigate();
-  const authToken = localStorage.getItem("authToken") || "";
   const [backDrop, setBackDrop] = useState<any>(false);
   const userDetailString = localStorage.getItem("userDetail");
   const parsedUser =
@@ -160,7 +182,6 @@ const Home = () => {
     middleName: null,
     lastName: null,
     gender: "",
-    dateOfBirth: "",
     guardianName: null,
     maritalStatus: "",
     bloodGroup: "",
@@ -179,13 +200,16 @@ const Home = () => {
     arrivalDate: "",
     departureDate: "",
     groupDetails: [{ name: "", relation: "", gender: "", age: "" }],
-    pickupPlace: "",
+    pickUp: "",
     notes: "",
     ...userFromLocalStorage,
   });
   const [errors, setErrors] = useState<any>({});
   const [registerCheck, setRegisterCheck] = useState<any>(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<any>("success");
   const [registerId, setRegisterId] = useState<any>();
+  const authToken = localStorage.getItem("authToken") || "";
   const handleOpen = (eventCode: any) => {
     setFormData({ ...formData, eventCode });
     setOpen(true);
@@ -195,10 +219,21 @@ const Home = () => {
     setOpen(false);
   };
 
-  const iRef = useRef(0);
-  let txt = "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
-  const speed = 50;
+  const handleChange = (e: any) => {
+    console.log("formdata :: ", formData);
+    const { name, value } = e.target;
+    let formattedValue = value;
+    console.log("name :: ", name, "value :: ", value);
+    setFormData({ ...formData, [name]: formattedValue });
+    if (value.trim() !== "") {
+      setErrors({ ...errors, [name]: "" });
+    }
+  };
 
+  const iRef = useRef(0);
+  let txt =
+    "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
+  const speed = 50;
 
   const isSmScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const items = [
@@ -277,10 +312,10 @@ const Home = () => {
       transform: "translateY(-50%)",
     },
   };
-  const handleChange: any = (cur: number, prev: number) => {
-    setIndex(cur);
-    console.log(cur, prev);
-  };
+  // const handleChange: any = (cur: number, prev: number) => {
+  //   setIndex(cur);
+  //   console.log(cur, prev);
+  // };
 
   const imageStyle: any = {
     width: "100%", // Set the width as per your requirements
@@ -432,7 +467,6 @@ const Home = () => {
     setFormData({ ...formData, groupDetails: updatedGroupDetails });
   };
 
-
   const removeGroupMember = (indexToRemove: any) => {
     const updatedGroupDetails = formData.groupDetails.filter(
       (member: any, index: any) => index !== indexToRemove
@@ -458,10 +492,10 @@ const Home = () => {
     let user: any = localStorage.getItem("userDetail");
     user = JSON.parse(user);
     if (!authToken) {
+      navigate("/event-registration");
       // navigate("/log-in", {
       //   state: { eventCode: eventCode },
       // });
-      navigate("/event-registration");
     } else {
       const checkRegistered = axios
         .get(`${baseUrl}/events/event-registrations`, {
@@ -478,7 +512,8 @@ const Home = () => {
             if (registeredEvent) {
               setFormData((prevFormData: any) => {
                 return {
-                  ...prevFormData,
+                  ...user,
+                  pickUp: registeredEvent.pickUp,
                   arrivalDate: registeredEvent.arrivalDate,
                   departureDate: registeredEvent.departureDate,
                   groupDetails: registeredEvent.groupDetails,
@@ -542,11 +577,13 @@ const Home = () => {
         firstName,
         gender,
         dateOfBirth,
+        age,
         eventCode,
         arrivalDate,
         departureDate,
         groupDetails,
         notes,
+        pickUp,
       } = formData;
 
       const updateUserObj = {
@@ -559,6 +596,7 @@ const Home = () => {
         whatsappNumber: parsedUser.whatsappNumber,
         gender,
         dateOfBirth,
+        age,
         edQualification: parsedUser.edQualification,
         profession: parsedUser.profession,
         guardianName: parsedUser.guardianName,
@@ -591,21 +629,38 @@ const Home = () => {
             mobileNumber,
             firstName,
             gender,
-            dateOfBirth,
+            age,
             eventCode,
             arrivalDate,
             departureDate,
-            groupDetails,
+            groupDetails: groupDetails.map((E: any) => {
+              return { ...E, deletedFlag: false };
+            }),
             notes,
+            pickUp,
           },
           {
             headers: { Authorization: authToken },
           }
         );
         console.log("Register event :: res ::", res);
+        if (res.data.status === 200) {
+          setBackDrop(false);
+          setAlertType("success");
+          setAlertMessage(res.data.message);
+          setOpenAlert(true);
+          setOpen(false);
+        } else {
+          setBackDrop(false);
+          setAlertType("error");
+          setAlertMessage(res.data.message);
+          setOpenAlert(true);
+        }
+      } else {
         setBackDrop(false);
+        setAlertType("error");
+        setAlertMessage(data.message);
         setOpenAlert(true);
-        setOpen(false);
       }
     } catch (error) {
       console.log("error :: ", error);
@@ -660,6 +715,23 @@ const Home = () => {
 
   return (
     <>
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={3000}
+        onClose={() => setOpenAlert(false)}
+      >
+        <Alert
+          onClose={() => setOpenAlert(false)}
+          severity={alertType}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {/* {registerCheck
+            ? "Registration Successfully updated."
+            : " Registration Successfully Done."} */}
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       {/* <div style={{ position: "relative" }}>
         <Carousel
           index={index}
@@ -680,7 +752,6 @@ const Home = () => {
         </Carousel>
       </div> */}
 
-
       <div className="hero-section">
         <div className="hero-content">
           <h1 id="demo" className="text"></h1>
@@ -695,7 +766,20 @@ const Home = () => {
               }}
             > */}
             <div className="marquee-container">
-              <h1 className="marquee">Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </h1>
+              <h1 className="marquee">
+                Current
+                Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Current
+                Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Current
+                Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Current
+                Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Current
+                Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Current
+                Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{" "}
+              </h1>
             </div>
 
             {skeletonopen && (
@@ -763,9 +847,8 @@ const Home = () => {
                     transition: "0.3s",
                     borderRadius: "8px",
                     overflow: "hidden",
-                    background: "#eda942",
-                    // background: "#f7b557",
-                    border: "1px solid #ddd"
+                    background: "#fff",
+                    border: "1px solid #ddd",
                   }}
                 >
                   <CardContent style={{ padding: "20px" }}>
@@ -781,46 +864,39 @@ const Home = () => {
                       {event.eventName}
                     </Typography>
 
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 4 }}  >
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        gutterBottom
-                        style={{ marginBottom: "10px" }}
-                      >
-                        <strong>Organiser:</strong> {event.organiserName}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        gutterBottom
-                        style={{ marginBottom: "10px" }}
-                      >
-                        <strong>Date:</strong> {event.startDateTime} -{" "}
-                        {event.endDateTime}
-                      </Typography>
-                    </Stack>
-
-
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        gutterBottom
-                        style={{ marginBottom: "10px" }}
-                      >
-                        <strong>Location:</strong> {event.city}, {event.state},{" "}
-                        {event.country}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        style={{ marginBottom: "10px" }}
-                      >
-                        <strong>Mode:</strong> {event.mode}
-                      </Typography>
-                    </Stack>
-
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      gutterBottom
+                      style={{ marginBottom: "10px" }}
+                    >
+                      <strong>Organiser:</strong> {event.organiserName}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      gutterBottom
+                      style={{ marginBottom: "10px" }}
+                    >
+                      <strong>Date:</strong> {event.startDateTime} -{" "}
+                      {event.endDateTime}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      gutterBottom
+                      style={{ marginBottom: "10px" }}
+                    >
+                      <strong>Location:</strong> {event.city}, {event.state},{" "}
+                      {event.country}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      style={{ marginBottom: "10px" }}
+                    >
+                      <strong>Mode:</strong> {event.mode}
+                    </Typography>
                     <Stack
                       direction={"row"}
                       sx={{
@@ -836,14 +912,14 @@ const Home = () => {
                         style={{
                           display: "block",
                           textAlign: "right",
-                          textDecoration: "underline",
-                          color: "#990000",
+                          textDecoration: "none",
+                          color: "#007bff",
                         }}
                       >
                         View on Map
                       </a>
                       <Button
-
+                        autoFocus
                         variant="contained"
                         onClick={() => onRegisterClick(event.eventCode)}
                         style={{
@@ -881,15 +957,32 @@ const Home = () => {
                             p: 4,
                           }}
                         >
-                          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" }, mb: 2 }}>
+                          <Box
+                            sx={{
+                              flexGrow: 1,
+                              display: { xs: "flex", md: "none" },
+                              mb: 2,
+                            }}
+                          >
                             <Stack spacing={2}>
                               {registerCheck && (
-                                <Typography variant="h6" gutterBottom color="error" style={{ backgroundColor: "red", color: "white", fontSize: "13px", borderRadius: "5px", padding: "5px" }}>
-                                  You are already registered for this event
-                                  with Reg  id {registerId}
+                                <Typography
+                                  variant="h6"
+                                  gutterBottom
+                                  color="error"
+                                  style={{
+                                    backgroundColor: "red",
+                                    color: "white",
+                                    fontSize: "13px",
+                                    borderRadius: "5px",
+                                    padding: "5px",
+                                  }}
+                                >
+                                  You are already registered for this event with
+                                  Reg id {registerId}
                                 </Typography>
                               )}
-                              <Stack spacing={2} direction={'row'}>
+                              <Stack spacing={2} direction={"row"}>
                                 <Typography variant="h6" gutterBottom>
                                   Register for {event.eventName}
                                 </Typography>
@@ -905,7 +998,8 @@ const Home = () => {
                               // display: "flex",
                               justifyContent: "space-between",
                               alignItems: "center",
-                              mb: 2, flexGrow: 1,
+                              mb: 2,
+                              flexGrow: 1,
                               display: {
                                 xs: "none",
                                 md: "flex",
@@ -917,9 +1011,20 @@ const Home = () => {
                               Register for {event.eventName}
                             </Typography>
                             {registerCheck && (
-                              <Typography variant="h6" gutterBottom color="error" style={{ backgroundColor: "red", color: "white", borderRadius: "5px", paddingLeft: "10px", paddingRight: "10px" }}>
-                                You are already registered for this event
-                                with Reg id {registerId}
+                              <Typography
+                                variant="h6"
+                                gutterBottom
+                                color="error"
+                                style={{
+                                  backgroundColor: "red",
+                                  color: "white",
+                                  borderRadius: "5px",
+                                  paddingLeft: "10px",
+                                  paddingRight: "10px",
+                                }}
+                              >
+                                You are already registered for this event with
+                                Reg id {registerId}
                               </Typography>
                             )}
                             <IconButton onClick={handleClose}>
@@ -939,8 +1044,13 @@ const Home = () => {
                                 />
                               </Grid>
                               <Grid item xs={12}>
-                                <FormControl component="fieldset" margin="normal">
-                                  <FormLabel component="legend">Gender</FormLabel>
+                                <FormControl
+                                  component="fieldset"
+                                  margin="normal"
+                                >
+                                  <FormLabel component="legend">
+                                    Gender
+                                  </FormLabel>
                                   <RadioGroup
                                     aria-label="gender"
                                     name="gender"
@@ -958,6 +1068,11 @@ const Home = () => {
                                       control={<Radio />}
                                       label="Female"
                                     />
+                                    <FormControlLabel
+                                      value="Others"
+                                      control={<Radio />}
+                                      label="Others"
+                                    />
                                   </RadioGroup>
                                 </FormControl>
                               </Grid>
@@ -974,7 +1089,9 @@ const Home = () => {
                                     onChange={handleChange}
                                   >
                                     <MenuItem value="india">India</MenuItem>
-                                    <MenuItem value="afghanistan">Afghanistan</MenuItem>
+                                    <MenuItem value="afghanistan">
+                                      Afghanistan
+                                    </MenuItem>
                                   </Select>
                                 </FormControl>
                               </Grid>
@@ -1025,13 +1142,18 @@ const Home = () => {
                                     required
                                     value={formData.district}
                                     onChange={handleChange}
-                                    disabled={!formData.state || formData.state === ""}
+                                    disabled={
+                                      !formData.state || formData.state === ""
+                                    }
                                   >
                                     {formData.state &&
                                       statesWithDistricts[formData.state] &&
                                       statesWithDistricts[formData.state].map(
                                         (district: any, index: any) => (
-                                          <MenuItem key={index} value={district}>
+                                          <MenuItem
+                                            key={index}
+                                            value={district}
+                                          >
                                             {district}
                                           </MenuItem>
                                         )
@@ -1056,7 +1178,7 @@ const Home = () => {
                                 />
                               </Grid>
 
-                              <Grid item xs={12} >
+                              <Grid item xs={12}>
                                 <TextField
                                   label="Address 1"
                                   name="addrLine1"
@@ -1088,50 +1210,23 @@ const Home = () => {
                                 />
                               </Grid>
 
+                              <Grid item xs={12} sm={6}>
+                                <FormControl fullWidth>
+                                  <TextField
+                                    label="Age"
+                                    name="age"
+                                    type="number"
+                                    value={formData.age}
+                                    onChange={handleChange}
+                                    fullWidth
+                                    style={{ marginBottom: "2%" }}
+                                  />
+                                </FormControl>
+                              </Grid>
                               <LocalizationProvider
                                 dateAdapter={AdapterDateFns}
                                 adapterLocale={enGB}
                               >
-
-                                <Grid item xs={12} sm={6}>
-                                  <FormControl fullWidth>
-                                    <DatePicker
-                                      value={
-                                        formData.dateOfBirth
-                                          ? new Date(
-                                            formData.dateOfBirth
-                                              .split("-")
-                                              .reverse()
-                                              .join("-")
-                                          )
-                                          : null
-                                      }
-                                      onChange={(e: any) => {
-                                        const value = `${new Date(e)
-                                          .getDate()
-                                          .toString()
-                                          .padStart(2, "0")}-${(
-                                            new Date(e).getMonth() + 1
-                                          )
-                                            .toString()
-                                            .padStart(2, "0")}-${new Date(
-                                              e
-                                            ).getFullYear()}`;
-                                        setFormData({
-                                          ...formData,
-                                          ["dateOfBirth"]: value,
-                                        });
-                                      }}
-                                      label="Date Of Birth"
-                                      slotProps={{
-                                        textField: {
-                                          helperText: "DD/MM/YYYY",
-                                        },
-                                      }}
-                                    />
-                                  </FormControl>
-                                </Grid>
-
                                 <Grid item xs={12} sm={6}>
                                   <FormControl fullWidth>
                                     <DateTimePicker
@@ -1153,11 +1248,13 @@ const Home = () => {
                                             })
                                             .replace(/\//g, "-") +
                                           " " +
-                                          ("0" + new Date(e).getHours()).slice(-2) +
-                                          ":" +
-                                          ("0" + new Date(e).getMinutes()).slice(
+                                          ("0" + new Date(e).getHours()).slice(
                                             -2
-                                          );
+                                          ) +
+                                          ":" +
+                                          (
+                                            "0" + new Date(e).getMinutes()
+                                          ).slice(-2);
                                         setFormData({
                                           ...formData,
                                           ["arrivalDate"]: convertedDate,
@@ -1188,11 +1285,13 @@ const Home = () => {
                                             })
                                             .replace(/\//g, "-") +
                                           " " +
-                                          ("0" + new Date(e).getHours()).slice(-2) +
-                                          ":" +
-                                          ("0" + new Date(e).getMinutes()).slice(
+                                          ("0" + new Date(e).getHours()).slice(
                                             -2
-                                          );
+                                          ) +
+                                          ":" +
+                                          (
+                                            "0" + new Date(e).getMinutes()
+                                          ).slice(-2);
                                         setFormData({
                                           ...formData,
                                           ["departureDate"]: convertedDate,
@@ -1201,15 +1300,14 @@ const Home = () => {
                                     />
                                   </FormControl>
                                 </Grid>
-
                               </LocalizationProvider>
 
                               <Grid item xs={12}>
                                 <FormControl fullWidth>
                                   <InputLabel>Pickup place</InputLabel>
                                   <Select
-                                    name="pickupPlace"
-                                    value={formData.pickupPlace}
+                                    name="pickUp"
+                                    value={formData.pickUp}
                                     onChange={handleChange}
                                   >
                                     <MenuItem value="Kalupur Railway Station">
@@ -1229,8 +1327,7 @@ const Home = () => {
                                 </FormControl>
                               </Grid>
 
-                              <Grid item xs={12} >
-
+                              <Grid item xs={12}>
                                 <Box mb={2}>
                                   <Typography variant="subtitle1">
                                     Group Details:
@@ -1261,7 +1358,10 @@ const Home = () => {
                                               required
                                               value={member.name}
                                               onChange={(e) =>
-                                                handleGroupDetailsChange(index, e)
+                                                handleGroupDetailsChange(
+                                                  index,
+                                                  e
+                                                )
                                               }
                                               fullWidth
                                             />
@@ -1272,22 +1372,39 @@ const Home = () => {
                                               name="relation"
                                               value={member.relation}
                                               onChange={(e) =>
-                                                handleGroupDetailsChange(index, e)
+                                                handleGroupDetailsChange(
+                                                  index,
+                                                  e
+                                                )
                                               }
                                               fullWidth
                                             />
                                           </Grid>
                                           <Grid item xs={12} sm={6}>
-                                            <TextField
-                                              label="Gender"
-                                              name="gender"
-                                              required
+                                            {/* <InputLabel>Gender</InputLabel> */}
+                                            <Select
+                                              label={"Gender"}
+                                              arial-label={"Gender"}
                                               value={member.gender}
                                               onChange={(e) =>
-                                                handleGroupDetailsChange(index, e)
+                                                handleGroupDetailsChange(
+                                                  index,
+                                                  e
+                                                )
                                               }
+                                              name="gender"
                                               fullWidth
-                                            />
+                                            >
+                                              <MenuItem value="Male">
+                                                Male
+                                              </MenuItem>
+                                              <MenuItem value="Female">
+                                                Female
+                                              </MenuItem>
+                                              <MenuItem value="Others">
+                                                Others
+                                              </MenuItem>
+                                            </Select>
                                           </Grid>
                                           <Grid item xs={12} sm={6}>
                                             <TextField
@@ -1296,7 +1413,10 @@ const Home = () => {
                                               required
                                               value={member.age}
                                               onChange={(e) =>
-                                                handleGroupDetailsChange(index, e)
+                                                handleGroupDetailsChange(
+                                                  index,
+                                                  e
+                                                )
                                               }
                                               fullWidth
                                             />
@@ -1311,7 +1431,9 @@ const Home = () => {
                                         <Button
                                           variant="contained"
                                           color="secondary"
-                                          onClick={() => removeGroupMember(index)}
+                                          onClick={() =>
+                                            removeGroupMember(index)
+                                          }
                                           style={{ marginTop: "16px" }}
                                         >
                                           Remove
@@ -1319,7 +1441,12 @@ const Home = () => {
                                       </Box>
                                     )
                                   )}
-                                  <div style={{ display: "flex", justifyContent: 'center' }}>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "center",
+                                    }}
+                                  >
                                     <Button
                                       variant="contained"
                                       onClick={addGroupMember}
@@ -1331,7 +1458,7 @@ const Home = () => {
                                 </Box>
                               </Grid>
 
-                              <Grid item xs={12} >
+                              <Grid item xs={12}>
                                 <TextField
                                   label="Anything else you want to inform us"
                                   name="notes"
@@ -1344,7 +1471,12 @@ const Home = () => {
                                 />
                               </Grid>
                             </Grid>
-                            <div style={{ display: "flex", justifyContent: 'center' }}>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                              }}
+                            >
                               <Button
                                 type="submit"
                                 variant="contained"
@@ -1358,7 +1490,6 @@ const Home = () => {
                                 {registerCheck ? "Update" : "Submit"}
                               </Button>
                             </div>
-
                           </form>
                         </Box>
                       </>
