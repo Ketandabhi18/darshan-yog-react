@@ -225,7 +225,7 @@ const SinglePageEventRegister = () => {
       lastName,
       whatsappNumber,
       gender,
-      dateOfBirth,
+      age,
       edQualification,
       profession,
       guardianName,
@@ -250,7 +250,7 @@ const SinglePageEventRegister = () => {
         lastName,
         whatsappNumber,
         gender,
-        dateOfBirth,
+        age,
         edQualification,
         profession,
         guardianName,
@@ -289,7 +289,7 @@ const SinglePageEventRegister = () => {
         mobileNumber: formData.mobileNumber,
         firstName,
         gender,
-        dateOfBirth,
+        age,
         eventCode,
         arrivalDate,
         departureDate,
@@ -343,7 +343,7 @@ const SinglePageEventRegister = () => {
       </Snackbar>
       <div className="hero-event">
         <div className="hero-content">
-          <h1 style={{ paddingTop: '25px' }}>Registration</h1>
+          <h1 style={{ paddingTop: "25px" }}>Registration</h1>
         </div>
       </div>
       <ThemeProvider theme={defaultTheme}>
@@ -362,7 +362,6 @@ const SinglePageEventRegister = () => {
               Registration
             </Typography>
           </Box> */}
-
 
           {step === false && (
             <div
@@ -539,6 +538,7 @@ const SinglePageEventRegister = () => {
                   >
                     <MenuItem value="Male">Male</MenuItem>
                     <MenuItem value="Female">Female</MenuItem>
+                    <MenuItem value="Others">Others</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -548,32 +548,15 @@ const SinglePageEventRegister = () => {
                 adapterLocale={enGB}
               >
                 <Grid item xs={12} sm={6}>
-                  <DatePicker
-                    value={
-                      formData.dateOfBirth
-                        ? new Date(
-                          formData.dateOfBirth.split("-").reverse().join("-")
-                        )
-                        : null
-                    }
-                    onChange={(e: any) => {
-                      const value = `${new Date(e)
-                        .getDate()
-                        .toString()
-                        .padStart(2, "0")}-${(new Date(e).getMonth() + 1)
-                          .toString()
-                          .padStart(2, "0")}-${new Date(e).getFullYear()}`;
-                      setFormData({
-                        ...formData,
-                        ["dateOfBirth"]: value,
-                      });
-                    }}
-                    label="Date Of Birth"
-                    slotProps={{
-                      textField: {
-                        helperText: "DD/MM/YYYY",
-                      },
-                    }}
+                  <TextField
+                    disabled={openEventForm ? false : true}
+                    label="Age"
+                    name="age"
+                    type="number"
+                    value={formData.age}
+                    onChange={handleChange}
+                    fullWidth
+                    style={{ marginBottom: "2%" }}
                   />
                 </Grid>
 
@@ -670,8 +653,8 @@ const SinglePageEventRegister = () => {
                       value={formData?.country ?? ""}
                       onChange={handleChange}
                     >
-                      <MenuItem value="india">India</MenuItem>
-                      <MenuItem value="afghanistan">Afghanistan</MenuItem>
+                      <MenuItem value="India">India</MenuItem>
+                      <MenuItem value="Afghanistan">Afghanistan</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
@@ -726,7 +709,7 @@ const SinglePageEventRegister = () => {
                       required
                       value={formData?.district ?? ""}
                       onChange={handleChange}
-                    //   disabled={!formData?.state || formData?.state === ""}
+                      //   disabled={!formData?.state || formData?.state === ""}
                     >
                       {formData?.state &&
                         statesWithDistricts[formData?.state] &&
@@ -923,17 +906,24 @@ const SinglePageEventRegister = () => {
                             />
                           </Grid>
                           <Grid item xs={12} sm={6}>
-                            <TextField
-                              disabled={openEventForm ? false : true}
-                              label="Gender"
-                              name="gender"
-                              required
-                              value={member.gender}
-                              onChange={(e) =>
-                                handleGroupDetailsChange(index, e)
-                              }
-                              fullWidth
-                            />
+                            <FormControl fullWidth>
+                              <InputLabel>Gender</InputLabel>
+                              <Select
+                                disabled={openEventForm ? false : true}
+                                label={"Gender"}
+                                arial-label={"Gender"}
+                                value={member.gender}
+                                onChange={(e) =>
+                                  handleGroupDetailsChange(index, e)
+                                }
+                                name="gender"
+                                fullWidth
+                              >
+                                <MenuItem value="Male">Male</MenuItem>
+                                <MenuItem value="Female">Female</MenuItem>
+                                <MenuItem value="Others">Others</MenuItem>
+                              </Select>
+                            </FormControl>
                           </Grid>
                           <Grid item xs={12} sm={6}>
                             <TextField

@@ -60,7 +60,6 @@ const EventsPage = () => {
     middleName: null,
     lastName: null,
     gender: "",
-    dateOfBirth: "",
     guardianName: null,
     maritalStatus: "",
     bloodGroup: "",
@@ -80,7 +79,7 @@ const EventsPage = () => {
     arrivalDate: "",
     departureDate: "",
     groupDetails: [{ name: "", relation: "", gender: "", age: "" }],
-    pickupPlace: "",
+    pickUp: "",
     notes: "",
     ...userFromLocalStorage,
   });
@@ -168,7 +167,8 @@ const EventsPage = () => {
             if (registeredEvent) {
               setFormData((prevFormData: any) => {
                 return {
-                  ...prevFormData,
+                  ...user,
+                  pickUp: registeredEvent.pickUp,
                   arrivalDate: registeredEvent.arrivalDate,
                   departureDate: registeredEvent.departureDate,
                   groupDetails: registeredEvent.groupDetails,
@@ -232,11 +232,13 @@ const EventsPage = () => {
         firstName,
         gender,
         dateOfBirth,
+        age,
         eventCode,
         arrivalDate,
         departureDate,
         groupDetails,
         notes,
+        pickUp,
       } = formData;
 
       const updateUserObj = {
@@ -249,6 +251,7 @@ const EventsPage = () => {
         whatsappNumber: parsedUser.whatsappNumber,
         gender,
         dateOfBirth,
+        age,
         edQualification: parsedUser.edQualification,
         profession: parsedUser.profession,
         guardianName: parsedUser.guardianName,
@@ -281,12 +284,15 @@ const EventsPage = () => {
             mobileNumber,
             firstName,
             gender,
-            dateOfBirth,
+            age,
             eventCode,
             arrivalDate,
             departureDate,
-            groupDetails,
+            groupDetails: groupDetails.map((E: any) => {
+              return { ...E, deletedFlag: false };
+            }),
             notes,
+            pickUp,
           },
           {
             headers: { Authorization: authToken },
@@ -677,6 +683,11 @@ const EventsPage = () => {
                                   control={<Radio />}
                                   label="Female"
                                 />
+                                <FormControlLabel
+                                  value="Others"
+                                  control={<Radio />}
+                                  label="Others"
+                                />
                               </RadioGroup>
                             </FormControl>
                           </Grid>
@@ -811,49 +822,23 @@ const EventsPage = () => {
                             />
                           </Grid>
 
+                          <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                              <TextField
+                                label="Age"
+                                name="age"
+                                type="number"
+                                value={formData.age}
+                                onChange={handleChange}
+                                fullWidth
+                                style={{ marginBottom: "2%" }}
+                              />
+                            </FormControl>
+                          </Grid>
                           <LocalizationProvider
                             dateAdapter={AdapterDateFns}
                             adapterLocale={enGB}
                           >
-                            <Grid item xs={12} sm={6}>
-                              <FormControl fullWidth>
-                                <DatePicker
-                                  value={
-                                    formData.dateOfBirth
-                                      ? new Date(
-                                          formData.dateOfBirth
-                                            .split("-")
-                                            .reverse()
-                                            .join("-")
-                                        )
-                                      : null
-                                  }
-                                  onChange={(e: any) => {
-                                    const value = `${new Date(e)
-                                      .getDate()
-                                      .toString()
-                                      .padStart(2, "0")}-${(
-                                      new Date(e).getMonth() + 1
-                                    )
-                                      .toString()
-                                      .padStart(2, "0")}-${new Date(
-                                      e
-                                    ).getFullYear()}`;
-                                    setFormData({
-                                      ...formData,
-                                      ["dateOfBirth"]: value,
-                                    });
-                                  }}
-                                  label="Date Of Birth"
-                                  slotProps={{
-                                    textField: {
-                                      helperText: "DD/MM/YYYY",
-                                    },
-                                  }}
-                                />
-                              </FormControl>
-                            </Grid>
-
                             <Grid item xs={12} sm={6}>
                               <FormControl fullWidth>
                                 <DateTimePicker
@@ -929,8 +914,8 @@ const EventsPage = () => {
                             <FormControl fullWidth>
                               <InputLabel>Pickup place</InputLabel>
                               <Select
-                                name="pickupPlace"
-                                value={formData.pickupPlace}
+                                name="pickUp"
+                                value={formData.pickUp}
                                 onChange={handleChange}
                               >
                                 <MenuItem value="Kalupur Railway Station">
@@ -998,16 +983,25 @@ const EventsPage = () => {
                                         />
                                       </Grid>
                                       <Grid item xs={12} sm={6}>
-                                        <TextField
-                                          label="Gender"
-                                          name="gender"
-                                          required
+                                        {/* <InputLabel>Gender</InputLabel> */}
+                                        <Select
+                                          label={"Gender"}
+                                          arial-label={"Gender"}
                                           value={member.gender}
                                           onChange={(e) =>
                                             handleGroupDetailsChange(index, e)
                                           }
+                                          name="gender"
                                           fullWidth
-                                        />
+                                        >
+                                          <MenuItem value="Male">Male</MenuItem>
+                                          <MenuItem value="Female">
+                                            Female
+                                          </MenuItem>
+                                          <MenuItem value="Others">
+                                            Others
+                                          </MenuItem>
+                                        </Select>
                                       </Grid>
                                       <Grid item xs={12} sm={6}>
                                         <TextField
