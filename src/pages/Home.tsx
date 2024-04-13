@@ -20,7 +20,7 @@ import Button from "@mui/material/Button";
 import HomeCarouselCard from "../Components/HomeCarouselCard";
 import CardActionArea from "@mui/material/CardActionArea";
 import { useNavigate } from "react-router-dom";
-import { Backdrop, Box, CircularProgress, FormControl, FormControlLabel, FormHelperText, FormLabel, InputLabel, MenuItem, Modal, Radio, RadioGroup, Select, Skeleton, Stack, TextField } from "@mui/material";
+import { Backdrop, Box, CircularProgress, FormControl, FormControlLabel, FormHelperText, FormLabel, InputLabel, MenuItem, Modal, Radio, RadioGroup, Select, Skeleton, Stack, TextField, makeStyles } from "@mui/material";
 import axios from "axios";
 import { baseUrl, statesWithDistricts } from "../config/constants";
 import { LocalizationProvider, DatePicker, DateTimePicker } from "@mui/x-date-pickers";
@@ -62,26 +62,49 @@ const videoData: VideoItem[] = [
 
 const videoLinks = [
   {
+    id: 1,
     title: "Video 1",
-    url: "https://youtu.be/ujnC4X8FCTA?si=3laoG1Ae9AzqZJbi7",
+    url: "https://www.youtube.com/watch?v=fqq7RW3IGtM",
     thumbnail: "https://i.ytimg.com/vi/ujnC4X8FCTA/maxresdefault.jpg",
   },
   {
+    id: 2,
     title: "Video 2",
     url: "https://youtu.be/8GA8HrcXLDo?si=9FhYE8jnFkl0EskY",
     thumbnail: "https://i.ytimg.com/vi/8GA8HrcXLDo/maxresdefault.jpg",
   },
   {
+    id: 3,
     title: "Video 3",
     url: "https://youtu.be/cTSx9AOvs8o?si=zVCHpznhroZ0IrVA",
     thumbnail: "https://i.ytimg.com/vi/cTSx9AOvs8o/maxresdefault.jpg",
   },
   {
+    id: 4,
     title: "Video 4",
-    url: "https://youtu.be/NvWOMwEVtPg?si=RIglbjTcqNNVGXgo",
-    thumbnail: "https://i.ytimg.com/vi/NvWOMwEVtPg/maxresdefault.jpg",
+    url: "https://www.youtube.com/watch?v=fqq7RW3IGtM",
+    thumbnail: "https://i.ytimg.com/vi/ujnC4X8FCTA/maxresdefault.jpg",
   },
+  {
+    id: 5,
+    title: "Video 5",
+    url: "https://youtu.be/8GA8HrcXLDo?si=9FhYE8jnFkl0EskY",
+    thumbnail: "https://i.ytimg.com/vi/8GA8HrcXLDo/maxresdefault.jpg",
+  },
+  {
+    id: 6,
+    title: "Video 6",
+    url: "https://youtu.be/cTSx9AOvs8o?si=zVCHpznhroZ0IrVA",
+    thumbnail: "https://i.ytimg.com/vi/cTSx9AOvs8o/maxresdefault.jpg",
+  },
+  /*  {
+     id: 4,
+     title: "Video 4",
+     url: "https://youtu.be/NvWOMwEVtPg?si=RIglbjTcqNNVGXgo",
+     thumbnail: "https://i.ytimg.com/vi/NvWOMwEVtPg/maxresdefault.jpg",
+   }, */
 ];
+
 
 const VideoBox = ({ title, url, thumbnail }: any) => {
   const handleClick = () => {
@@ -256,6 +279,7 @@ const Home = () => {
     { name: "Program Schedule", data: videoData },
     { name: "Latest Video", data: videoData },
   ];
+
   const styles: any = {
     pageSection: {
       backgroundColor: "#ffffff",
@@ -658,734 +682,41 @@ const Home = () => {
     fetchEvents();
   }, []);
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+
+
+
   return (
     <>
-      {/* <div style={{ position: "relative" }}>
-        <Carousel
-          index={index}
-          onChange={() => handleChange()}
-          interval={4000}
-          animation="slide"
-          indicators={false}
-          stopAutoPlayOnHover
-          swipe
-          className="my-carousel"
-          // style={{ borderRadius: "8px", overflow: "hidden" }}
-        >
-          {items.map((item, i) => (
-            <div key={i} style={{ width: "100%", height: "100%" }}>
-              <img src={item.imageUrl} alt={item.alt} style={imageStyle} />
-            </div>
-          ))}
-        </Carousel>
-      </div> */}
-
-
       <div className="hero-section">
         <div className="hero-content">
           <h1 id="demo" className="text"></h1>
 
-          <div className="event-container">
-            {/* <Container
-              maxWidth="md"
-              style={{
-                textAlign: "left",
-                backgroundColor: "#f4f4f4",
-                borderRadius: "6px",
-              }}
-            > */}
-            <div className="marquee-container">
-              <h1 className="marquee">Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Current Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </h1>
-            </div>
-
-            {skeletonopen && (
-              <Card
-                style={{
-                  marginBottom: "20px",
-                  boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                  transition: "0.3s",
-                  borderRadius: "8px",
-                  overflow: "hidden",
-                  background: "#fff",
-                  border: "1px solid #ddd",
-                }}
-              >
-                <CardContent style={{ padding: "20px" }}>
-                  <Typography
-                    variant="h5"
-                    component="div"
-                    style={{ color: "#333", marginBottom: "10px" }}
-                  >
-                    <Skeleton animation="pulse" />
-                  </Typography>
-
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    gutterBottom
-                    style={{ marginBottom: "10px" }}
-                  >
-                    <Skeleton animation="pulse" />
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    gutterBottom
-                    style={{ marginBottom: "10px" }}
-                  >
-                    <Skeleton animation="pulse" />
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    gutterBottom
-                    style={{ marginBottom: "10px" }}
-                  >
-                    <Skeleton animation="pulse" />
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    style={{ marginBottom: "10px" }}
-                  >
-                    <Skeleton animation="pulse" />
-                  </Typography>
-                </CardContent>
-              </Card>
-            )}
-            {data.map((event: any) => {
-              return (
-                <Card
-                  key={event.eventCode}
-                  style={{
-                    marginBottom: "20px",
-                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                    transition: "0.3s",
-                    borderRadius: "8px",
-                    overflow: "hidden",
-                    background: "#eda942",
-                    // background: "#f7b557",
-                    border: "1px solid #ddd"
-                  }}
-                >
-                  <CardContent style={{ padding: "20px" }}>
-                    <Typography
-                      variant="h5"
-                      component="div"
-                      style={{ color: "#333", marginBottom: "10px" }}
-                      onClick={() => {
-                        console.log("event name :: ", event.eventName);
-                        navigate(`/event-detail`, { state: event });
-                      }}
-                    >
-                      {event.eventName}
-                    </Typography>
-
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 4 }}  >
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        gutterBottom
-                        style={{ marginBottom: "10px" }}
-                      >
-                        <strong>Organiser:</strong> {event.organiserName}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        gutterBottom
-                        style={{ marginBottom: "10px" }}
-                      >
-                        <strong>Date:</strong> {event.startDateTime} -{" "}
-                        {event.endDateTime}
-                      </Typography>
-                    </Stack>
-
-
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        gutterBottom
-                        style={{ marginBottom: "10px" }}
-                      >
-                        <strong>Location:</strong> {event.city}, {event.state},{" "}
-                        {event.country}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        style={{ marginBottom: "10px" }}
-                      >
-                        <strong>Mode:</strong> {event.mode}
-                      </Typography>
-                    </Stack>
-
-                    <Stack
-                      direction={"row"}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <a
-                        href={`https://maps.google.com/?q=${event.city}, ${event.state}, ${event.country}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          display: "block",
-                          textAlign: "right",
-                          textDecoration: "underline",
-                          color: "#990000",
-                        }}
-                      >
-                        View on Map
-                      </a>
-                      <Button
-
-                        variant="contained"
-                        onClick={() => onRegisterClick(event.eventCode)}
-                        style={{
-                          backgroundColor: "#007bff",
-                          color: "#fff",
-                          marginRight: "10px",
-                        }}
-                      >
-                        Register
-                      </Button>
-                    </Stack>
-                    <Modal open={open} onClose={handleClose}>
-                      <>
-                        {" "}
-                        <Backdrop
-                          sx={{
-                            color: "#fff",
-                            zIndex: (theme) => theme.zIndex.drawer + 1,
-                          }}
-                          open={backDrop}
-                        >
-                          <CircularProgress color="inherit" />
-                        </Backdrop>
-                        <Box
-                          sx={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            width: "75%", // Adjusted width for responsiveness
-                            maxHeight: "90vh", // Adjusted height for responsiveness
-                            overflowY: "auto",
-                            bgcolor: "background.paper",
-                            boxShadow: 24,
-                            p: 4,
-                          }}
-                        >
-                          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" }, mb: 2 }}>
-                            <Stack spacing={2}>
-                              {registerCheck && (
-                                <Typography variant="h6" gutterBottom color="error" style={{ backgroundColor: "red", color: "white", fontSize: "13px", borderRadius: "5px", padding: "5px" }}>
-                                  You are already registered for this event
-                                  with Reg  id {registerId}
-                                </Typography>
-                              )}
-                              <Stack spacing={2} direction={'row'}>
-                                <Typography variant="h6" gutterBottom>
-                                  Register for {event.eventName}
-                                </Typography>
-                                <IconButton onClick={handleClose}>
-                                  <CloseOutlined />
-                                </IconButton>
-                              </Stack>
-                            </Stack>
-                          </Box>
-
-                          <Box
-                            sx={{
-                              // display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                              mb: 2, flexGrow: 1,
-                              display: {
-                                xs: "none",
-                                md: "flex",
-                                // justifyContent: "space-evenly",
-                              },
-                            }}
-                          >
-                            <Typography variant="h6" gutterBottom>
-                              Register for {event.eventName}
-                            </Typography>
-                            {registerCheck && (
-                              <Typography variant="h6" gutterBottom color="error" style={{ backgroundColor: "red", color: "white", borderRadius: "5px", paddingLeft: "10px", paddingRight: "10px" }}>
-                                You are already registered for this event
-                                with Reg id {registerId}
-                              </Typography>
-                            )}
-                            <IconButton onClick={handleClose}>
-                              <CloseOutlined />
-                            </IconButton>
-                          </Box>
-
-                          <form>
-                            <Grid container spacing={2}>
-                              <Grid item xs={12}>
-                                <TextField
-                                  label="First Name"
-                                  name="firstName"
-                                  value={formData.firstName}
-                                  onChange={handleChange}
-                                  fullWidth
-                                />
-                              </Grid>
-                              <Grid item xs={12}>
-                                <FormControl component="fieldset" margin="normal">
-                                  <FormLabel component="legend">Gender</FormLabel>
-                                  <RadioGroup
-                                    aria-label="gender"
-                                    name="gender"
-                                    value={formData.gender}
-                                    onChange={handleChange}
-                                    row
-                                  >
-                                    <FormControlLabel
-                                      value="Male"
-                                      control={<Radio />}
-                                      label="Male"
-                                    />
-                                    <FormControlLabel
-                                      value="Female"
-                                      control={<Radio />}
-                                      label="Female"
-                                    />
-                                  </RadioGroup>
-                                </FormControl>
-                              </Grid>
-
-                              <Grid item xs={12} sm={6}>
-                                <FormControl fullWidth>
-                                  <InputLabel>Country*</InputLabel>
-                                  <Select
-                                    aria-label="Country"
-                                    label="Country"
-                                    name="country"
-                                    required
-                                    value={formData.country}
-                                    onChange={handleChange}
-                                  >
-                                    <MenuItem value="india">India</MenuItem>
-                                    <MenuItem value="afghanistan">Afghanistan</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </Grid>
-
-                              {errors.country && (
-                                <FormHelperText error>
-                                  {errors.country}
-                                </FormHelperText>
-                              )}
-
-                              <Grid item xs={12} sm={6}>
-                                <FormControl fullWidth>
-                                  <InputLabel>State*</InputLabel>
-                                  <Select
-                                    aria-label="State"
-                                    label={"State"}
-                                    name="state"
-                                    required
-                                    value={formData.state}
-                                    onChange={(event) => {
-                                      handleStateChange(event);
-                                      handleChange(event);
-                                    }}
-                                  >
-                                    {Object.keys(statesWithDistricts).map(
-                                      (state, index) => (
-                                        <MenuItem key={index} value={state}>
-                                          {state}
-                                        </MenuItem>
-                                      )
-                                    )}
-                                  </Select>
-                                  {errors.state && (
-                                    <FormHelperText error>
-                                      {errors.state}
-                                    </FormHelperText>
-                                  )}
-                                </FormControl>
-                              </Grid>
-
-                              <Grid item xs={12} sm={6}>
-                                <FormControl fullWidth>
-                                  <InputLabel>District*</InputLabel>
-                                  <Select
-                                    aria-label="District"
-                                    label="District"
-                                    name="district"
-                                    required
-                                    value={formData.district}
-                                    onChange={handleChange}
-                                    disabled={!formData.state || formData.state === ""}
-                                  >
-                                    {formData.state &&
-                                      statesWithDistricts[formData.state] &&
-                                      statesWithDistricts[formData.state].map(
-                                        (district: any, index: any) => (
-                                          <MenuItem key={index} value={district}>
-                                            {district}
-                                          </MenuItem>
-                                        )
-                                      )}
-                                  </Select>
-
-                                  {errors.district && (
-                                    <FormHelperText error>
-                                      {errors.district}
-                                    </FormHelperText>
-                                  )}
-                                </FormControl>
-                              </Grid>
-
-                              <Grid item xs={12} sm={6}>
-                                <TextField
-                                  label="City / Village"
-                                  name="city"
-                                  value={formData.city}
-                                  onChange={handleChange}
-                                  fullWidth
-                                />
-                              </Grid>
-
-                              <Grid item xs={12} >
-                                <TextField
-                                  label="Address 1"
-                                  name="addrLine1"
-                                  value={formData.addrLine1}
-                                  onChange={handleChange}
-                                  fullWidth
-                                />
-                              </Grid>
-
-                              <Grid item xs={12}>
-                                <TextField
-                                  label="Address 2"
-                                  name="addrLine2"
-                                  value={formData.addrLine2}
-                                  onChange={handleChange}
-                                  fullWidth
-                                />
-                              </Grid>
-
-                              <Grid item xs={12} sm={6}>
-                                <TextField
-                                  label="Pincode"
-                                  name="pincode"
-                                  type="number"
-                                  value={formData.pincode}
-                                  onChange={handleChange}
-                                  fullWidth
-                                  style={{ marginBottom: "2%" }}
-                                />
-                              </Grid>
-
-                              <LocalizationProvider
-                                dateAdapter={AdapterDateFns}
-                                adapterLocale={enGB}
-                              >
-
-                                <Grid item xs={12} sm={6}>
-                                  <FormControl fullWidth>
-                                    <DatePicker
-                                      value={
-                                        formData.dateOfBirth
-                                          ? new Date(
-                                            formData.dateOfBirth
-                                              .split("-")
-                                              .reverse()
-                                              .join("-")
-                                          )
-                                          : null
-                                      }
-                                      onChange={(e: any) => {
-                                        const value = `${new Date(e)
-                                          .getDate()
-                                          .toString()
-                                          .padStart(2, "0")}-${(
-                                            new Date(e).getMonth() + 1
-                                          )
-                                            .toString()
-                                            .padStart(2, "0")}-${new Date(
-                                              e
-                                            ).getFullYear()}`;
-                                        setFormData({
-                                          ...formData,
-                                          ["dateOfBirth"]: value,
-                                        });
-                                      }}
-                                      label="Date Of Birth"
-                                      slotProps={{
-                                        textField: {
-                                          helperText: "DD/MM/YYYY",
-                                        },
-                                      }}
-                                    />
-                                  </FormControl>
-                                </Grid>
-
-                                <Grid item xs={12} sm={6}>
-                                  <FormControl fullWidth>
-                                    <DateTimePicker
-                                      label="Arrival Date"
-                                      name="arrivalDate"
-                                      value={
-                                        formData.arrivalDate
-                                          ? new Date(formData?.arrivalDate)
-                                          : new Date()
-                                      }
-                                      onChange={(e: any) => {
-                                        const convertedDate =
-                                          new Date(e)
-                                            .toLocaleDateString("en-US", {
-                                              timeZone: "Asia/Kolkata",
-                                              day: "2-digit",
-                                              month: "2-digit",
-                                              year: "numeric",
-                                            })
-                                            .replace(/\//g, "-") +
-                                          " " +
-                                          ("0" + new Date(e).getHours()).slice(-2) +
-                                          ":" +
-                                          ("0" + new Date(e).getMinutes()).slice(
-                                            -2
-                                          );
-                                        setFormData({
-                                          ...formData,
-                                          ["arrivalDate"]: convertedDate,
-                                        });
-                                      }}
-                                    />
-                                  </FormControl>
-                                </Grid>
-
-                                <Grid item xs={12} sm={6}>
-                                  <FormControl fullWidth>
-                                    <DateTimePicker
-                                      label="Departure Date"
-                                      name="departureDate"
-                                      value={
-                                        formData.departureDate
-                                          ? new Date(formData?.departureDate)
-                                          : new Date()
-                                      }
-                                      onChange={(e: any) => {
-                                        const convertedDate =
-                                          new Date(e)
-                                            .toLocaleDateString("en-US", {
-                                              timeZone: "Asia/Kolkata",
-                                              day: "2-digit",
-                                              month: "2-digit",
-                                              year: "numeric",
-                                            })
-                                            .replace(/\//g, "-") +
-                                          " " +
-                                          ("0" + new Date(e).getHours()).slice(-2) +
-                                          ":" +
-                                          ("0" + new Date(e).getMinutes()).slice(
-                                            -2
-                                          );
-                                        setFormData({
-                                          ...formData,
-                                          ["departureDate"]: convertedDate,
-                                        });
-                                      }}
-                                    />
-                                  </FormControl>
-                                </Grid>
-
-                              </LocalizationProvider>
-
-                              <Grid item xs={12}>
-                                <FormControl fullWidth>
-                                  <InputLabel>Pickup place</InputLabel>
-                                  <Select
-                                    name="pickupPlace"
-                                    value={formData.pickupPlace}
-                                    onChange={handleChange}
-                                  >
-                                    <MenuItem value="Kalupur Railway Station">
-                                      Kalupur Railway Station
-                                    </MenuItem>
-                                    <MenuItem value="Sabarmati Railway Station">
-                                      Sabarmati Railway Station
-                                    </MenuItem>
-                                    <MenuItem value="Ahmedabad Airport">
-                                      Ahmedabad Airport
-                                    </MenuItem>
-                                    <MenuItem value="Prantij bus stop">
-                                      Prantij bus stop
-                                    </MenuItem>
-                                    <MenuItem value="Self ">Self </MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </Grid>
-
-                              <Grid item xs={12} >
-
-                                <Box mb={2}>
-                                  <Typography variant="subtitle1">
-                                    Group Details:
-                                  </Typography>
-                                  {formData.groupDetails.map(
-                                    (member: any, index: any) => (
-                                      <Box
-                                        key={index}
-                                        sx={{
-                                          border: "1px solid #ccc",
-                                          borderRadius: "8px",
-                                          padding: "16px",
-                                          marginBottom: "16px",
-                                        }}
-                                      >
-                                        <Typography
-                                          variant="h6"
-                                          gutterBottom
-                                          style={{ marginBottom: "8px" }}
-                                        >
-                                          Participant {index + 1}
-                                        </Typography>
-                                        <Grid container spacing={2}>
-                                          <Grid item xs={12} sm={6}>
-                                            <TextField
-                                              label="Name"
-                                              name="name"
-                                              required
-                                              value={member.name}
-                                              onChange={(e) =>
-                                                handleGroupDetailsChange(index, e)
-                                              }
-                                              fullWidth
-                                            />
-                                          </Grid>
-                                          <Grid item xs={12} sm={6}>
-                                            <TextField
-                                              label="Relation"
-                                              name="relation"
-                                              value={member.relation}
-                                              onChange={(e) =>
-                                                handleGroupDetailsChange(index, e)
-                                              }
-                                              fullWidth
-                                            />
-                                          </Grid>
-                                          <Grid item xs={12} sm={6}>
-                                            <TextField
-                                              label="Gender"
-                                              name="gender"
-                                              required
-                                              value={member.gender}
-                                              onChange={(e) =>
-                                                handleGroupDetailsChange(index, e)
-                                              }
-                                              fullWidth
-                                            />
-                                          </Grid>
-                                          <Grid item xs={12} sm={6}>
-                                            <TextField
-                                              label="Age"
-                                              name="age"
-                                              required
-                                              value={member.age}
-                                              onChange={(e) =>
-                                                handleGroupDetailsChange(index, e)
-                                              }
-                                              fullWidth
-                                            />
-                                          </Grid>
-                                        </Grid>
-                                        {errors.groupDetails &&
-                                          errors.groupDetails[index] && (
-                                            <FormHelperText error>
-                                              {errors.groupDetails[index]}
-                                            </FormHelperText>
-                                          )}
-                                        <Button
-                                          variant="contained"
-                                          color="secondary"
-                                          onClick={() => removeGroupMember(index)}
-                                          style={{ marginTop: "16px" }}
-                                        >
-                                          Remove
-                                        </Button>
-                                      </Box>
-                                    )
-                                  )}
-                                  <div style={{ display: "flex", justifyContent: 'center' }}>
-                                    <Button
-                                      variant="contained"
-                                      onClick={addGroupMember}
-                                      style={{ marginTop: "10px" }}
-                                    >
-                                      Add Member
-                                    </Button>
-                                  </div>
-                                </Box>
-                              </Grid>
-
-                              <Grid item xs={12} >
-                                <TextField
-                                  label="Anything else you want to inform us"
-                                  name="notes"
-                                  value={formData.notes}
-                                  onChange={handleChange}
-                                  fullWidth
-                                  margin="normal"
-                                  multiline
-                                  rows={3}
-                                />
-                              </Grid>
-                            </Grid>
-                            <div style={{ display: "flex", justifyContent: 'center' }}>
-                              <Button
-                                type="submit"
-                                variant="contained"
-                                onClick={handleSubmit}
-                                style={{
-                                  backgroundColor: "#007bff",
-                                  color: "#fff",
-                                  marginTop: "10px",
-                                }}
-                              >
-                                {registerCheck ? "Update" : "Submit"}
-                              </Button>
-                            </div>
-
-                          </form>
-                        </Box>
-                      </>
-                    </Modal>
-                  </CardContent>
-                </Card>
-              );
-            })}
-            {/*  </Container> */}
-          </div>
-          {/*   {!localStorage.getItem("authToken") && (
-            // <Button
-            //   type="submit"
-            //   variant="contained"
-            //   onClick={() => navigate("/event-registration")}
-            //   sx={{
-            //     position: "absolute",
-            //     bottom: "25px",
-            //     right: "45%",
-            //   }}
-            // >
-            //   Register
-            // </Button>
+          {!localStorage.getItem("authToken") && (
             <div className="button-container">
-              <button className="cta-button" onClick={() => navigate("/event-registration")}>Register</button>
+              <button className="btn" onClick={() => navigate("/event-registration")}>Register Now</button>
             </div>
-          )} */}
+          )}
         </div>
       </div>
 
@@ -1403,7 +734,7 @@ const Home = () => {
             }}
           >
             {" "}
-            <Typography variant="h4">Photo & Video</Typography>
+            <Typography variant="h4" style={{ fontFamily: '"Poppins", sans-serif' }}>LATEST VIDEO</Typography>
           </div>
           {/* <Grid container spacing={3}>
             {homecardCarouselData.map((item: any, index: any) => (
@@ -1433,6 +764,18 @@ const Home = () => {
           </div>
         </Container>
       </section>
+
+
+      {/* <Slider {...settings}>
+        {videoLinks.map((video, index) => (
+          <div key={index} className="card">
+            <img src={video.thumbnail} alt={video.title} />
+            <div className="card-content">
+              <h3>{video.title}</h3>
+            </div>
+          </div>
+        ))}
+      </Slider> */}
     </>
   );
 };

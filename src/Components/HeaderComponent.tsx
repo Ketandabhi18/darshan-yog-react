@@ -10,8 +10,9 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
-import "./header.css";
+import "./headerComponent.css";
 import { pages } from "../config/constants";
+
 const HeaderComponent = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -62,8 +63,8 @@ const HeaderComponent = () => {
         position="static"
         // style={{ backgroundColor: "transparent", position: "fixed" }}
         style={{ backgroundColor: "rgb(206,206,206)" }}
-        // style={{ backgroundColor: "#e48732" }}
-        // style={{ backgroundColor: "#e18c48", position: "fixed" }}
+      // style={{ backgroundColor: "#e48732" }}
+      // style={{ backgroundColor: "#e18c48", position: "fixed" }}
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters>

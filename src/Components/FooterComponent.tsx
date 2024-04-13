@@ -15,7 +15,7 @@ import {
   YouTube,
 } from "@mui/icons-material";
 import { Button, Grid, TextField } from "@mui/material";
-import "./footer.css";
+import "./footerComponent.css";
 
 function Copyright() {
   return (
@@ -33,12 +33,18 @@ const FooterComponent = () => {
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-        <Grid container spacing={2} sx={{ backgroundColor: "#990000", color: "white" }}>
+        <Grid container spacing={2} sx={{
+          /*  backgroundColor: "#990000", color: "white", */
+          backgroundImage: 'linear-gradient(117deg, rgba(237, 28, 36, 1) 0%, rgba(245, 130, 32, 1) 100%)',
+          color: 'white',
+          // p: 2, // Padding
+          paddingBottom: "50px"
+        }}>
           <Grid item xs={12} md={6}>
             <Container maxWidth="sm">
               <div style={{ display: "flex" }}>
                 <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
-                  <Typography variant="h6" component="h1" gutterBottom>
+                  <Typography variant="h6" component="h2" gutterBottom style={{ fontFamily: '"Poppins", sans-serif', fontSize: "25px", fontWeight: "600" }}>
                     Contact Us
                   </Typography>
                   <span
@@ -50,7 +56,7 @@ const FooterComponent = () => {
                     }}
                   >
                     <LocationCityOutlined />
-                    <p style={{ paddingLeft: "15px", fontSize: "medium" }}>
+                    <p style={{ paddingLeft: "15px", fontSize: "medium", fontFamily: '"Poppins", sans-serif' }}>
                       आर्यवन, रोजड़, पत्रा.: सागपुर, तालुका : तलोद, जिला :
                       साबरकांठा, <br /> गुजरात- 383307
                     </p>
@@ -64,7 +70,7 @@ const FooterComponent = () => {
                     }}
                   >
                     <Phone />
-                    <p style={{ paddingLeft: "15px", fontSize: "medium" }}>
+                    <p style={{ paddingLeft: "15px", fontSize: "medium", fontFamily: '"Poppins", sans-serif' }}>
                       9409615011, 9409415011
                     </p>
                   </span>
@@ -78,7 +84,7 @@ const FooterComponent = () => {
                     }}
                   >
                     <Mail />
-                    <p style={{ paddingLeft: "15px", fontSize: "medium" }}>
+                    <p style={{ paddingLeft: "15px", fontSize: "medium", fontFamily: '"Poppins", sans-serif' }}>
                       darshanyog@gmail.com
                     </p>
                   </span>
@@ -192,9 +198,9 @@ const FooterComponent = () => {
               >
                 <Typography
                   variant="h6"
-                  component="h1"
+                  component="h2"
                   gutterBottom
-                  style={{ justifyContent: "center", display: "flex" }}
+                  style={{ paddingLeft: "65px", display: "flex", fontFamily: '"Poppins", sans-serif', fontSize: "25px", fontWeight: "600" }}
                 >
                   Message for Us
                 </Typography>
@@ -281,7 +287,7 @@ const FooterComponent = () => {
                     required
                   />
 
-                  <button type="submit" className="submit-button">
+                  <button type="submit" className="btn">
                     Submit
                   </button>
                 </div>

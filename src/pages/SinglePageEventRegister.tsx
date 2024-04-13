@@ -341,11 +341,7 @@ const SinglePageEventRegister = () => {
           {alertMessage}
         </Alert>
       </Snackbar>
-      <div className="hero-event">
-        <div className="hero-content">
-          <h1 style={{ paddingTop: '25px' }}>Registration</h1>
-        </div>
-      </div>
+     
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="md">
           <CssBaseline />
