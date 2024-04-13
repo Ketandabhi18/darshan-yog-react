@@ -335,7 +335,7 @@ const UpdateUser = () => {
                     value={formData?.country}
                     onChange={handleChange}
                   >
-                    <MenuItem value="india">India</MenuItem>
+                    <MenuItem value="India">India</MenuItem>
                     <MenuItem value="afghanistan">Afghanistan</MenuItem>
                   </Select>
                 </FormControl>
