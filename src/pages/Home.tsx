@@ -492,7 +492,7 @@ const Home = () => {
     let user: any = localStorage.getItem("userDetail");
     user = JSON.parse(user);
     if (!authToken) {
-      navigate("/event-registration");
+      navigate(`/event/${eventCode}`);
       // navigate("/log-in", {
       //   state: { eventCode: eventCode },
       // });

@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import {
   Backdrop,
@@ -48,6 +48,8 @@ const SinglePageEventRegister = () => {
   const [backDrop, setBackDrop] = useState<any>(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const eventcode = useParams().id ?? "";
+  console.log("eventcode :: singlepageRegister", eventcode);
   const handleVerfiyOtp = async (event: any) => {
     event.preventDefault();
     setBackDrop(true);
@@ -88,7 +90,7 @@ const SinglePageEventRegister = () => {
                 if (res.data.data) {
                   const registeredEvent = res.data.data.find(
                     (o: any) =>
-                      o.eventCode === "YOGDHAM_FEB24" &&
+                      o.eventCode === eventcode &&
                       o.mobileNumber === `${countrycode}${mobile}`
                   );
                   if (registeredEvent) {
@@ -108,7 +110,7 @@ const SinglePageEventRegister = () => {
                           departureDate: registeredEvent.departureDate,
                           groupDetails: registeredEvent.groupDetails,
                           notes: registeredEvent.notes,
-                          eventCode: "YOGDHAM_FEB24",
+                          eventCode: eventcode,
                         };
                       });
                       setOpenEventForm(true);
@@ -289,7 +291,7 @@ const SinglePageEventRegister = () => {
       return;
     }
 
-    const reqObj = { ...formData, eventCode: "YOGDHAM_FEB24" };
+    const reqObj = { ...formData, eventCode: eventcode };
     const { eventCode, arrivalDate, departureDate, groupDetails, notes } =
       reqObj;
     const res = await axios.post(
