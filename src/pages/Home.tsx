@@ -1,35 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
-import { styled } from "@mui/material/styles";
+import { useEffect, useRef, useState } from "react";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import IconButton, { IconButtonProps } from "@mui/material/IconButton";
+import { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { CloseOutlined, ViewCarousel } from "@mui/icons-material";
 import "./home.css";
-import Carousel from "react-material-ui-carousel";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
 import Container from "@mui/material/Container";
-import { ArrowLeft, ArrowRight } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { JSX } from "react/jsx-runtime";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-import HomeCarouselCard from "../Components/HomeCarouselCard";
 import CardActionArea from "@mui/material/CardActionArea";
 import { useNavigate } from "react-router-dom";
-import { Backdrop, Box, CircularProgress, FormControl, FormControlLabel, FormHelperText, FormLabel, InputLabel, MenuItem, Modal, Radio, RadioGroup, Select, Skeleton, Stack, TextField, makeStyles } from "@mui/material";
-import axios from "axios";
-import { baseUrl, statesWithDistricts } from "../config/constants";
-import { LocalizationProvider, DatePicker, DateTimePicker } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { enGB } from "date-fns/locale";
+import Slider from "react-slick";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
+
 interface VideoItem {
   title: string;
   date: string;
@@ -60,49 +47,65 @@ const videoData: VideoItem[] = [
   // Add more video items as needed
 ];
 
+const DATA = [
+  {
+    image: require('../assets/प्रियेश.jpg'),
+    title: 'आचार्य प्रियेश जी',
+    position: 'संयोजक',
+  },
+  {
+    image: require("../assets/सत्यपति.jpg"),
+    title: 'पूज्य स्वामी सत्यपति जी परिव्राजक',
+    position: 'संस्थापक - दर्शनयोग महाविद्यालय/विश्वकल्याण धर्मार्थ न्यास',
+  },
+  {
+    image: require("../assets/स्वामी विवेकानंद जी परिव्राजक.jpg"),
+    title: 'स्वामी विवेकानंद जी परिव्राजक',
+    position: 'प्रबन्धक न्यासी - दर्शन योग धर्मार्थ ट्रस्ट, अध्यक्ष - वैदिक परिषद, निदेशक - दर्शन योग महाविद्यालय',
+  },
+  {
+    image: require("../assets/स्वामी ब्रह्मविदानन्द जी सरस्वती.jpg"),
+    title: 'स्वामी ब्रह्मविदानन्द जी सरस्वती',
+    position: 'आचार्य - दर्शन योग महाविद्यालय रोजड, अध्यक्ष - दर्शन योग साधना आश्रम, कमोदा, न्यासी - दर्शन योग धर्मार्थ ट्रस्ट',
+  },
+  {
+    image: require("../assets/स्वामी ध्रुवदेव जी परिव्राजक.jpg"),
+    title: 'स्वामी ध्रुवदेव जी परिव्राजक',
+    position: 'कार्यकारी आचार्य - दर्शन योग महाविद्यालय रोजड, न्यासी - दर्शन योग धर्मार्थ ट्रस्ट',
+  },
+  {
+    image: require("../assets/दिनेश.jpg"),
+    title: 'आचार्य दिनेश कुमार जी',
+    position: 'व्यवस्थापक - दर्शनयोग महाविद्यालय रोजड, न्यासी - दर्शनयोग धर्मार्थ ट्रस्ट',
+  },
+  {
+    image: require("../assets/ईश्वरानन्द.jpg"),
+    title: 'आचार्य ईश्वरानन्द जी',
+    position: 'कार्यकारी उपाचार्य - दर्शन योग महाविद्यालय, रोजड',
+  },
+]
+
 const videoLinks = [
   {
-    id: 1,
-    title: "Video 1",
-    url: "https://www.youtube.com/watch?v=fqq7RW3IGtM",
-    thumbnail: "https://i.ytimg.com/vi/ujnC4X8FCTA/maxresdefault.jpg",
+    title: "प्रेरक प्रवचन:- असफलता का कारण",
+    url: "https://youtu.be/ujnC4X8FCTA?si=3laoG1Ae9AzqZJbi7",
+    thumbnail: "https://img.youtube.com/vi/ujnC4X8FCTA/sddefault.jpg",
   },
   {
-    id: 2,
-    title: "Video 2",
+    title: "वेद प्रवचन :- यजुर्वेद अध्याय 34",
     url: "https://youtu.be/8GA8HrcXLDo?si=9FhYE8jnFkl0EskY",
     thumbnail: "https://i.ytimg.com/vi/8GA8HrcXLDo/maxresdefault.jpg",
   },
   {
-    id: 3,
-    title: "Video 3",
-    url: "https://youtu.be/cTSx9AOvs8o?si=zVCHpznhroZ0IrVA",
-    thumbnail: "https://i.ytimg.com/vi/cTSx9AOvs8o/maxresdefault.jpg",
+    title: "वेद प्रवचन :- यजुर्वेद अध्याय 33 /मंत्र 5",
+    url: "https://www.youtube.com/watch?v=j2EPRLQL2_c&t=405s",
+    thumbnail: "https://img.youtube.com/vi/j2EPRLQL2_c/sddefault.jpg",
   },
   {
-    id: 4,
-    title: "Video 4",
-    url: "https://www.youtube.com/watch?v=fqq7RW3IGtM",
-    thumbnail: "https://i.ytimg.com/vi/ujnC4X8FCTA/maxresdefault.jpg",
+    title: "दर्शन योग महाविद्यालय 37वाँ एवं आर्ष कन्या गुरुकुल 7वाँ वार्षिकोत्सव",
+    url: "https://youtu.be/NvWOMwEVtPg?si=RIglbjTcqNNVGXgo",
+    thumbnail: "https://i.ytimg.com/vi/NvWOMwEVtPg/maxresdefault.jpg",
   },
-  {
-    id: 5,
-    title: "Video 5",
-    url: "https://youtu.be/8GA8HrcXLDo?si=9FhYE8jnFkl0EskY",
-    thumbnail: "https://i.ytimg.com/vi/8GA8HrcXLDo/maxresdefault.jpg",
-  },
-  {
-    id: 6,
-    title: "Video 6",
-    url: "https://youtu.be/cTSx9AOvs8o?si=zVCHpznhroZ0IrVA",
-    thumbnail: "https://i.ytimg.com/vi/cTSx9AOvs8o/maxresdefault.jpg",
-  },
-  /*  {
-     id: 4,
-     title: "Video 4",
-     url: "https://youtu.be/NvWOMwEVtPg?si=RIglbjTcqNNVGXgo",
-     thumbnail: "https://i.ytimg.com/vi/NvWOMwEVtPg/maxresdefault.jpg",
-   }, */
 ];
 
 
@@ -112,14 +115,14 @@ const VideoBox = ({ title, url, thumbnail }: any) => {
   };
 
   const cardStyle: any = {
-    maxWidth: "345px",
-    width: "200px", // Fixed width for each box
-    height: "200px", // Adjust the height as needed
-    margin: "20px",
+    maxWidth: "500px",
+    width: "200px",
+    height: "200px",
+    // margin: "20px",
     cursor: "pointer",
     borderRadius: "10px",
-    // transition: "transform 0.3s ease",
     boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+
   };
 
   const hoverStyle: any = {
@@ -148,9 +151,10 @@ const VideoBox = ({ title, url, thumbnail }: any) => {
           image={thumbnail}
           title={title}
           style={{
-            borderRadius: "10px 10px 0 0",
+            // borderRadius: "10px 10px 0 0",
             width: "100%",
             objectFit: "cover",
+            alignItems: "center"
           }}
         />
         <div style={contentStyle}>
@@ -164,59 +168,8 @@ const VideoBox = ({ title, url, thumbnail }: any) => {
 };
 
 const Home = () => {
-  const [skeletonopen, setSkeletonOpen] = useState(false);
-  const [data, setData] = useState<any>([]);
-  const [index, setIndex] = useState(0);
   const theme = useTheme();
   const navigate = useNavigate();
-  const authToken = localStorage.getItem("authToken") || "";
-  const [backDrop, setBackDrop] = useState<any>(false);
-  const userDetailString = localStorage.getItem("userDetail");
-  const parsedUser =
-    userDetailString && userDetailString !== "null"
-      ? JSON.parse(userDetailString)
-      : null;
-
-  const userFromLocalStorage: any = parsedUser || {
-    email: "",
-    firstName: "",
-    middleName: null,
-    lastName: null,
-    gender: "",
-    dateOfBirth: "",
-    guardianName: null,
-    maritalStatus: "",
-    bloodGroup: "",
-    addrLine1: "",
-    addrLine2: "",
-    city: "",
-    district: "",
-    state: "",
-    country: "",
-    pincode: "",
-  };
-  const [open, setOpen] = useState(false);
-  const [openAlert, setOpenAlert] = useState(false);
-  const [formData, setFormData] = useState<any>({
-    eventCode: "",
-    arrivalDate: "",
-    departureDate: "",
-    groupDetails: [{ name: "", relation: "", gender: "", age: "" }],
-    pickupPlace: "",
-    notes: "",
-    ...userFromLocalStorage,
-  });
-  const [errors, setErrors] = useState<any>({});
-  const [registerCheck, setRegisterCheck] = useState<any>(false);
-  const [registerId, setRegisterId] = useState<any>();
-  const handleOpen = (eventCode: any) => {
-    setFormData({ ...formData, eventCode });
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const iRef = useRef(0);
   let txt = "|| हे ऐश्वर्यवान परमात्मन आप हमारे सभी ऐश्वर्यों को सुदृढ़ करें, जिससे हम सम्पूर्ण विश्व को श्रेष्ठ बना सकें तथा समाज में व्याप्त अवैदिकत्व का नाश कर सकें ||";
@@ -245,7 +198,7 @@ const Home = () => {
         "https://darshanyog.org/assets/img/upload/slider/0QA5WfrH7q.jpg",
       alt: "Image 4",
     },
-    // Add more items as needed
+
   ];
 
   const branchItems = [
@@ -301,10 +254,6 @@ const Home = () => {
       transform: "translateY(-50%)",
     },
   };
-  const handleChange: any = (cur: number, prev: number) => {
-    setIndex(cur);
-    console.log(cur, prev);
-  };
 
   const imageStyle: any = {
     width: "100%", // Set the width as per your requirements
@@ -330,7 +279,7 @@ const Home = () => {
     },
   ];
 
-  const itemsPerPage = isSmScreen ? 1 : 3; // Adjust the number of items per page based on screen size
+  const itemsPerPage = isSmScreen ? 1 : 3;
 
   const groupedTestimonials = testimonials.reduce(
     (acc: any, testimonial: any, index: any) => {
@@ -443,228 +392,6 @@ const Home = () => {
     );
   };
 
-  const handleGroupDetailsChange = (index: any, e: any) => {
-    const { name, value } = e.target;
-    const updatedGroupDetails: any = [...formData.groupDetails];
-    updatedGroupDetails[index][name] = value;
-
-    const newErrors = { ...errors };
-    if (newErrors.groupDetails && newErrors.groupDetails[index]) {
-      newErrors.groupDetails[index] = "";
-      setErrors(newErrors);
-    }
-    setFormData({ ...formData, groupDetails: updatedGroupDetails });
-  };
-
-
-  const removeGroupMember = (indexToRemove: any) => {
-    const updatedGroupDetails = formData.groupDetails.filter(
-      (member: any, index: any) => index !== indexToRemove
-    );
-    setFormData({
-      ...formData,
-      groupDetails: updatedGroupDetails,
-    });
-  };
-
-  const addGroupMember = () => {
-    setFormData({
-      ...formData,
-      groupDetails: [
-        ...formData.groupDetails,
-        { name: "", relation: "", gender: "", age: "" },
-      ],
-    });
-  };
-
-  const onRegisterClick = async (eventCode: any) => {
-    setBackDrop(true);
-    let user: any = localStorage.getItem("userDetail");
-    user = JSON.parse(user);
-    if (!authToken) {
-      // navigate("/log-in", {
-      //   state: { eventCode: eventCode },
-      // });
-      navigate("/event-registration");
-    } else {
-      const checkRegistered = axios
-        .get(`${baseUrl}/events/event-registrations`, {
-          headers: { Authorization: authToken },
-        })
-        .then((res) => {
-          if (res.data.data) {
-            const registeredEvent = res.data.data.find(
-              (o: any) =>
-                o.eventCode === eventCode &&
-                o.mobileNumber === user.mobileNumber
-            );
-
-            if (registeredEvent) {
-              setFormData((prevFormData: any) => {
-                return {
-                  ...prevFormData,
-                  arrivalDate: registeredEvent.arrivalDate,
-                  departureDate: registeredEvent.departureDate,
-                  groupDetails: registeredEvent.groupDetails,
-                  notes: registeredEvent.notes,
-                  eventCode: eventCode,
-                };
-              });
-              setRegisterId(registeredEvent.eventRegId);
-              setRegisterCheck(true);
-              setBackDrop(false);
-              setOpen(true);
-            } else {
-              setBackDrop(false);
-              handleOpen(eventCode);
-            }
-          }
-        });
-    }
-  };
-
-  const handleSubmit = async (e: any) => {
-    try {
-      e.preventDefault();
-      const newErrors: any = {};
-      console.log("formData ::", formData);
-
-      if (!formData.firstName) {
-        newErrors.firstName = "First Name is required";
-      }
-      if (!formData.gender) {
-        newErrors.gender = "Gender is required";
-      }
-
-      if (!formData.district) {
-        newErrors.district = "District is required";
-      }
-      if (!formData.state) {
-        newErrors.state = "State is required";
-      }
-      if (!formData.country) {
-        newErrors.country = "Country is required";
-      }
-
-      const groupDetailsErrors = formData.groupDetails.map((member: any) => {
-        if (!member.name || !member.gender || !member.age) {
-          return "Please fill in all fields for all group members";
-        }
-        return null; // No error
-      });
-      // Set the errors for groupDetails
-      if (groupDetailsErrors.some((error: any) => error !== null)) {
-        newErrors.groupDetails = groupDetailsErrors;
-      }
-      // If there are errors, set them and prevent form submission
-      if (Object.keys(newErrors).length > 0) {
-        setErrors(newErrors);
-        return;
-      }
-      const {
-        mobileNumber,
-        firstName,
-        gender,
-        dateOfBirth,
-        eventCode,
-        arrivalDate,
-        departureDate,
-        groupDetails,
-        notes,
-      } = formData;
-
-      const updateUserObj = {
-        mobileNumber,
-        countrycode: parsedUser.countrycode,
-        email: parsedUser.email,
-        firstName,
-        middleName: parsedUser.middleName,
-        lastName: parsedUser.lastName,
-        whatsappNumber: parsedUser.whatsappNumber,
-        gender,
-        dateOfBirth,
-        edQualification: parsedUser.edQualification,
-        profession: parsedUser.profession,
-        guardianName: parsedUser.guardianName,
-        maritalStatus: parsedUser.maritalStatus,
-        bloodGroup: parsedUser.bloodGroup,
-        addrLine1: formData.addrLine1,
-        addrLine2: formData.addrLine2,
-        city: formData.city,
-        district: formData.district,
-        state: formData.state,
-        country: formData.country,
-        pincode: formData.pincode,
-      };
-      setBackDrop(true);
-      const { data } = await axios.post(
-        `${baseUrl}/update-user`,
-        updateUserObj,
-        {
-          headers: { Authorization: authToken },
-        }
-      );
-
-      if (data.status === 200) {
-        localStorage.removeItem("userDetail");
-        localStorage.setItem("userDetail", JSON.stringify(data.data));
-
-        const res = await axios.post(
-          `${baseUrl}/events/register`,
-          {
-            mobileNumber,
-            firstName,
-            gender,
-            dateOfBirth,
-            eventCode,
-            arrivalDate,
-            departureDate,
-            groupDetails,
-            notes,
-          },
-          {
-            headers: { Authorization: authToken },
-          }
-        );
-        console.log("Register event :: res ::", res);
-        setBackDrop(false);
-        setOpenAlert(true);
-        setOpen(false);
-      }
-    } catch (error) {
-      console.log("error :: ", error);
-    }
-  };
-
-  const handleStateChange = (event: any) => {
-    const selectedState = event.target.value;
-    setFormData((prevFormData: any) => ({
-      ...prevFormData,
-      state: selectedState,
-      district: "",
-    }));
-  };
-
-  const fetchEvents = async () => {
-    try {
-      setSkeletonOpen(true);
-      axios
-        .get(`${baseUrl}/events/active`, {
-          headers: { Authorization: authToken },
-        })
-        .then((res) => {
-          // if(res.data)
-          console.log("res :: data ::", res.data);
-          if (res.data.status === 200) {
-            setData(res.data.data);
-            setSkeletonOpen(false);
-          }
-        });
-    } catch (error) {
-      console.log("error :: ", error);
-    }
-  };
-
   useEffect(() => {
     const typeWriter = () => {
       const demoElement = document.getElementById("demo");
@@ -678,11 +405,7 @@ const Home = () => {
     typeWriter();
   }, [txt, speed]);
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  const settings = {
+  const SETTINGS = {
     dots: true,
     infinite: true,
     speed: 500,
@@ -693,18 +416,31 @@ const Home = () => {
         breakpoint: 1024,
         settings: {
           slidesToShow: 3,
-        },
+          slidesToScroll: 3,
+          // infinite: true,
+          // dots: true
+        }
       },
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 1,
-        },
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+          // infinite: true,
+        }
       },
-    ],
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          // infinite: true,
+        }
+      }
+    ]
+
   };
-
-
 
   return (
     <>
@@ -720,7 +456,91 @@ const Home = () => {
         </div>
       </div>
 
-      <section
+      <div className="slider-div">
+        <div
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            display: "flex",
+            paddingBottom: "2%",
+          }}
+        >
+          {" "}
+          <Typography variant="h4" style={{ fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "700", textAlign: "center" }}>Latest Video</Typography>
+        </div>
+        <style>
+          {`
+          .slick-prev:before {
+            content: '←';
+            color: #990000;
+          }
+          .slick-next:before {
+            content: '→';
+            color: #990000;
+          }
+        `}
+        </style>
+        <Slider {...SETTINGS}>
+          {
+            videoLinks.map(({ thumbnail, title, url }, inx) => (
+              <div key={inx} style={{ margin: '0 auto', cursor: 'pointer' }}>
+                <div style={{ width: '100%', height: '200px' }}>
+                  <img src={thumbnail} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <h4 style={{ textAlign: 'center', marginTop: '10px', fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "800" }}>{title}</h4>
+              </div>
+            ))
+          }
+        </Slider>
+      </div>
+
+      <section className="team-sec">
+        <div
+          style={{
+            padding: "30px 0"
+          }}
+        >
+          {" "}
+          <Typography variant="h4" style={{ fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "700", textAlign: "center" }}>हमारी टीम</Typography>
+        </div>
+        <div className="team-div">
+          <style>
+            {`
+          .slick-prev:before {
+            content: '←';
+            color: white;
+          }
+          .slick-next:before {
+            content: '→';
+            color: white;
+          }
+        `}
+          </style>
+          <Slider {...SETTINGS}>
+            {
+              DATA.map(({ image, title, position }, inx) => (
+                <div className="container">
+                  <div style={{ width: '100%', height: '100%' }}>
+                    <img src={image} alt={title} className="team-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: ".5s ease", backfaceVisibility: "hidden", opacity: 1 }} />
+                  </div>
+                  <div className="overlay">
+                    <h3>{title}</h3>
+                    <p>{position}</p>
+                  </div>
+                </div>
+              ))
+            }
+          </Slider>
+        </div>
+      </section>
+    </>
+  );
+};
+
+export default Home;
+
+
+{/*   <section
         style={{ background: "#eeeded", padding: "50px 0" }}
         id="announcement"
       >
@@ -736,16 +556,6 @@ const Home = () => {
             {" "}
             <Typography variant="h4" style={{ fontFamily: '"Poppins", sans-serif' }}>LATEST VIDEO</Typography>
           </div>
-          {/* <Grid container spacing={3}>
-            {homecardCarouselData.map((item: any, index: any) => (
-              <HomeCarouselCard
-                key={index}
-                videoData={item.data}
-                name={item.name}
-              />
-            ))}
-          </Grid> */}
-
           <div
             style={{
               display: "flex",
@@ -763,21 +573,49 @@ const Home = () => {
             ))}
           </div>
         </Container>
-      </section>
+      </section> */}
 
-
-      {/* <Slider {...settings}>
-        {videoLinks.map((video, index) => (
-          <div key={index} className="card">
-            <img src={video.thumbnail} alt={video.title} />
-            <div className="card-content">
-              <h3>{video.title}</h3>
-            </div>
+{/*   <section>
+        <div style={{ margin: '50px' }}>
+          <div
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              display: "flex",
+              paddingBottom: "2%",
+            }}
+          >
+            {" "}
+            <Typography variant="h4" style={{ fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "700" }}>Latest Video</Typography>
           </div>
-        ))}
-      </Slider> */}
-    </>
-  );
-};
+          <style>
+            {`
+          .slick-prev:before {
+            content: '←';
+            color: #990000;
+          }
+          .slick-next:before {
+            content: '→';
+            color: #990000;
+          }
+        `}
+          </style>
+          <Slider {...SETTINGS}>
+            {videoLinks.map((video, index) => (
+              <div style={{
+                display: 'flex',
+                justifyContent: "center",
+                alignItems: "center"
+              }}>
+                <VideoBox
+                  key={index}
+                  title={video.title}
+                  url={video.url}
+                  thumbnail={video.thumbnail}
+                />
+              </div>
 
-export default Home;
+            ))}
+          </Slider>
+        </div>
+      </section> */}

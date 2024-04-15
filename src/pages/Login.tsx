@@ -353,11 +353,11 @@ const Login: FunctionComponent = () => {
         </Alert>
       </Snackbar>
       <ThemeProvider theme={defaultTheme}>
-        <div className="hero-event">
+        {/* <div className="hero-event">
           <div className="hero-content">
             <h1 style={{ paddingTop: '25px' }}>LOG IN</h1>
           </div>
-        </div>
+        </div> */}
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <Box
@@ -372,7 +372,7 @@ const Login: FunctionComponent = () => {
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
+            <Typography variant="h5" style={{ color: "black" }}>
               Log in
             </Typography>
             {step === false && (

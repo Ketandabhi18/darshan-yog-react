@@ -133,11 +133,11 @@ const UpdateUser = () => {
         </Alert>
       </Snackbar>
 
-      <div className="hero-event">
+    {/*   <div className="hero-event">
         <div className="hero-content">
           <h1 style={{ paddingTop: '25px' }}>Update profile</h1>
         </div>
-      </div>
+      </div> */}
 
 
       <div

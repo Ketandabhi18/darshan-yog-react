@@ -23,11 +23,11 @@ const EventDetailPage = () => {
 
   return (
     <>
-      <div className="hero-event">
+      {/* <div className="hero-event">
         <div className="hero-content">
           <h1 style={{ paddingTop: '25px' }}>Event Details</h1>
         </div>
-      </div>
+      </div> */}
       <div style={{ marginBottom: "2%", marginTop: "2%" }}>
         <Paper
           elevation={3}

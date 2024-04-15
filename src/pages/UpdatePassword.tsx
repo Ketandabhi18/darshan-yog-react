@@ -92,11 +92,11 @@ const UpdatePassword = () => {
           Password Successfully Updated.
         </Alert>
       </Snackbar>
-      <div className="hero-event">
+   {/*    <div className="hero-event">
         <div className="hero-content">
           <h1 style={{ paddingTop: '25px' }}>Set New Password</h1>
-        </div>
-      </div>
+        </div>Event Details
+      </div> */}
       {/* <Typography
         variant="h5"
         style={{ textAlign: "center", marginTop: "1%", marginBottom: "1%" }}

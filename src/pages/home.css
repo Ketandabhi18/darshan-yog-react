@@ -71,8 +71,6 @@ h1 {
     --btn-bg: #fafafa;
 }
 
-
-
 .btn:hover {
     box-shadow: 2px 2px 0 0 var(--btn-color);
 }
@@ -115,6 +113,10 @@ h1 {
         max-width: 80%;
     }
 
+    .slider-div {
+        margin: 50px;
+    }
+
     h1 {
         font-size: 2.5rem;
     }
@@ -133,6 +135,10 @@ h1 {
         max-width: 90%;
     }
 
+    .slider-div {
+        margin: 50px;
+    }
+
     h1 {
         font-size: 1.4rem;
     }
@@ -146,20 +152,20 @@ h1 {
     }
 }
 
+@media (max-width: 1024px) {
+    .slider-div {
+        margin: 50px;
+    }
+}
+
 @media (max-width: 768px) {
     .grid-container {
         grid-template-columns: repeat(1, 1fr);
     }
 }
 
-.section {
-    background: rgba(245, 130, 32, 0.5);
-    padding: 50px 0;
-}
-
-.card {
-    /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); */
-    box-shadow: 0px 0px 10px rgba(237, 28, 36, 0.5);
+/* .card {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
 }
 
@@ -167,5 +173,94 @@ h1 {
     transform: scale(1.05);
     transition: transform 0.3s ease-in-out;
 }
+ */
+/* .slick-track {
+    position: relative;
+    top: 50px;
+    left: 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+} */
 
 
+.slick-slide {
+    /* margin: 0 10px; */
+    padding: 0 10px;
+}
+
+.slick-slide img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.slick-carousel {
+    width: 100%;
+    height: 300px;
+}
+
+.slick-slide {
+    width: 200px;
+    height: 150px;
+}
+
+.slider-div {
+    margin: 75px;
+}
+
+.team-div {
+    width: 60% !important;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    /* background-color: linear-gradient(117deg, rgba(237, 28, 36, 0.10) 0%, rgba(245, 130, 32, 0.1) 100%); */
+}
+
+.team-div img {
+    height: 400px !important;
+    width: 100%;
+}
+
+.team-sec {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.container:hover .overlay {
+    opacity: 1;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    opacity: 0;
+    transition: opacity 0.5s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.overlay h3 {
+    margin: 0;
+}
+
+.team-img {
+    border: 2px solid black;
+    border-radius: 10px;
+}

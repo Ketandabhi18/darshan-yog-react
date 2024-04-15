@@ -348,13 +348,12 @@ const EventsPage = () => {
             : " Registration Successfully Done."}
         </Alert>
       </Snackbar>
-
+{/* 
       <div className="hero-event">
         <div className="hero-content">
           <h1 style={{ paddingTop: '25px' }}>Event List</h1>
         </div>
-      </div>
-
+      </div> */}
 
       <Container
         maxWidth="md"

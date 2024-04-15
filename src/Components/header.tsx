@@ -3,13 +3,26 @@ import logo from "./assets/logo.jpg";
 import "./header.css";
 import { useEffect, useState } from "react";
 import { pages } from "../config/constants";
-import { Button } from "@mui/material";
+import { Avatar, Button, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from "@mui/material";
+import { Settings, Logout } from "@mui/icons-material";
 
 const Header = () => {
     const isloggedIn = localStorage.getItem("authToken");
+    const user: any = localStorage.getItem("userDetail");
+    const userDetail: any = JSON.parse(user);
     const [navOptions, setNavOptions] = useState<any>(pages);
     const [anchorEl, setAnchorEl] = useState<any>({});
+    const [profileDropMenu, setProfileDropMenu] = useState<any>(null);
+    const open = Boolean(profileDropMenu);
     const navigate = useNavigate();
+
+    const handleProfileClick = (event: any) => {
+        setProfileDropMenu(event.currentTarget);
+    };
+
+    const handleCloseProfile = () => {
+        setProfileDropMenu(null);
+    };
 
     const handleClick = (event: any, pageName: any, route: any) => {
         const page: any = navOptions.find((p: any) => p.name === pageName);
@@ -31,7 +44,7 @@ const Header = () => {
     return (
         <>
             <header>
-                <a href="#"
+                <a href="/"
                 ><img
                         src={logo}
                         alt="logo"
@@ -47,8 +60,98 @@ const Header = () => {
                 <nav className="navbar">
                     <a href="/" className="nav-item" >Home</a>
                     <a href="/events" className="nav-item" >Events</a>
-                    <a href="/log-in" className="nav-item" >Log In</a>
-                    {/* <a href="#" className="nav-item" >Contact</a> */}
+                    {/* <a href="/log-in" className="nav-item" >Log In</a> */}
+                    {localStorage.getItem("authToken") ? (
+                        <>
+                            <Tooltip title="Account settings">
+                                <IconButton
+                                    onClick={handleProfileClick}
+                                    size="small"
+                                    sx={{ ml: 2 }}
+                                    aria-controls={open ? "account-menu" : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={open ? "true" : undefined}
+                                >
+                                    <Avatar sx={{ width: 32, height: 32, backgroundColor: "#990000" }}>
+                                        {userDetail?.firstName?.charAt(0) || "User"}
+                                    </Avatar>
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                anchorEl={profileDropMenu}
+                                id="account-menu"
+                                open={open}
+                                onClose={handleCloseProfile}
+                                onClick={handleCloseProfile}
+                                PaperProps={{
+                                    elevation: 0,
+                                    sx: {
+                                        overflow: "visible",
+                                        filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                                        mt: 1.5,
+                                        "& .MuiAvatar-root": {
+                                            width: 32,
+                                            height: 32,
+                                            ml: -0.5,
+                                            mr: 1,
+                                        },
+                                        "&::before": {
+                                            content: '""',
+                                            display: "block",
+                                            position: "absolute",
+                                            top: 0,
+                                            right: 14,
+                                            width: 10,
+                                            height: 10,
+                                            bgcolor: "background.paper",
+                                            transform: "translateY(-50%) rotate(45deg)",
+                                            zIndex: 0,
+                                        },
+                                    },
+                                }}
+                                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                            >
+                                <MenuItem
+                                    onClick={() => {
+                                        handleCloseProfile();
+                                        navigate("update-user");
+                                    }}
+                                >
+                                    <Avatar /> Profile
+                                </MenuItem>
+                                <Divider />
+                                <MenuItem
+                                    onClick={() => {
+                                        handleCloseProfile();
+                                        navigate("/update-password");
+                                    }}
+                                >
+                                    <ListItemIcon>
+                                        <Settings fontSize="small" />
+                                    </ListItemIcon>
+                                    Set/Change Password
+                                </MenuItem>
+                                <MenuItem
+                                    onClick={() => {
+                                        handleCloseProfile();
+                                        localStorage.clear();
+                                        setNavOptions(pages);
+                                        navigate("/");
+                                    }}
+                                >
+                                    <ListItemIcon>
+                                        <Logout fontSize="small" />
+                                    </ListItemIcon>
+                                    Logout
+                                </MenuItem>
+                            </Menu>
+                        </>
+                    ) : (
+                        <a href="/log-in" className="nav-item">
+                            Log In
+                        </a>
+                    )}
                 </nav>
             </header>
 

@@ -38,7 +38,8 @@ const FooterComponent = () => {
           backgroundImage: 'linear-gradient(117deg, rgba(237, 28, 36, 1) 0%, rgba(245, 130, 32, 1) 100%)',
           color: 'white',
           // p: 2, // Padding
-          paddingBottom: "50px"
+          paddingBottom: "50px",
+          marginTop:"50px"
         }}>
           <Grid item xs={12} md={6}>
             <Container maxWidth="sm">
