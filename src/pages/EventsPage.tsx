@@ -89,6 +89,8 @@ const EventsPage = () => {
   const [alertType, setAlertType] = useState<any>("success");
   const [registerId, setRegisterId] = useState<any>();
   const authToken = localStorage.getItem("authToken") || "";
+  const [dateErrorArrival, setDateErrorArrival] = useState<any>("");
+  const [dateErrorDeparture, setDateErrorDeparture] = useState<any>("");
   const handleOpen = (eventCode: any) => {
     setFormData({ ...formData, eventCode });
     setOpen(true);
@@ -111,11 +113,7 @@ const EventsPage = () => {
 
   const handleGroupDetailsChange = (index: any, e: any) => {
     const { name, value } = e.target;
-    const updatedGroupDetails: any = [
-      ...formData.groupDetails.filter((member: any) => {
-        return member.deletedFlag == false;
-      }),
-    ];
+    const updatedGroupDetails: any = [...formData.groupDetails];
     updatedGroupDetails[index][name] = value;
 
     const newErrors = { ...errors };
@@ -222,111 +220,116 @@ const EventsPage = () => {
       }
 
       const groupDetailsErrors = formData.groupDetails.map((member: any) => {
-        if (!member.name || !member.gender || !member.age) {
-          return "Please fill in all fields for all group members";
+        if (member.deletedFlag === false) {
+          if (!member.name || !member.gender || !member.age) {
+            return "Please fill in all fields for all group members";
+          }
         }
         return null; // No error
       });
-      // Set the errors for groupDetails
       if (groupDetailsErrors.some((error: any) => error !== null)) {
         newErrors.groupDetails = groupDetailsErrors;
       }
-      // If there are errors, set them and prevent form submission
       if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
         return;
       }
-      const {
-        mobileNumber,
-        firstName,
-        gender,
-        dateOfBirth,
-        age,
-        eventCode,
-        arrivalDate,
-        departureDate,
-        groupDetails,
-        notes,
-        pickUp,
-      } = formData;
 
-      const updateUserObj = {
-        mobileNumber,
-        countrycode: parsedUser.countrycode,
-        email: parsedUser.email,
-        firstName,
-        middleName: parsedUser.middleName,
-        lastName: parsedUser.lastName,
-        whatsappNumber: parsedUser.whatsappNumber,
-        gender,
-        dateOfBirth,
-        age,
-        edQualification: parsedUser.edQualification,
-        profession: parsedUser.profession,
-        guardianName: parsedUser.guardianName,
-        maritalStatus: parsedUser.maritalStatus,
-        bloodGroup: parsedUser.bloodGroup,
-        addrLine1: formData.addrLine1,
-        addrLine2: formData.addrLine2,
-        city: formData.city,
-        district: formData.district,
-        state: formData.state,
-        country: formData.country,
-        pincode: formData.pincode,
-      };
-      setBackDrop(true);
-      const { data } = await axios.post(
-        `${baseUrl}/update-user`,
-        updateUserObj,
-        {
-          headers: { Authorization: authToken },
-        }
-      );
+      if (dateErrorArrival === "" && dateErrorDeparture === "") {
+        const {
+          mobileNumber,
+          firstName,
+          gender,
+          dateOfBirth,
+          age,
+          eventCode,
+          arrivalDate,
+          departureDate,
+          groupDetails,
+          notes,
+          pickUp,
+        } = formData;
 
-      if (data.status === 200) {
-        localStorage.removeItem("userDetail");
-        localStorage.setItem("userDetail", JSON.stringify(data.data));
-
-        const res = await axios.post(
-          `${baseUrl}/events/register`,
-          {
-            mobileNumber,
-            firstName,
-            gender,
-            age,
-            eventCode,
-            arrivalDate,
-            departureDate,
-            groupDetails: groupDetails,
-            notes,
-            pickUp,
-          },
+        const updateUserObj = {
+          mobileNumber,
+          countrycode: parsedUser.countrycode,
+          email: parsedUser.email,
+          firstName,
+          middleName: parsedUser.middleName,
+          lastName: parsedUser.lastName,
+          whatsappNumber: parsedUser.whatsappNumber,
+          gender,
+          dateOfBirth,
+          age,
+          edQualification: parsedUser.edQualification,
+          profession: parsedUser.profession,
+          guardianName: parsedUser.guardianName,
+          maritalStatus: parsedUser.maritalStatus,
+          bloodGroup: parsedUser.bloodGroup,
+          addrLine1: formData.addrLine1,
+          addrLine2: formData.addrLine2,
+          city: formData.city,
+          district: formData.district,
+          state: formData.state,
+          country: formData.country,
+          pincode: formData.pincode,
+        };
+        setBackDrop(true);
+        const { data } = await axios.post(
+          `${baseUrl}/update-user`,
+          updateUserObj,
           {
             headers: { Authorization: authToken },
           }
         );
-        console.log("Register event :: res ::", res);
-        if (res.data.status === 200) {
-          setBackDrop(false);
-          setAlertType("success");
-          setAlertMessage(
-            registerCheck
-              ? "Registration Details Successfully updated."
-              : " Registration Successfully Done."
+
+        if (data.status === 200) {
+          localStorage.removeItem("userDetail");
+          localStorage.setItem("userDetail", JSON.stringify(data.data));
+
+          const res = await axios.post(
+            `${baseUrl}/events/register`,
+            {
+              mobileNumber,
+              firstName,
+              gender,
+              age,
+              eventCode,
+              arrivalDate,
+              departureDate,
+              groupDetails,
+              notes,
+              pickUp,
+            },
+            {
+              headers: { Authorization: authToken },
+            }
           );
-          setOpenAlert(true);
-          setOpen(false);
+          console.log("Register event :: res ::", res);
+          if (res.data.status === 200) {
+            setBackDrop(false);
+            setAlertType("success");
+            setAlertMessage(
+              registerCheck
+                ? "Registration Details Successfully updated."
+                : " Registration Successfully Done."
+            );
+            setOpenAlert(true);
+            setOpen(false);
+          } else {
+            setBackDrop(false);
+            setAlertType("error");
+            setAlertMessage(res.data.message);
+            setOpenAlert(true);
+          }
         } else {
           setBackDrop(false);
           setAlertType("error");
-          setAlertMessage(res.data.message);
+          setAlertMessage(data.message);
           setOpenAlert(true);
         }
       } else {
-        setBackDrop(false);
-        setAlertType("error");
-        setAlertMessage(data.message);
-        setOpenAlert(true);
+        return;
       }
     } catch (error) {
       console.log("error :: ", error);
@@ -866,66 +869,106 @@ const EventsPage = () => {
                                   name="arrivalDate"
                                   value={
                                     formData.arrivalDate
-                                      ? new Date(formData?.arrivalDate)
+                                      ? new Date(formData.arrivalDate)
                                       : new Date()
                                   }
+                                  minDate={new Date(event.startDateTime)}
                                   onChange={(e: any) => {
-                                    const convertedDate =
-                                      new Date(e)
-                                        .toLocaleDateString("en-US", {
-                                          timeZone: "Asia/Kolkata",
-                                          day: "2-digit",
-                                          month: "2-digit",
-                                          year: "numeric",
-                                        })
-                                        .replace(/\//g, "-") +
-                                      " " +
-                                      ("0" + new Date(e).getHours()).slice(-2) +
-                                      ":" +
-                                      ("0" + new Date(e).getMinutes()).slice(
-                                        -2
+                                    const arrivalDate = new Date(e);
+                                    const departureDate = new Date(
+                                      formData.departureDate
+                                    );
+
+                                    if (arrivalDate > departureDate) {
+                                      // Set an error or handle it as you need
+                                      setDateErrorArrival(
+                                        "Arrival date cannot be after departure date"
                                       );
-                                    setFormData({
-                                      ...formData,
-                                      ["arrivalDate"]: convertedDate,
-                                    });
+                                    } else {
+                                      setDateErrorArrival("");
+                                      const convertedDate =
+                                        arrivalDate
+                                          .toLocaleDateString("en-US", {
+                                            timeZone: "Asia/Kolkata",
+                                            day: "2-digit",
+                                            month: "2-digit",
+                                            year: "numeric",
+                                          })
+                                          .replace(/\//g, "-") +
+                                        " " +
+                                        ("0" + arrivalDate.getHours()).slice(
+                                          -2
+                                        ) +
+                                        ":" +
+                                        ("0" + arrivalDate.getMinutes()).slice(
+                                          -2
+                                        );
+                                      setFormData({
+                                        ...formData,
+                                        arrivalDate: convertedDate,
+                                      });
+                                    }
                                   }}
                                 />
+                                {dateErrorArrival && (
+                                  <FormHelperText error>
+                                    {dateErrorArrival}
+                                  </FormHelperText>
+                                )}
                               </FormControl>
                             </Grid>
-
                             <Grid item xs={12} sm={6}>
                               <FormControl fullWidth>
                                 <DateTimePicker
                                   label="Departure Date"
                                   name="departureDate"
+                                  minDate={new Date(event.endDateTime)}
                                   value={
                                     formData.departureDate
-                                      ? new Date(formData?.departureDate)
+                                      ? new Date(formData.departureDate)
                                       : new Date()
                                   }
                                   onChange={(e: any) => {
-                                    const convertedDate =
-                                      new Date(e)
-                                        .toLocaleDateString("en-US", {
-                                          timeZone: "Asia/Kolkata",
-                                          day: "2-digit",
-                                          month: "2-digit",
-                                          year: "numeric",
-                                        })
-                                        .replace(/\//g, "-") +
-                                      " " +
-                                      ("0" + new Date(e).getHours()).slice(-2) +
-                                      ":" +
-                                      ("0" + new Date(e).getMinutes()).slice(
-                                        -2
+                                    const departureDate = new Date(e);
+                                    const arrivalDate = new Date(
+                                      formData.arrivalDate
+                                    );
+
+                                    if (departureDate < arrivalDate) {
+                                      setDateErrorDeparture(
+                                        "Departure date cannot be before Arrival date"
                                       );
-                                    setFormData({
-                                      ...formData,
-                                      ["departureDate"]: convertedDate,
-                                    });
+                                    } else {
+                                      setDateErrorDeparture("");
+                                      const convertedDate =
+                                        departureDate
+                                          .toLocaleDateString("en-US", {
+                                            timeZone: "Asia/Kolkata",
+                                            day: "2-digit",
+                                            month: "2-digit",
+                                            year: "numeric",
+                                          })
+                                          .replace(/\//g, "-") +
+                                        " " +
+                                        ("0" + departureDate.getHours()).slice(
+                                          -2
+                                        ) +
+                                        ":" +
+                                        (
+                                          "0" + departureDate.getMinutes()
+                                        ).slice(-2);
+                                      setFormData({
+                                        ...formData,
+                                        departureDate: convertedDate,
+                                      });
+                                    }
                                   }}
                                 />
+                                {dateErrorDeparture && (
+                                  <FormHelperText error>
+                                    {dateErrorDeparture}
+                                  </FormHelperText>
+                                )}
                               </FormControl>
                             </Grid>
                           </LocalizationProvider>

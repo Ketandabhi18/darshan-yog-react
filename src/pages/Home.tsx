@@ -210,6 +210,8 @@ const Home = () => {
   const [alertType, setAlertType] = useState<any>("success");
   const [registerId, setRegisterId] = useState<any>();
   const authToken = localStorage.getItem("authToken") || "";
+  const [dateErrorArrival, setDateErrorArrival] = useState<any>("");
+  const [dateErrorDeparture, setDateErrorDeparture] = useState<any>("");
   const handleOpen = (eventCode: any) => {
     setFormData({ ...formData, eventCode });
     setOpen(true);
@@ -468,8 +470,13 @@ const Home = () => {
   };
 
   const removeGroupMember = (indexToRemove: any) => {
-    const updatedGroupDetails = formData.groupDetails.filter(
-      (member: any, index: any) => index !== indexToRemove
+    const updatedGroupDetails = formData.groupDetails.map(
+      (member: any, index: any) => {
+        if (index === indexToRemove && member.deletedFlag === false) {
+          return { ...member, deletedFlag: true };
+        }
+        return member;
+      }
     );
     setFormData({
       ...formData,
@@ -482,7 +489,7 @@ const Home = () => {
       ...formData,
       groupDetails: [
         ...formData.groupDetails,
-        { name: "", relation: "", gender: "", age: "" },
+        { name: "", relation: "", gender: "", age: "", deletedFlag: false },
       ],
     });
   };
@@ -558,8 +565,10 @@ const Home = () => {
       }
 
       const groupDetailsErrors = formData.groupDetails.map((member: any) => {
-        if (!member.name || !member.gender || !member.age) {
-          return "Please fill in all fields for all group members";
+        if (member.deletedFlag === false) {
+          if (!member.name || !member.gender || !member.age) {
+            return "Please fill in all fields for all group members";
+          }
         }
         return null; // No error
       });
@@ -572,99 +581,101 @@ const Home = () => {
         setErrors(newErrors);
         return;
       }
-      const {
-        mobileNumber,
-        firstName,
-        gender,
-        dateOfBirth,
-        age,
-        eventCode,
-        arrivalDate,
-        departureDate,
-        groupDetails,
-        notes,
-        pickUp,
-      } = formData;
+      if (dateErrorArrival === "" && dateErrorDeparture === "") {
+        const {
+          mobileNumber,
+          firstName,
+          gender,
+          dateOfBirth,
+          age,
+          eventCode,
+          arrivalDate,
+          departureDate,
+          groupDetails,
+          notes,
+          pickUp,
+        } = formData;
 
-      const updateUserObj = {
-        mobileNumber,
-        countrycode: parsedUser.countrycode,
-        email: parsedUser.email,
-        firstName,
-        middleName: parsedUser.middleName,
-        lastName: parsedUser.lastName,
-        whatsappNumber: parsedUser.whatsappNumber,
-        gender,
-        dateOfBirth,
-        age,
-        edQualification: parsedUser.edQualification,
-        profession: parsedUser.profession,
-        guardianName: parsedUser.guardianName,
-        maritalStatus: parsedUser.maritalStatus,
-        bloodGroup: parsedUser.bloodGroup,
-        addrLine1: formData.addrLine1,
-        addrLine2: formData.addrLine2,
-        city: formData.city,
-        district: formData.district,
-        state: formData.state,
-        country: formData.country,
-        pincode: formData.pincode,
-      };
-      setBackDrop(true);
-      const { data } = await axios.post(
-        `${baseUrl}/update-user`,
-        updateUserObj,
-        {
-          headers: { Authorization: authToken },
-        }
-      );
-
-      if (data.status === 200) {
-        localStorage.removeItem("userDetail");
-        localStorage.setItem("userDetail", JSON.stringify(data.data));
-
-        const res = await axios.post(
-          `${baseUrl}/events/register`,
-          {
-            mobileNumber,
-            firstName,
-            gender,
-            age,
-            eventCode,
-            arrivalDate,
-            departureDate,
-            groupDetails: groupDetails.map((E: any) => {
-              return { ...E, deletedFlag: false };
-            }),
-            notes,
-            pickUp,
-          },
+        const updateUserObj = {
+          mobileNumber,
+          countrycode: parsedUser.countrycode,
+          email: parsedUser.email,
+          firstName,
+          middleName: parsedUser.middleName,
+          lastName: parsedUser.lastName,
+          whatsappNumber: parsedUser.whatsappNumber,
+          gender,
+          dateOfBirth,
+          age,
+          edQualification: parsedUser.edQualification,
+          profession: parsedUser.profession,
+          guardianName: parsedUser.guardianName,
+          maritalStatus: parsedUser.maritalStatus,
+          bloodGroup: parsedUser.bloodGroup,
+          addrLine1: formData.addrLine1,
+          addrLine2: formData.addrLine2,
+          city: formData.city,
+          district: formData.district,
+          state: formData.state,
+          country: formData.country,
+          pincode: formData.pincode,
+        };
+        setBackDrop(true);
+        const { data } = await axios.post(
+          `${baseUrl}/update-user`,
+          updateUserObj,
           {
             headers: { Authorization: authToken },
           }
         );
-        console.log("Register event :: res ::", res);
-        if (res.data.status === 200) {
-          setBackDrop(false);
-          setAlertType("success");
-          setAlertMessage(
-            registerCheck
-              ? "Registration Successfully updated."
-              : " Registration Successfully Done."
+
+        if (data.status === 200) {
+          localStorage.removeItem("userDetail");
+          localStorage.setItem("userDetail", JSON.stringify(data.data));
+
+          const res = await axios.post(
+            `${baseUrl}/events/register`,
+            {
+              mobileNumber,
+              firstName,
+              gender,
+              age,
+              eventCode,
+              arrivalDate,
+              departureDate,
+              groupDetails: groupDetails,
+              notes,
+              pickUp,
+            },
+            {
+              headers: { Authorization: authToken },
+            }
           );
-          setOpenAlert(true);
-          setOpen(false);
+          console.log("Register event :: res ::", res);
+          if (res.data.status === 200) {
+            setBackDrop(false);
+            setAlertType("success");
+            setAlertMessage(
+              registerCheck
+                ? "Registration Details Successfully updated."
+                : " Registration Successfully Done."
+            );
+            setOpenAlert(true);
+            setOpen(false);
+          } else {
+            setBackDrop(false);
+            setAlertType("error");
+            setAlertMessage(res.data.message);
+            setOpenAlert(true);
+          }
         } else {
           setBackDrop(false);
           setAlertType("error");
-          setAlertMessage(res.data.message);
+          setAlertMessage(data.message);
           setOpenAlert(true);
         }
       } else {
-        setBackDrop(false);
-        setAlertType("error");
-        setAlertMessage(data.message);
-        setOpenAlert(true);
+        return;
       }
     } catch (error) {
       console.log("error :: ", error);
@@ -1247,70 +1258,106 @@ const Home = () => {
                                       name="arrivalDate"
                                       value={
                                         formData.arrivalDate
-                                          ? new Date(formData?.arrivalDate)
+                                          ? new Date(formData.arrivalDate)
                                           : new Date()
                                       }
+                                      minDate={new Date(event.startDateTime)}
                                       onChange={(e: any) => {
-                                        const convertedDate =
-                                          new Date(e)
-                                            .toLocaleDateString("en-US", {
-                                              timeZone: "Asia/Kolkata",
-                                              day: "2-digit",
-                                              month: "2-digit",
-                                              year: "numeric",
-                                            })
-                                            .replace(/\//g, "-") +
-                                          " " +
-                                          ("0" + new Date(e).getHours()).slice(
-                                            -2
-                                          ) +
-                                          ":" +
-                                          (
-                                            "0" + new Date(e).getMinutes()
-                                          ).slice(-2);
-                                        setFormData({
-                                          ...formData,
-                                          ["arrivalDate"]: convertedDate,
-                                        });
+                                        const arrivalDate = new Date(e);
+                                        const departureDate = new Date(
+                                          formData.departureDate
+                                        );
+
+                                        if (arrivalDate > departureDate) {
+                                          // Set an error or handle it as you need
+                                          setDateErrorArrival(
+                                            "Arrival date cannot be after departure date"
+                                          );
+                                        } else {
+                                          setDateErrorArrival("");
+                                          const convertedDate =
+                                            arrivalDate
+                                              .toLocaleDateString("en-US", {
+                                                timeZone: "Asia/Kolkata",
+                                                day: "2-digit",
+                                                month: "2-digit",
+                                                year: "numeric",
+                                              })
+                                              .replace(/\//g, "-") +
+                                            " " +
+                                            (
+                                              "0" + arrivalDate.getHours()
+                                            ).slice(-2) +
+                                            ":" +
+                                            (
+                                              "0" + arrivalDate.getMinutes()
+                                            ).slice(-2);
+                                          setFormData({
+                                            ...formData,
+                                            arrivalDate: convertedDate,
+                                          });
+                                        }
                                       }}
                                     />
+                                    {dateErrorArrival && (
+                                      <FormHelperText error>
+                                        {dateErrorArrival}
+                                      </FormHelperText>
+                                    )}
                                   </FormControl>
                                 </Grid>
-
                                 <Grid item xs={12} sm={6}>
                                   <FormControl fullWidth>
                                     <DateTimePicker
                                       label="Departure Date"
                                       name="departureDate"
+                                      minDate={new Date(event.endDateTime)}
                                       value={
                                         formData.departureDate
-                                          ? new Date(formData?.departureDate)
+                                          ? new Date(formData.departureDate)
                                           : new Date()
                                       }
                                       onChange={(e: any) => {
-                                        const convertedDate =
-                                          new Date(e)
-                                            .toLocaleDateString("en-US", {
-                                              timeZone: "Asia/Kolkata",
-                                              day: "2-digit",
-                                              month: "2-digit",
-                                              year: "numeric",
-                                            })
-                                            .replace(/\//g, "-") +
-                                          " " +
-                                          ("0" + new Date(e).getHours()).slice(
-                                            -2
-                                          ) +
-                                          ":" +
-                                          (
-                                            "0" + new Date(e).getMinutes()
-                                          ).slice(-2);
-                                        setFormData({
-                                          ...formData,
-                                          ["departureDate"]: convertedDate,
-                                        });
+                                        const departureDate = new Date(e);
+                                        const arrivalDate = new Date(
+                                          formData.arrivalDate
+                                        );
+
+                                        if (departureDate < arrivalDate) {
+                                          setDateErrorDeparture(
+                                            "Departure date cannot be before Arrival date"
+                                          );
+                                        } else {
+                                          setDateErrorDeparture("");
+                                          const convertedDate =
+                                            departureDate
+                                              .toLocaleDateString("en-US", {
+                                                timeZone: "Asia/Kolkata",
+                                                day: "2-digit",
+                                                month: "2-digit",
+                                                year: "numeric",
+                                              })
+                                              .replace(/\//g, "-") +
+                                            " " +
+                                            (
+                                              "0" + departureDate.getHours()
+                                            ).slice(-2) +
+                                            ":" +
+                                            (
+                                              "0" + departureDate.getMinutes()
+                                            ).slice(-2);
+                                          setFormData({
+                                            ...formData,
+                                            departureDate: convertedDate,
+                                          });
+                                        }
                                       }}
                                     />
+                                    {dateErrorDeparture && (
+                                      <FormHelperText error>
+                                        {dateErrorDeparture}
+                                      </FormHelperText>
+                                    )}
                                   </FormControl>
                                 </Grid>
                               </LocalizationProvider>
@@ -1346,115 +1393,129 @@ const Home = () => {
                                     Group Details:
                                   </Typography>
                                   {formData.groupDetails.map(
-                                    (member: any, index: any) => (
-                                      <Box
-                                        key={index}
-                                        sx={{
-                                          border: "1px solid #ccc",
-                                          borderRadius: "8px",
-                                          padding: "16px",
-                                          marginBottom: "16px",
-                                        }}
-                                      >
-                                        <Typography
-                                          variant="h6"
-                                          gutterBottom
-                                          style={{ marginBottom: "8px" }}
-                                        >
-                                          Participant {index + 1}
-                                        </Typography>
-                                        <Grid container spacing={2}>
-                                          <Grid item xs={12} sm={6}>
-                                            <TextField
-                                              label="Name"
-                                              name="name"
-                                              required
-                                              value={member.name}
-                                              onChange={(e) =>
-                                                handleGroupDetailsChange(
-                                                  index,
-                                                  e
-                                                )
-                                              }
-                                              fullWidth
-                                            />
-                                          </Grid>
-                                          <Grid item xs={12} sm={6}>
-                                            <TextField
-                                              label="Relation"
-                                              name="relation"
-                                              value={member.relation}
-                                              onChange={(e) =>
-                                                handleGroupDetailsChange(
-                                                  index,
-                                                  e
-                                                )
-                                              }
-                                              fullWidth
-                                            />
-                                          </Grid>
-                                          <Grid item xs={12} sm={6}>
-                                            <FormControl fullWidth>
-                                              <InputLabel>Gender</InputLabel>
-                                              <Select
-                                                label={"Gender"}
-                                                arial-label={"Gender"}
-                                                value={member.gender}
-                                                onChange={(e) =>
-                                                  handleGroupDetailsChange(
-                                                    index,
-                                                    e
-                                                  )
-                                                }
-                                                name="gender"
-                                                fullWidth
+                                    (member: any, index: any) => {
+                                      return (
+                                        <>
+                                          {member.deletedFlag === false && (
+                                            <Box
+                                              key={index}
+                                              sx={{
+                                                border: "1px solid #ccc",
+                                                borderRadius: "8px",
+                                                padding: "16px",
+                                                marginBottom: "16px",
+                                              }}
+                                            >
+                                              <Typography
+                                                variant="h6"
+                                                gutterBottom
+                                                style={{ marginBottom: "8px" }}
                                               >
-                                                <MenuItem value="Male">
-                                                  Male
-                                                </MenuItem>
-                                                <MenuItem value="Female">
-                                                  Female
-                                                </MenuItem>
-                                                <MenuItem value="Others">
-                                                  Others
-                                                </MenuItem>
-                                              </Select>
-                                            </FormControl>
-                                          </Grid>
-                                          <Grid item xs={12} sm={6}>
-                                            <TextField
-                                              label="Age"
-                                              name="age"
-                                              required
-                                              value={member.age}
-                                              onChange={(e) =>
-                                                handleGroupDetailsChange(
-                                                  index,
-                                                  e
-                                                )
-                                              }
-                                              fullWidth
-                                            />
-                                          </Grid>
-                                        </Grid>
-                                        {errors.groupDetails &&
-                                          errors.groupDetails[index] && (
-                                            <FormHelperText error>
-                                              {errors.groupDetails[index]}
-                                            </FormHelperText>
+                                                Participant{" "}
+                                                {formData.groupDetails
+                                                  .slice(0, index + 1)
+                                                  .findLastIndex(
+                                                    (obj: any) =>
+                                                      !obj.deletedFlag
+                                                  ) + 1}
+                                              </Typography>
+                                              <Grid container spacing={2}>
+                                                <Grid item xs={12} sm={6}>
+                                                  <TextField
+                                                    label="Name"
+                                                    name="name"
+                                                    required
+                                                    value={member.name}
+                                                    onChange={(e) =>
+                                                      handleGroupDetailsChange(
+                                                        index,
+                                                        e
+                                                      )
+                                                    }
+                                                    fullWidth
+                                                  />
+                                                </Grid>
+                                                <Grid item xs={12} sm={6}>
+                                                  <TextField
+                                                    label="Relation"
+                                                    name="relation"
+                                                    value={member.relation}
+                                                    onChange={(e) =>
+                                                      handleGroupDetailsChange(
+                                                        index,
+                                                        e
+                                                      )
+                                                    }
+                                                    fullWidth
+                                                  />
+                                                </Grid>
+                                                <Grid item xs={12} sm={6}>
+                                                  <FormControl fullWidth>
+                                                    <InputLabel>
+                                                      Gender
+                                                    </InputLabel>
+                                                    <Select
+                                                      label={"Gender"}
+                                                      aria-label={"Gender"}
+                                                      value={member.gender}
+                                                      onChange={(e) =>
+                                                        handleGroupDetailsChange(
+                                                          index,
+                                                          e
+                                                        )
+                                                      }
+                                                      name="gender"
+                                                      fullWidth
+                                                    >
+                                                      <MenuItem value="Male">
+                                                        Male
+                                                      </MenuItem>
+                                                      <MenuItem value="Female">
+                                                        Female
+                                                      </MenuItem>
+                                                      <MenuItem value="Others">
+                                                        Others
+                                                      </MenuItem>
+                                                    </Select>
+                                                  </FormControl>
+                                                </Grid>
+                                                <Grid item xs={12} sm={6}>
+                                                  <TextField
+                                                    label="Age"
+                                                    name="age"
+                                                    required
+                                                    value={member.age}
+                                                    onChange={(e) =>
+                                                      handleGroupDetailsChange(
+                                                        index,
+                                                        e
+                                                      )
+                                                    }
+                                                    fullWidth
+                                                  />
+                                                </Grid>
+                                              </Grid>
+                                              {errors.groupDetails &&
+                                                errors.groupDetails[index] && (
+                                                  <FormHelperText error>
+                                                    {errors.groupDetails[index]}
+                                                  </FormHelperText>
+                                                )}
+                                              <Button
+                                                variant="contained"
+                                                color="secondary"
+                                                onClick={() =>
+                                                  removeGroupMember(index)
+                                                }
+                                                style={{ marginTop: "16px" }}
+                                              >
+                                                Remove
+                                              </Button>
+                                            </Box>
                                           )}
-                                        <Button
-                                          variant="contained"
-                                          color="secondary"
-                                          onClick={() =>
-                                            removeGroupMember(index)
-                                          }
-                                          style={{ marginTop: "16px" }}
-                                        >
-                                          Remove
-                                        </Button>
-                                      </Box>
-                                    )
+                                        </>
+                                      );
+                                    }
                                   )}
                                   <div
                                     style={{

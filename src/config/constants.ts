@@ -980,3 +980,19 @@ export const statesWithDistricts: any = {
     "Uttar Dinajpur",
   ],
 };
+
+export const bloodGroupArray: any = [
+  "A Positive",
+  "A Negative",
+  "A Unknown",
+  "B Positive",
+  "B Negative",
+  "B Unknown",
+  "AB Positive",
+  "AB Negative",
+  "AB Unknown",
+  "O Positive",
+  "O Negative",
+  "O Unknown",
+  "Unknown",
+];
