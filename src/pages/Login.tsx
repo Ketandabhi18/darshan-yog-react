@@ -84,6 +84,7 @@ const Login: FunctionComponent = () => {
             if (location.state && !loginwithPassword) {
               const checkRegistered = axios
                 .get(`${baseUrl}/events/event-registrations`, {
+                  params: { eventCode: location?.state.eventCode },
                   headers: {
                     Authorization: localStorage.getItem("authToken"),
                   },

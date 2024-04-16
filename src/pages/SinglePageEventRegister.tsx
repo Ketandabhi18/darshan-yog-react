@@ -83,6 +83,7 @@ const SinglePageEventRegister = () => {
 
             const checkRegistered = axios
               .get(`${baseUrl}/events/event-registrations`, {
+                params: { eventCode: eventcode },
                 headers: {
                   Authorization: localStorage.getItem("authToken"),
                 },
