@@ -355,7 +355,7 @@ const EventsPage = () => {
           <h1 style={{ paddingTop: '25px' }}>Event List</h1>
         </div>
       </div> */}
-      <h2 style={{ textAlign: 'center', marginTop: '30px', fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "700" }}>Event List</h2>
+      <h2 style={{ textAlign: 'center', marginTop: '30px', fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "600" }}>Event List</h2>
       <Container
         maxWidth="md"
         style={{

@@ -133,20 +133,20 @@ const UpdateUser = () => {
         </Alert>
       </Snackbar>
 
-    {/*   <div className="hero-event">
+      {/*   <div className="hero-event">
         <div className="hero-content">
           <h1 style={{ paddingTop: '25px' }}>Update profile</h1>
         </div>
       </div> */}
 
-
+      <h2 style={{ textAlign: 'center', marginTop: '30px', fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "600" }}>Update profile</h2>
       <div
         style={{
           width: "100%",
           justifyContent: "center",
           display: "flex",
           marginTop: "2%",
-          paddingTop: "40px"
+          // paddingTop: "10px"
         }}
       >
 
@@ -340,7 +340,7 @@ const UpdateUser = () => {
                   </Select>
                 </FormControl>
               </Grid>
-              
+
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>State*</InputLabel>

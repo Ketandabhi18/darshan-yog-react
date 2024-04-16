@@ -44,7 +44,7 @@ const Header = () => {
     return (
         <>
             <header>
-                <a href="/"
+                <a onClick={() => navigate("/")}
                 ><img
                         src={logo}
                         alt="logo"
@@ -58,8 +58,8 @@ const Header = () => {
                 </label>
 
                 <nav className="navbar">
-                    <a href="/" className="nav-item" >Home</a>
-                    <a href="/events" className="nav-item" >Events</a>
+                    <a onClick={() => navigate("/")} className="nav-item" >Home</a>
+                    <a onClick={() => navigate("/events")} className="nav-item" >Events</a>
                     {/* <a href="/log-in" className="nav-item" >Log In</a> */}
                     {localStorage.getItem("authToken") ? (
                         <>
@@ -148,7 +148,7 @@ const Header = () => {
                             </Menu>
                         </>
                     ) : (
-                        <a href="/log-in" className="nav-item">
+                        <a onClick={() => navigate("/log-in")} className="nav-item">
                             Log In
                         </a>
                     )}

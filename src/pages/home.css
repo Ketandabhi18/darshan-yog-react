@@ -196,7 +196,7 @@ h1 {
 }
 
 .slider-div {
-    margin: 75px;
+    margin: 40px;
 }
 
 .team-div {
@@ -204,7 +204,7 @@ h1 {
     /* display: flex; */
     justify-content: center;
     align-items: center;
-    padding: 0 10px;
+    /* padding: 0 10px; */
     /* background-color: linear-gradient(117deg, rgba(237, 28, 36, 0.10) 0%, rgba(245, 130, 32, 0.1) 100%); */
 }
 

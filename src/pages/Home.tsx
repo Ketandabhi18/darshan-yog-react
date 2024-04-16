@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import { IconButtonProps } from "@mui/material/IconButton";
@@ -6,12 +6,12 @@ import Typography from "@mui/material/Typography";
 import "./home.css";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
-import Container from "@mui/material/Container";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CardActionArea from "@mui/material/CardActionArea";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
+import { Grid } from "@mui/material";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -456,6 +456,35 @@ const Home = () => {
         </div>
       </div>
 
+      <div style={{ marginTop: "50px", marginLeft: "20px", marginRight: "20px", display: "flex", justifyContent: "center", flexDirection: "column" }}>
+        <div style={{ textAlign: "center" }}>
+          <Typography variant="h4" style={{ fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "900", textAlign: "center" }}>दर्शन योग धाम</Typography>
+          <div>
+            <h4 style={{ color: "#990000", marginBottom: "20px" }}>संस्कृति वन, लाकरोड़ा, गांधीनगर, गुजरात</h4>
+          </div>
+          <div>
+            <Grid style={{ padding: "0 50px" }} container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <CardMedia component="iframe" src={'https://www.youtube.com/embed/GMnq__u6gvM?si=c94Ipiw6WLbA13ia'} allow="autoPlay" style={{ width: "100%", height: "400px" }} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <div>
+                  <h3 style={{ color: "#990000", marginBottom: "10px" }}>(वैदिक धर्म की रक्षा और समृद्धि का आदर्श संस्थान)</h3>
+                  <p style={{ marginBottom: "20px" }}>
+                    दर्शन योग धर्मार्थ ट्रस्ट अपने पूर्वजों ऋषि-मुनियों के द्वारा अनुपालित परम्पराओं की अनमोल थाती को
+                    सुरक्षित रखने के लिए सदैव प्रयासशील है । आर्य समाज में योग-विद्या में आदर्श माने जाने वाले पूज्य स्वामी
+                    सत्यपति जी परिव्राजक की यह अभिलाषा रही है कि समाज में ऐसे सत्यवादी परोपकारी दार्शनिक आदर्श योगियों का
+                    निर्माण किया जाये, जिनका मुख्य उद्देश्य निष्ठापूर्वक ईश्वर, जीव, प्रकृति व भौतिक पदार्थों का वैदिक
+                    ज्ञान-विज्ञान आदान-प्रदान करना हो । यह सब कार्य समान लक्ष्य वाले व्यक्तियों के धार्मिक संगठन द्वारा ही
+                    सम्भव है । दर्शन योग धर्मार्थ ट्रस्ट ने अपने ऐसे संगठन-निर्माण का निश्चय किया है ।
+                  </p>
+                </div>
+              </Grid>
+            </Grid>
+          </div>
+        </div>
+      </div>
+
       <div className="slider-div">
         <div
           style={{
@@ -480,7 +509,7 @@ const Home = () => {
           {
             videoLinks.map(({ thumbnail, title, url }, inx) => (
               <div key={inx} style={{ margin: '0 auto', cursor: 'pointer' }}>
-                <div style={{ width: '100%', height: '200px' }}>
+                <div style={{ width: '100%', height: '250px' }}>
                   <img src={thumbnail} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <h4 style={{ textAlign: 'center', marginTop: '10px', fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "800" }}>{title}</h4>

@@ -28,6 +28,7 @@ const EventDetailPage = () => {
           <h1 style={{ paddingTop: '25px' }}>Event Details</h1>
         </div>
       </div> */}
+      <h2 style={{ textAlign: 'center', marginTop: '30px', fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "600" }}>Event Details</h2>
       <div style={{ marginBottom: "2%", marginTop: "2%" }}>
         <Paper
           elevation={3}
