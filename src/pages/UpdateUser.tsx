@@ -13,11 +13,13 @@ import {
   Alert,
   Backdrop,
   CircularProgress,
+  Autocomplete,
 } from "@mui/material";
 import {
   EducationalQualification,
   Profession,
   baseUrl,
+  bloodGroupArray,
   states,
   statesWithDistricts,
 } from "../config/constants";
@@ -41,14 +43,13 @@ const UpdateUser = () => {
   console.log(new Date(), "userDetail :: in update user ", userDetail);
   const [formData, setFormData] = useState<any>(userDetail);
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
+  const handleChange = (e: any, newValue?: any) => {
+    const { name, value } = e.target || {};
     setFormData((prevState: any) => ({
       ...prevState,
-      [name]: value,
+      [name]: value || newValue,
     }));
-
-    if (value.trim() !== "") {
+    if ((value || newValue)?.trim() !== "") {
       setErrors({ ...errors, [name]: "" });
     }
   };
@@ -89,9 +90,7 @@ const UpdateUser = () => {
         setOpenAlert(true);
         localStorage.removeItem("userDetail");
         localStorage.setItem("userDetail", JSON.stringify(data.data));
-      }
-
-      if (data.status === 401) {
+      } else if (data.status === 401) {
         setAlertType("error");
         setAlertMessage("Your token Expired Please login again.!!");
         setOpenAlert(true);
@@ -325,12 +324,31 @@ const UpdateUser = () => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={4}>
-                <TextField
+                {/* <TextField
                   fullWidth
                   label="Blood Group"
                   name="bloodGroup"
                   value={formData?.bloodGroup}
                   onChange={handleChange}
+                /> */}
+                <Autocomplete
+                  freeSolo
+                  fullWidth
+                  value={formData.bloodGroup}
+                  options={bloodGroupArray}
+                  onChange={(event, newValue) =>
+                    handleChange({ target: { name: "bloodGroup" } }, newValue)
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Blood Group"
+                      InputProps={{
+                        ...params.InputProps,
+                        type: "Blood Group",
+                      }}
+                    />
+                  )}
                 />
               </Grid>
 

@@ -982,19 +982,15 @@ export const statesWithDistricts: any = {
 };
 
 export const bloodGroupArray: any = [
-  "A Positive",
-  "A Negative",
-  "A Unknown",
-  "B Positive",
-  "B Negative",
-  "B Unknown",
-  "AB Positive",
-  "AB Negative",
-  "AB Unknown",
-  "O Positive",
-  "O Negative",
-  "O Unknown",
-  "Unknown",
+  "A+",
+  "A-",
+  "B+",
+  "B-",
+  "AB+",
+  "AB-",
+  "O+",
+  "O-",
+  "Others",
 ];
 
 interface VideoItem {
