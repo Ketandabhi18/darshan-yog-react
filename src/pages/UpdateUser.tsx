@@ -26,8 +26,10 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { enGB } from "date-fns/locale";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { useNavigate } from "react-router-dom";
 
 const UpdateUser = () => {
+  const navigate = useNavigate();
   const [errors, setErrors] = useState<any>({});
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState<any>("");
@@ -87,6 +89,16 @@ const UpdateUser = () => {
         setOpenAlert(true);
         localStorage.removeItem("userDetail");
         localStorage.setItem("userDetail", JSON.stringify(data.data));
+      }
+
+      if (data.status === 401) {
+        setAlertType("error");
+        setAlertMessage("Your token Expired Please login again.!!");
+        setOpenAlert(true);
+        setTimeout(() => {
+          localStorage.clear();
+          navigate("/log-in");
+        }, 2000);
       } else {
         setBackDrop(false);
         setAlertType("error");
@@ -135,10 +147,9 @@ const UpdateUser = () => {
 
       <div className="hero-event">
         <div className="hero-content">
-          <h1 style={{ paddingTop: '25px' }}>Update profile</h1>
+          <h1 style={{ paddingTop: "25px" }}>Update profile</h1>
         </div>
       </div>
-
 
       <div
         style={{
@@ -146,10 +157,9 @@ const UpdateUser = () => {
           justifyContent: "center",
           display: "flex",
           marginTop: "2%",
-          paddingTop: "40px"
+          paddingTop: "40px",
         }}
       >
-
         <div style={{ width: "80%" }}>
           {/*  <div
             style={{
@@ -224,11 +234,11 @@ const UpdateUser = () => {
                       value={
                         formData.dateOfBirth
                           ? new Date(
-                            formData.dateOfBirth
-                              .split("-")
-                              .reverse()
-                              .join("-")
-                          )
+                              formData.dateOfBirth
+                                .split("-")
+                                .reverse()
+                                .join("-")
+                            )
                           : new Date()
                       }
                       onChange={(e: any) => {
@@ -236,8 +246,8 @@ const UpdateUser = () => {
                           .getDate()
                           .toString()
                           .padStart(2, "0")}-${(new Date(e).getMonth() + 1)
-                            .toString()
-                            .padStart(2, "0")}-${new Date(e).getFullYear()}`;
+                          .toString()
+                          .padStart(2, "0")}-${new Date(e).getFullYear()}`;
                         setFormData((prevFormData: any) => {
                           return { ...prevFormData, ["dateOfBirth"]: value };
                         });
@@ -340,7 +350,7 @@ const UpdateUser = () => {
                   </Select>
                 </FormControl>
               </Grid>
-              
+
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>State*</InputLabel>

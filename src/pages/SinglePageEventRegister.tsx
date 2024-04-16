@@ -89,6 +89,15 @@ const SinglePageEventRegister = () => {
                 },
               })
               .then((res) => {
+                if (res.data.status === 401) {
+                  setAlertType("error");
+                  setAlertMessage("Your token Expired Please login again.!!");
+                  setOpenAlert(true);
+                  setTimeout(() => {
+                    localStorage.clear();
+                    navigate("/log-in");
+                  }, 2000);
+                }
                 if (res.data.data) {
                   const registeredEvent = res.data.data.find(
                     (o: any) =>

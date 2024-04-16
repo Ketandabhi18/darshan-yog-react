@@ -25,6 +25,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { baseUrl, statesWithDistricts } from "../config/constants";
 import axios from "axios";
 import { CloseOutlined } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const EventRegistrationModal = ({
   registerCheck,
@@ -41,6 +42,7 @@ const EventRegistrationModal = ({
   setOpenAlert,
   setOpen,
 }: any) => {
+  const navigate = useNavigate();
   const [errors, setErrors] = useState<any>({});
   const [dateErrorArrival, setDateErrorArrival] = useState<any>("");
   const [dateErrorDeparture, setDateErrorDeparture] = useState<any>("");
@@ -164,12 +166,30 @@ const EventRegistrationModal = ({
             );
             setOpenAlert(true);
             setOpen(false);
+          } else if (res.data.status === 401) {
+            setAlertType("error");
+            setAlertMessage("Your token Expired Please login again.!!");
+            setOpenAlert(true);
+            // setOpen(false);
+            localStorage.clear();
+            setTimeout(() => {
+              navigate("/log-in");
+            }, 2000);
           } else {
             setBackDrop(false);
             setAlertType("error");
             setAlertMessage(res.data.message);
             setOpenAlert(true);
           }
+        } else if (data.status === 401) {
+          setAlertType("error");
+          setAlertMessage("Your token Expired Please login again.!!");
+          setOpenAlert(true);
+          setOpen(false);
+          setTimeout(() => {
+            localStorage.clear();
+            navigate("/log-in");
+          }, 2000);
         } else {
           setBackDrop(false);
           setAlertType("error");
