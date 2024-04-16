@@ -466,19 +466,15 @@ const Home = () => {
           }}
         >
           {" "}
-          <Typography variant="h4" style={{ fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "700", textAlign: "center" }}>Latest Video</Typography>
+          <Typography variant="h4" style={{ fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "600", textAlign: "center" }}>Latest Video</Typography>
         </div>
         <style>
           {`
-          .slick-prev:before {
-            content: '←';
-            color: #990000;
-          }
-          .slick-next:before {
-            content: '→';
-            color: #990000;
-          }
-        `}
+            .slider-div .slick-prev:before,
+            .slider-div .slick-next:before {
+              color: #990000; 
+            }
+          `}
         </style>
         <Slider {...SETTINGS}>
           {
@@ -501,27 +497,25 @@ const Home = () => {
           }}
         >
           {" "}
-          <Typography variant="h4" style={{ fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "700", textAlign: "center" }}>हमारी टीम</Typography>
+          <Typography variant="h4" style={{ fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "900", textAlign: "center" }}>हमारी टीम</Typography>
         </div>
         <div className="team-div">
           <style>
             {`
-          .slick-prev:before {
-            content: '←';
-            color: white;
-          }
-          .slick-next:before {
-            content: '→';
-            color: white;
-          }
-        `}
+              .team-sec .slick-dots li button {
+                background-color: #990000;
+                width: 15px;
+                height: 15px; 
+                border-radius: 50%;
+              }
+            `}
           </style>
           <Slider {...SETTINGS}>
             {
               DATA.map(({ image, title, position }, inx) => (
                 <div className="container">
                   <div style={{ width: '100%', height: '100%' }}>
-                    <img src={image} alt={title} className="team-img" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: ".5s ease", backfaceVisibility: "hidden", opacity: 1 }} />
+                    <img src={image} alt={title} className="team-img" style={{ width: '100%', height: '300px', objectFit: 'cover', transition: ".5s ease", backfaceVisibility: "hidden", opacity: 1 }} />
                   </div>
                   <div className="overlay">
                     <h3>{title}</h3>

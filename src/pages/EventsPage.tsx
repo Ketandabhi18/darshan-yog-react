@@ -53,7 +53,7 @@ const EventsPage = () => {
     userDetailString && userDetailString !== "null"
       ? JSON.parse(userDetailString)
       : null;
-
+  const [isHovered, setIsHovered] = useState(false);
   const userFromLocalStorage: any = parsedUser || {
     email: "",
     firstName: "",
@@ -330,6 +330,7 @@ const EventsPage = () => {
   useEffect(() => {
     fetchEvents();
   }, []);
+
   return (
     <>
       <Snackbar
@@ -348,17 +349,17 @@ const EventsPage = () => {
             : " Registration Successfully Done."}
         </Alert>
       </Snackbar>
-{/* 
-      <div className="hero-event">
+
+      {/*  <div className="hero-event">
         <div className="hero-content">
           <h1 style={{ paddingTop: '25px' }}>Event List</h1>
         </div>
       </div> */}
-
+      <h2 style={{ textAlign: 'center', marginTop: '30px', fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "700" }}>Event List</h2>
       <Container
         maxWidth="md"
         style={{
-          marginTop: "2%",
+          // marginTop: "2%",
           marginBottom: "2%",
           padding: "20px",
           backgroundColor: "#f4f4f4",
@@ -451,11 +452,13 @@ const EventsPage = () => {
                 <Typography
                   variant="h5"
                   component="div"
-                  style={{ color: "#333", marginBottom: "10px" }}
+                  style={{ color: isHovered ? "#990000" : "#333", marginBottom: "10px", textDecoration: "underline", cursor: "pointer", transition: "color 0.3s" }}
                   onClick={() => {
                     console.log("event name :: ", event.eventName);
                     navigate(`/event-detail`, { state: event });
                   }}
+                  onMouseEnter={() => setIsHovered(true)} // Set hover state to true on mouse enter
+                  onMouseLeave={() => setIsHovered(false)} // Set hover state to false on mouse leave
                 >
                   {event.eventName}
                 </Typography>
@@ -515,7 +518,6 @@ const EventsPage = () => {
                     View on Map
                   </a>
                   <Button
-                    autoFocus
                     variant="contained"
                     onClick={() => onRegisterClick(event.eventCode)}
                     style={{
@@ -526,6 +528,22 @@ const EventsPage = () => {
                   >
                     Register
                   </Button>
+                 {/*  <Button
+                    variant="contained"
+                    onClick={() => onRegisterClick(event.eventCode)}
+                    style={{
+                      backgroundColor: "linear-gradient(117deg, rgba(237, 28, 36, 1) 0%, rgba(245, 130, 32, 1) 100%)",
+                      color: "#fff",
+                      marginRight: "10px",
+                      position: "relative",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontWeight: "600",
+                      fontSize: "1rem"
+                    }}
+                  >
+                    Register
+                  </Button> */}
                 </Stack>
                 <Modal open={open} onClose={handleClose}>
                   <>
@@ -1002,7 +1020,7 @@ const EventsPage = () => {
                               </div>
                             </Box>
                           </Grid>
-                          
+
                           <Grid item xs={12} >
                             <TextField
                               label="Anything else you want to inform us"

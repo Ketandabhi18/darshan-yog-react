@@ -28,7 +28,7 @@ h1 {
     margin-top: 50px;
 }
 
-.cta-button {
+/* .cta-button {
     background: rgb(237, 28, 36);
     background: linear-gradient(117deg, rgba(237, 28, 36, 1) 0%, rgba(245, 130, 32, 1) 100%);
     padding: 10px 20px;
@@ -42,7 +42,7 @@ h1 {
     outline-offset: 5px;
     outline-width: 1px;
     outline-color: #f8d3b3;
-}
+} */
 
 .btn {
     --btn-color: rgb(124 45 18);
@@ -125,8 +125,16 @@ h1 {
         margin-top: 2rem;
     }
 
-    .cta-button {
+    /* .cta-button {
         font-size: 1.2rem;
+    } */
+    .team-div img {
+        height: 300px !important;
+        width: 100%;
+    }
+
+    .team-div {
+        width: 80%;
     }
 }
 
@@ -147,8 +155,12 @@ h1 {
         margin-top: 1.5rem;
     }
 
-    .cta-button {
+    /* .cta-button {
         font-size: 1rem;
+    } */
+    .team-div img {
+        height: 300px !important;
+        width: 100%;
     }
 }
 
@@ -164,28 +176,7 @@ h1 {
     }
 }
 
-/* .card {
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
-}
-
-.card:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease-in-out;
-}
- */
-/* .slick-track {
-    position: relative;
-    top: 50px;
-    left: 0;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-} */
-
-
 .slick-slide {
-    /* margin: 0 10px; */
     padding: 0 10px;
 }
 
@@ -209,7 +200,7 @@ h1 {
 }
 
 .team-div {
-    width: 60% !important;
+    width: 60%;
     /* display: flex; */
     justify-content: center;
     align-items: center;
@@ -218,7 +209,7 @@ h1 {
 }
 
 .team-div img {
-    height: 400px !important;
+    height: 400px;
     width: 100%;
 }
 
