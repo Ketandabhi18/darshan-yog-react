@@ -26,10 +26,7 @@ const RoutesAll = () => {
           <Route path="/:id" element={<ViewDetails />} />
           <Route path="/event-detail" element={<EventDetailPage />} />
           <Route path="/update-password" element={<UpdatePassword />} />
-          <Route
-            path="/event-registration"
-            element={<SinglePageEventRegister />}
-          />
+          <Route path="/event/:id" element={<SinglePageEventRegister />} />
         </Routes>
       </div>
     </>

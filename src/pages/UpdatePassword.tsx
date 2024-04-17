@@ -13,8 +13,10 @@ import {
 import axios from "axios";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { baseUrl } from "../config/constants";
+import { useNavigate } from "react-router-dom";
 
 const UpdatePassword = () => {
+  const navigate = useNavigate();
   const user: any = localStorage.getItem("userDetail") || "";
   const userDetails = JSON.parse(user);
   const defaultMobileNumber = userDetails.mobileNumber;
@@ -25,6 +27,8 @@ const UpdatePassword = () => {
   const [error, setError] = useState("");
   const [openAlert, setOpenAlert] = useState(false);
   const [backDrop, setBackDrop] = useState<any>(false);
+  const [alertMessage, setAlertMessage] = useState<any>("");
+  const [alertType, setAlertType] = useState<any>("");
   const authToken = localStorage.getItem("authToken") || "";
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -54,7 +58,17 @@ const UpdatePassword = () => {
       );
       if (res.data.status === 200) {
         setBackDrop(false);
+        setAlertType("success");
+        setAlertMessage("Password Updated Successfully.");
         setOpenAlert(true);
+      } else if (res.data.status === 401) {
+        setAlertType("error");
+        setAlertMessage("Your token Expired Please login again.!!");
+        setOpenAlert(true);
+        setTimeout(() => {
+          localStorage.clear();
+          navigate("/log-in");
+        }, 2000);
       }
       console.log("Register event :: res ::", res);
       setBackDrop(false);
@@ -85,11 +99,11 @@ const UpdatePassword = () => {
       >
         <Alert
           onClose={() => setOpenAlert(false)}
-          severity="success"
+          severity={alertType}
           variant="filled"
           sx={{ width: "100%" }}
         >
-          Password Successfully Updated.
+          {alertMessage}
         </Alert>
       </Snackbar>
       {/* <Typography

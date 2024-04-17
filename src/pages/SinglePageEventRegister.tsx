@@ -7,35 +7,38 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import {
   Backdrop,
   CircularProgress,
   FormControl,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
   Select,
   Snackbar,
+  Autocomplete,
 } from "@mui/material";
 import {
   EducationalQualification,
   Profession,
   baseUrl,
+  bloodGroupArray,
   statesWithDistricts,
 } from "../config/constants";
 
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { enGB } from "date-fns/locale";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const SinglePageEventRegister = () => {
   const [step, setStep] = useState<any>(false);
   const [mobile, setMobile] = useState<any>();
   const [countrycode, setCountryCode] = useState<any>("+91");
+  const [registerCheck, setRegisterCheck] = useState<any>(false);
   const [otp, setOtp] = useState<any>("");
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -45,8 +48,11 @@ const SinglePageEventRegister = () => {
     groupDetails: [],
   });
   const [backDrop, setBackDrop] = useState<any>(false);
+  const [dateErrorArrival, setDateErrorArrival] = useState<any>("");
+  const [dateErrorDeparture, setDateErrorDeparture] = useState<any>("");
   const navigate = useNavigate();
-  const location = useLocation();
+  const eventcode = useParams().id ?? "";
+  console.log("eventcode :: singlepageRegister", eventcode);
   const handleVerfiyOtp = async (event: any) => {
     event.preventDefault();
     setBackDrop(true);
@@ -79,19 +85,30 @@ const SinglePageEventRegister = () => {
 
             const checkRegistered = axios
               .get(`${baseUrl}/events/event-registrations`, {
+                params: { eventCode: eventcode },
                 headers: {
                   Authorization: localStorage.getItem("authToken"),
                 },
               })
               .then((res) => {
+                if (res.data.status === 401) {
+                  setAlertType("error");
+                  setAlertMessage("Your token Expired Please login again.!!");
+                  setOpenAlert(true);
+                  setTimeout(() => {
+                    localStorage.clear();
+                    navigate("/log-in");
+                  }, 2000);
+                }
                 if (res.data.data) {
                   const registeredEvent = res.data.data.find(
                     (o: any) =>
-                      o.eventCode === "YOGDHAM_FEB24" &&
+                      o.eventCode === eventcode &&
                       o.mobileNumber === `${countrycode}${mobile}`
                   );
                   if (registeredEvent) {
                     setBackDrop(false);
+                    setRegisterCheck(true);
                     setAlertType("error");
                     setAlertMessage(
                       `You have already registered for this event with Reg Id : ${registeredEvent.eventRegId}.`
@@ -102,11 +119,12 @@ const SinglePageEventRegister = () => {
                       setFormData((prevFormData: any) => {
                         return {
                           ...JSON.parse(userDetail),
+                          pickUp: registeredEvent.pickUp,
                           arrivalDate: registeredEvent.arrivalDate,
                           departureDate: registeredEvent.departureDate,
                           groupDetails: registeredEvent.groupDetails,
                           notes: registeredEvent.notes,
-                          eventCode: "YOGDHAM_FEB24",
+                          eventCode: eventcode,
                         };
                       });
                       setOpenEventForm(true);
@@ -169,12 +187,11 @@ const SinglePageEventRegister = () => {
     }
   };
 
-  const handleChange: any = (e: any) => {
-    console.log("e :: ", e);
-    const { name, value } = e.target;
+  const handleChange: any = (e: any, newValue?: any) => {
+    const { name, value } = e.target || {};
     setFormData((prevState: any) => ({
       ...prevState,
-      [name]: value,
+      [name]: value || newValue,
     }));
   };
 
@@ -194,10 +211,14 @@ const SinglePageEventRegister = () => {
 
     setFormData({ ...formData, groupDetails: updatedGroupDetails });
   };
-
   const removeGroupMember = (indexToRemove: any) => {
-    const updatedGroupDetails = formData.groupDetails.filter(
-      (member: any, index: any) => index !== indexToRemove
+    const updatedGroupDetails = formData.groupDetails.map(
+      (member: any, index: any) => {
+        if (index === indexToRemove && member.deletedFlag === false) {
+          return { ...member, deletedFlag: true };
+        }
+        return member;
+      }
     );
     setFormData({
       ...formData,
@@ -210,47 +231,23 @@ const SinglePageEventRegister = () => {
       ...formData,
       groupDetails: [
         ...formData.groupDetails,
-        { name: "", relation: "", gender: "", age: "" },
+        { name: "", relation: "", gender: "", age: "", deletedFlag: false },
       ],
     });
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setBackDrop(true);
-    const {
-      email,
-      firstName,
-      middleName,
-      lastName,
-      whatsappNumber,
-      gender,
-      dateOfBirth,
-      edQualification,
-      profession,
-      guardianName,
-      maritalStatus,
-      bloodGroup,
-      addrLine1,
-      addrLine2,
-      city,
-      district,
-      state,
-      country,
-      pincode,
-    } = formData;
-    const { data } = await axios.post(
-      `${baseUrl}/update-user`,
-      {
-        mobileNumber: `${countrycode}${mobile}`,
-        countrycode,
+    if (dateErrorArrival === "" && dateErrorDeparture === "") {
+      setBackDrop(true);
+      const {
         email,
         firstName,
         middleName,
         lastName,
         whatsappNumber,
         gender,
-        dateOfBirth,
+        age,
         edQualification,
         profession,
         guardianName,
@@ -263,57 +260,87 @@ const SinglePageEventRegister = () => {
         state,
         country,
         pincode,
-      },
-      {
-        headers: { Authorization: localStorage.getItem("authToken") },
+      } = formData;
+      const { data } = await axios.post(
+        `${baseUrl}/update-user`,
+        {
+          mobileNumber: `${countrycode}${mobile}`,
+          countrycode,
+          email,
+          firstName,
+          middleName,
+          lastName,
+          whatsappNumber,
+          gender,
+          age,
+          edQualification,
+          profession,
+          guardianName,
+          maritalStatus,
+          bloodGroup,
+          addrLine1,
+          addrLine2,
+          city,
+          district,
+          state,
+          country,
+          pincode,
+        },
+        {
+          headers: { Authorization: localStorage.getItem("authToken") },
+        }
+      );
+
+      if (data.status === 200) {
+        localStorage.removeItem("userDetail");
+        localStorage.setItem("userDetail", JSON.stringify(data.data));
+      } else {
+        setBackDrop(false);
+        setAlertMessage(data.message);
+        setAlertType("error");
+        setOpenAlert(true);
+        return;
       }
-    );
 
-    if (data.status === 200) {
-      localStorage.removeItem("userDetail");
-      localStorage.setItem("userDetail", JSON.stringify(data.data));
-    } else {
-      setBackDrop(false);
-      setAlertMessage(data.message);
-      setAlertType("error");
-      setOpenAlert(true);
-      return;
-    }
+      const reqObj = { ...formData, eventCode: eventcode };
+      const { eventCode, arrivalDate, departureDate, groupDetails, notes } =
+        reqObj;
+      const res = await axios.post(
+        `${baseUrl}/events/register`,
+        {
+          mobileNumber: formData.mobileNumber,
+          firstName,
+          gender,
+          age,
+          eventCode,
+          arrivalDate,
+          departureDate,
+          groupDetails,
+          notes,
+        },
+        {
+          headers: { Authorization: localStorage.getItem("authToken") },
+        }
+      );
 
-    const reqObj = { ...formData, eventCode: "YOGDHAM_FEB24" };
-    const { eventCode, arrivalDate, departureDate, groupDetails, notes } =
-      reqObj;
-    const res = await axios.post(
-      `${baseUrl}/events/register`,
-      {
-        mobileNumber: formData.mobileNumber,
-        firstName,
-        gender,
-        dateOfBirth,
-        eventCode,
-        arrivalDate,
-        departureDate,
-        groupDetails,
-        notes,
-      },
-      {
-        headers: { Authorization: localStorage.getItem("authToken") },
+      if (res.data.status === 200) {
+        setBackDrop(false);
+        setAlertMessage(
+          registerCheck
+            ? "Registration Details successfully updated"
+            : "Registration successfully done"
+        );
+        setAlertType("success");
+        setOpenAlert(true);
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } else {
+        setBackDrop(false);
+        setAlertType("error");
+        setAlertMessage(res.data.message);
+        setOpenAlert(true);
       }
-    );
-
-    if (res.data.status === 200) {
-      setBackDrop(false);
-      setAlertMessage("Registration successfully done");
-      setAlertType("success");
-      setOpenAlert(true);
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
-    } else {
-      setBackDrop(false);
-      setAlertType("error");
-      setAlertMessage(res.data.message);
-      setOpenAlert(true);
     }
   };
 
@@ -341,7 +368,18 @@ const SinglePageEventRegister = () => {
           {alertMessage}
         </Alert>
       </Snackbar>
-     
+      <h2
+        style={{
+          textAlign: "center",
+          marginTop: "30px",
+          fontFamily: '"Poppins", sans-serif',
+          color: "#990000",
+          fontWeight: "600",
+        }}
+      >
+        Registration
+      </h2>
+
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="md">
           <CssBaseline />
@@ -358,7 +396,6 @@ const SinglePageEventRegister = () => {
               Registration
             </Typography>
           </Box> */}
-
 
           {step === false && (
             <div
@@ -486,7 +523,7 @@ const SinglePageEventRegister = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   disabled={openEventForm ? false : true}
@@ -499,18 +536,7 @@ const SinglePageEventRegister = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  fullWidth
-                  disabled={openEventForm ? false : true}
-                  label="Middle Name"
-                  name="middleName"
-                  value={formData?.middleName ?? ""}
-                  onChange={handleChange}
-                  InputLabelProps={{ shrink: true }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   disabled={openEventForm ? false : true}
@@ -535,6 +561,7 @@ const SinglePageEventRegister = () => {
                   >
                     <MenuItem value="Male">Male</MenuItem>
                     <MenuItem value="Female">Female</MenuItem>
+                    <MenuItem value="Others">Others</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -544,32 +571,16 @@ const SinglePageEventRegister = () => {
                 adapterLocale={enGB}
               >
                 <Grid item xs={12} sm={6}>
-                  <DatePicker
-                    value={
-                      formData.dateOfBirth
-                        ? new Date(
-                          formData.dateOfBirth.split("-").reverse().join("-")
-                        )
-                        : null
-                    }
-                    onChange={(e: any) => {
-                      const value = `${new Date(e)
-                        .getDate()
-                        .toString()
-                        .padStart(2, "0")}-${(new Date(e).getMonth() + 1)
-                          .toString()
-                          .padStart(2, "0")}-${new Date(e).getFullYear()}`;
-                      setFormData({
-                        ...formData,
-                        ["dateOfBirth"]: value,
-                      });
-                    }}
-                    label="Date Of Birth"
-                    slotProps={{
-                      textField: {
-                        helperText: "DD/MM/YYYY",
-                      },
-                    }}
+                  <TextField
+                    disabled={openEventForm ? false : true}
+                    label="Age"
+                    name="age"
+                    type="number"
+                    value={formData.age}
+                    onChange={handleChange}
+                    fullWidth
+                    style={{ marginBottom: "2%" }}
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
 
@@ -643,14 +654,39 @@ const SinglePageEventRegister = () => {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
+                  <Autocomplete
                     disabled={openEventForm ? false : true}
+                    freeSolo
+                    forcePopupIcon
                     fullWidth
-                    label="Blood Group"
-                    name="bloodGroup"
-                    value={formData?.bloodGroup ?? ""}
-                    onChange={handleChange}
-                    InputLabelProps={{ shrink: true }}
+                    value={formData.bloodGroup ?? ""}
+                    options={bloodGroupArray}
+                    onChange={(event: any, newValue: any) => {
+                      if (newValue !== null) {
+                        handleChange(
+                          { target: { name: "bloodGroup" } },
+                          newValue
+                        );
+                      }
+                    }}
+                    onClose={(event: any) => {
+                      if (event.target.value !== 0) {
+                        handleChange(
+                          { target: { name: "bloodGroup" } },
+                          event.target.value
+                        );
+                      }
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Blood Group"
+                        InputProps={{
+                          ...params.InputProps,
+                          type: "Blood Group",
+                        }}
+                      />
+                    )}
                   />
                 </Grid>
 
@@ -666,8 +702,8 @@ const SinglePageEventRegister = () => {
                       value={formData?.country ?? ""}
                       onChange={handleChange}
                     >
-                      <MenuItem value="india">India</MenuItem>
-                      <MenuItem value="afghanistan">Afghanistan</MenuItem>
+                      <MenuItem value="India">India</MenuItem>
+                      <MenuItem value="Afghanistan">Afghanistan</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
@@ -722,7 +758,7 @@ const SinglePageEventRegister = () => {
                       required
                       value={formData?.district ?? ""}
                       onChange={handleChange}
-                    //   disabled={!formData?.state || formData?.state === ""}
+                      //   disabled={!formData?.state || formData?.state === ""}
                     >
                       {formData?.state &&
                         statesWithDistricts[formData?.state] &&
@@ -784,29 +820,44 @@ const SinglePageEventRegister = () => {
                       name="arrivalDate"
                       value={
                         formData.arrivalDate
-                          ? new Date(formData?.arrivalDate)
+                          ? new Date(formData.arrivalDate)
                           : new Date()
                       }
+                      // minDate={new Date()}
                       onChange={(e: any) => {
-                        const convertedDate =
-                          new Date(e)
-                            .toLocaleDateString("en-US", {
-                              timeZone: "Asia/Kolkata",
-                              day: "2-digit",
-                              month: "2-digit",
-                              year: "numeric",
-                            })
-                            .replace(/\//g, "-") +
-                          " " +
-                          ("0" + new Date(e).getHours()).slice(-2) +
-                          ":" +
-                          ("0" + new Date(e).getMinutes()).slice(-2);
-                        setFormData({
-                          ...formData,
-                          ["arrivalDate"]: convertedDate,
-                        });
+                        const arrivalDate = new Date(e);
+                        const departureDate = new Date(formData.departureDate);
+
+                        if (arrivalDate > departureDate) {
+                          // Set an error or handle it as you need
+                          setDateErrorArrival(
+                            "Arrival date cannot be after departure date"
+                          );
+                        } else {
+                          setDateErrorArrival("");
+                          const convertedDate =
+                            arrivalDate
+                              .toLocaleDateString("en-US", {
+                                timeZone: "Asia/Kolkata",
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              })
+                              .replace(/\//g, "-") +
+                            " " +
+                            ("0" + arrivalDate.getHours()).slice(-2) +
+                            ":" +
+                            ("0" + arrivalDate.getMinutes()).slice(-2);
+                          setFormData({
+                            ...formData,
+                            arrivalDate: convertedDate,
+                          });
+                        }
                       }}
                     />
+                    {dateErrorArrival && (
+                      <FormHelperText error>{dateErrorArrival}</FormHelperText>
+                    )}
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -817,29 +868,44 @@ const SinglePageEventRegister = () => {
                       name="departureDate"
                       value={
                         formData.departureDate
-                          ? new Date(formData?.departureDate)
+                          ? new Date(formData.departureDate)
                           : new Date()
                       }
                       onChange={(e: any) => {
-                        const convertedDate =
-                          new Date(e)
-                            .toLocaleDateString("en-US", {
-                              timeZone: "Asia/Kolkata",
-                              day: "2-digit",
-                              month: "2-digit",
-                              year: "numeric",
-                            })
-                            .replace(/\//g, "-") +
-                          " " +
-                          ("0" + new Date(e).getHours()).slice(-2) +
-                          ":" +
-                          ("0" + new Date(e).getMinutes()).slice(-2);
-                        setFormData({
-                          ...formData,
-                          ["departureDate"]: convertedDate,
-                        });
+                        const departureDate = new Date(e);
+                        const arrivalDate = new Date(formData.arrivalDate);
+
+                        if (departureDate < arrivalDate) {
+                          setDateErrorDeparture(
+                            "Departure date cannot be before Arrival date"
+                          );
+                        } else {
+                          setDateErrorDeparture("");
+                          const convertedDate =
+                            departureDate
+                              .toLocaleDateString("en-US", {
+                                timeZone: "Asia/Kolkata",
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              })
+                              .replace(/\//g, "-") +
+                            " " +
+                            ("0" + departureDate.getHours()).slice(-2) +
+                            ":" +
+                            ("0" + departureDate.getMinutes()).slice(-2);
+                          setFormData({
+                            ...formData,
+                            departureDate: convertedDate,
+                          });
+                        }
                       }}
                     />
+                    {dateErrorDeparture && (
+                      <FormHelperText error>
+                        {dateErrorDeparture}
+                      </FormHelperText>
+                    )}
                   </FormControl>
                 </Grid>
               </LocalizationProvider>
@@ -848,9 +914,11 @@ const SinglePageEventRegister = () => {
                 <FormControl fullWidth>
                   <InputLabel>Pickup place</InputLabel>
                   <Select
+                    label={"pickup place"}
+                    aria-label={"pickup place"}
                     disabled={openEventForm ? false : true}
-                    name="pickupPlace"
-                    value={formData?.pickupPlace ?? ""}
+                    name="pickUp"
+                    value={formData?.pickUp ?? ""}
                     onChange={handleChange}
                   >
                     <MenuItem value="Kalupur Railway Station">
@@ -875,88 +943,101 @@ const SinglePageEventRegister = () => {
                   <Typography variant="subtitle1">Group Details:</Typography>
                   {formData?.groupDetails &&
                     formData.groupDetails.length > 0 &&
-                    formData.groupDetails.map((member: any, index: any) => (
-                      <Box
-                        key={index}
-                        sx={{
-                          border: "1px solid #ccc",
-                          borderRadius: "8px",
-                          padding: "16px",
-                          marginBottom: "16px",
-                        }}
-                      >
-                        <Typography
-                          variant="h6"
-                          gutterBottom
-                          style={{ marginBottom: "8px" }}
-                        >
-                          Participant {index + 1}
-                        </Typography>
-                        <Grid container spacing={2}>
-                          <Grid item xs={12} sm={6}>
-                            <TextField
-                              disabled={openEventForm ? false : true}
-                              label="Name"
-                              name="name"
-                              required
-                              value={member.name}
-                              onChange={(e) =>
-                                handleGroupDetailsChange(index, e)
-                              }
-                              fullWidth
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={6}>
-                            <TextField
-                              disabled={openEventForm ? false : true}
-                              label="Relation"
-                              name="relation"
-                              value={member.relation}
-                              onChange={(e) =>
-                                handleGroupDetailsChange(index, e)
-                              }
-                              fullWidth
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={6}>
-                            <TextField
-                              disabled={openEventForm ? false : true}
-                              label="Gender"
-                              name="gender"
-                              required
-                              value={member.gender}
-                              onChange={(e) =>
-                                handleGroupDetailsChange(index, e)
-                              }
-                              fullWidth
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={6}>
-                            <TextField
-                              disabled={openEventForm ? false : true}
-                              label="Age"
-                              name="age"
-                              required
-                              value={member.age}
-                              onChange={(e) =>
-                                handleGroupDetailsChange(index, e)
-                              }
-                              fullWidth
-                            />
-                          </Grid>
-                        </Grid>
+                    formData.groupDetails.map((member: any, index: any) => {
+                      return (
+                        <>
+                          {member.deletedFlag === false && (
+                            <Box
+                              key={index}
+                              sx={{
+                                border: "1px solid #ccc",
+                                borderRadius: "8px",
+                                padding: "16px",
+                                marginBottom: "16px",
+                              }}
+                            >
+                              <Typography
+                                variant="h6"
+                                gutterBottom
+                                style={{ marginBottom: "8px" }}
+                              >
+                                Participant{" "}
+                                {formData.groupDetails
+                                  .slice(0, index + 1)
+                                  .findLastIndex(
+                                    (obj: any) => !obj.deletedFlag
+                                  ) + 1}
+                              </Typography>
+                              <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                  <TextField
+                                    label="Name"
+                                    name="name"
+                                    required
+                                    value={member.name}
+                                    onChange={(e) =>
+                                      handleGroupDetailsChange(index, e)
+                                    }
+                                    fullWidth
+                                  />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                  <TextField
+                                    label="Relation"
+                                    name="relation"
+                                    value={member.relation}
+                                    onChange={(e) =>
+                                      handleGroupDetailsChange(index, e)
+                                    }
+                                    fullWidth
+                                  />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                  <FormControl fullWidth>
+                                    <InputLabel>Gender</InputLabel>
+                                    <Select
+                                      label={"Gender"}
+                                      aria-label={"Gender"}
+                                      value={member.gender}
+                                      onChange={(e) =>
+                                        handleGroupDetailsChange(index, e)
+                                      }
+                                      name="gender"
+                                      fullWidth
+                                    >
+                                      <MenuItem value="Male">Male</MenuItem>
+                                      <MenuItem value="Female">Female</MenuItem>
+                                      <MenuItem value="Others">Others</MenuItem>
+                                    </Select>
+                                  </FormControl>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                  <TextField
+                                    label="Age"
+                                    name="age"
+                                    required
+                                    value={member.age}
+                                    onChange={(e) =>
+                                      handleGroupDetailsChange(index, e)
+                                    }
+                                    fullWidth
+                                  />
+                                </Grid>
+                              </Grid>
 
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => removeGroupMember(index)}
-                          style={{ marginTop: "16px" }}
-                          disabled={openEventForm ? false : true}
-                        >
-                          Remove
-                        </Button>
-                      </Box>
-                    ))}
+                              <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => removeGroupMember(index)}
+                                style={{ marginTop: "16px" }}
+                              >
+                                Remove
+                              </Button>
+                            </Box>
+                          )}
+                        </>
+                      );
+                    })}
                   <Button
                     variant="contained"
                     onClick={addGroupMember}

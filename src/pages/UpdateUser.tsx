@@ -13,11 +13,13 @@ import {
   Alert,
   Backdrop,
   CircularProgress,
+  Autocomplete,
 } from "@mui/material";
 import {
   EducationalQualification,
   Profession,
   baseUrl,
+  bloodGroupArray,
   states,
   statesWithDistricts,
 } from "../config/constants";
@@ -26,8 +28,10 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { enGB } from "date-fns/locale";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { useNavigate } from "react-router-dom";
 
 const UpdateUser = () => {
+  const navigate = useNavigate();
   const [errors, setErrors] = useState<any>({});
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState<any>("");
@@ -39,14 +43,13 @@ const UpdateUser = () => {
   console.log(new Date(), "userDetail :: in update user ", userDetail);
   const [formData, setFormData] = useState<any>(userDetail);
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
+  const handleChange = (e: any, newValue?: any) => {
+    const { name, value } = e.target || {};
     setFormData((prevState: any) => ({
       ...prevState,
-      [name]: value,
+      [name]: value || newValue,
     }));
-
-    if (value.trim() !== "") {
+    if ((value || newValue)?.trim() !== "") {
       setErrors({ ...errors, [name]: "" });
     }
   };
@@ -87,6 +90,14 @@ const UpdateUser = () => {
         setOpenAlert(true);
         localStorage.removeItem("userDetail");
         localStorage.setItem("userDetail", JSON.stringify(data.data));
+      } else if (data.status === 401) {
+        setAlertType("error");
+        setAlertMessage("Your token Expired Please login again.!!");
+        setOpenAlert(true);
+        setTimeout(() => {
+          localStorage.clear();
+          navigate("/log-in");
+        }, 2000);
       } else {
         setBackDrop(false);
         setAlertType("error");
@@ -139,7 +150,17 @@ const UpdateUser = () => {
         </div>
       </div> */}
 
-      <h2 style={{ textAlign: 'center', marginTop: '30px', fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "600" }}>Update profile</h2>
+      <h2
+        style={{
+          textAlign: "center",
+          marginTop: "30px",
+          fontFamily: '"Poppins", sans-serif',
+          color: "#990000",
+          fontWeight: "600",
+        }}
+      >
+        Update profile
+      </h2>
       <div
         style={{
           width: "100%",
@@ -149,7 +170,6 @@ const UpdateUser = () => {
           // paddingTop: "10px"
         }}
       >
-
         <div style={{ width: "80%" }}>
           {/*  <div
             style={{
@@ -224,11 +244,11 @@ const UpdateUser = () => {
                       value={
                         formData.dateOfBirth
                           ? new Date(
-                            formData.dateOfBirth
-                              .split("-")
-                              .reverse()
-                              .join("-")
-                          )
+                              formData.dateOfBirth
+                                .split("-")
+                                .reverse()
+                                .join("-")
+                            )
                           : new Date()
                       }
                       onChange={(e: any) => {
@@ -236,8 +256,8 @@ const UpdateUser = () => {
                           .getDate()
                           .toString()
                           .padStart(2, "0")}-${(new Date(e).getMonth() + 1)
-                            .toString()
-                            .padStart(2, "0")}-${new Date(e).getFullYear()}`;
+                          .toString()
+                          .padStart(2, "0")}-${new Date(e).getFullYear()}`;
                         setFormData((prevFormData: any) => {
                           return { ...prevFormData, ["dateOfBirth"]: value };
                         });
@@ -315,12 +335,45 @@ const UpdateUser = () => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={4}>
-                <TextField
+                {/* <TextField
                   fullWidth
                   label="Blood Group"
                   name="bloodGroup"
                   value={formData?.bloodGroup}
                   onChange={handleChange}
+                /> */}
+                <Autocomplete
+                  freeSolo
+                  forcePopupIcon
+                  fullWidth
+                  value={formData.bloodGroup}
+                  options={bloodGroupArray}
+                  onChange={(event: any, newValue: any) => {
+                    if (newValue !== null) {
+                      handleChange(
+                        { target: { name: "bloodGroup" } },
+                        newValue
+                      );
+                    }
+                  }}
+                  onClose={(event: any) => {
+                    if (event.target.value !== 0) {
+                      handleChange(
+                        { target: { name: "bloodGroup" } },
+                        event.target.value
+                      );
+                    }
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Blood Group"
+                      InputProps={{
+                        ...params.InputProps,
+                        type: "Blood Group",
+                      }}
+                    />
+                  )}
                 />
               </Grid>
 
@@ -335,7 +388,7 @@ const UpdateUser = () => {
                     value={formData?.country}
                     onChange={handleChange}
                   >
-                    <MenuItem value="india">India</MenuItem>
+                    <MenuItem value="India">India</MenuItem>
                     <MenuItem value="afghanistan">Afghanistan</MenuItem>
                   </Select>
                 </FormControl>

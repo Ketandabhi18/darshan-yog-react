@@ -450,7 +450,7 @@ const Home = () => {
 
           {!localStorage.getItem("authToken") && (
             <div className="button-container">
-              <button className="btn" onClick={() => navigate("/event-registration")}>Register Now</button>
+              <button className="btn" onClick={() => navigate("/event/YOGDHAM_FEB24")}>Register Now</button>
             </div>
           )}
         </div>
