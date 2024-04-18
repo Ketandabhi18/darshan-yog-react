@@ -33,7 +33,7 @@ const Vision = () => {
                         </div>
 
                         <Row style={{ marginBottom: '2%', fontFamily: '"Poppins", sans-serif', fontSize: "14px" }}>
-                            The Darshan Yog Mahavidyalaya is engaged in providing the invaluable resources required for the training of trainers / teachers and committed preachers who willing to dedicate their lives to benefit the whole of humanity to develop proficiency in Vaidik knowledge (Veda, Darshan shāstras, ārsha granthas and more importantly the real Vaidik Yoga.)
+                            The Darshan Yog Mahavidyalaya is engaged in providing the invaluable resources required for the training of trainers / teachers and committed preachers who willing to dedicate their lives to benefit the whole of humanity to develop proficiency in Vaidik knowledge (Veda, Darshan shastras, arsha granthas and more importantly the real Vaidik Yoga.)
                         </Row>
                         <Row style={{ marginBottom: '2%', fontFamily: '"Poppins", sans-serif', fontSize: "14px" }}>
                             The one and only revelation that God gave to the human race in the beginning is the Vedas and the language is Vaidik Sanskrit. That knowledge empowered people to pursue and track their spiritual progress as well as fulfil their duties in society. The Vedas constitute a manual for human beings to succeed in life in the same way. An equivalence in today’s world would be the operating manual of a commodity which sensitises the user on how to derive maximum benefit from it.

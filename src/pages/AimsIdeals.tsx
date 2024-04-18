@@ -34,7 +34,7 @@ const AimsIdeals = () => {
 
                         <Row style={{ marginBottom: '3%' }}>
                             <Typography style={{ fontFamily: '"Poppins", sans-serif', fontSize: "14px" }}>
-                                Our motto is "Krinvanto Vishvamāryam", i.e. make the whole world noble in ‘thoughts, words and actions’.
+                                Our motto is "Krinvanto Vishvamaryam", i.e. make the whole world noble in ‘thoughts, words and actions’.
                             </Typography>
                         </Row>
 
@@ -51,7 +51,7 @@ const AimsIdeals = () => {
                                     </li>
                                     <li>
                                         <Typography style={{ fontFamily: '"Poppins", sans-serif', fontSize: "14px" }}>
-                                            to uplift the physical, moral / mental and spiritual standards of all through the practice of authentic Vaidik Yog (Yogābhyāsa) as per the teachings of Maharishi Patanjali;
+                                            to uplift the physical, moral / mental and spiritual standards of all through the practice of authentic Vaidik Yog (Yogabhyasa) as per the teachings of Maharishi Patanjali;
                                         </Typography>
                                     </li>
                                     <li>
@@ -61,7 +61,7 @@ const AimsIdeals = () => {
                                     </li>
                                     <li>
                                         <Typography style={{ fontFamily: '"Poppins", sans-serif', fontSize: "14px" }}>
-                                            to transform the world into a better place by sensitising  people to return to the Vaidik way of life including the true varna vyavasthā (classes based on character, skills & insightful aptitudes NOT on heredity) and ashram vyavasthā (stages of life) in society;
+                                            to transform the world into a better place by sensitising  people to return to the Vaidik way of life including the true varna vyavastha (classes based on character, skills & insightful aptitudes NOT on heredity) and ashram vyavastha (stages of life) in society;
                                         </Typography>
                                     </li>
                                     <li>
@@ -75,7 +75,7 @@ const AimsIdeals = () => {
 
                         <Row style={{ marginBottom: '1%' }}>
                             <Typography style={{ fontFamily: '"Poppins", sans-serif', fontSize: "14px" }}>
-                                These ideals existed in the Vaidik age. The dissemination of the true knowledge about God, soul, nature and the Vedas among the masses would induce them to adopt these ideals in their day-to-day living. At the Darshan Yog Mahāvidyālaya we are doing our utmost by providing the appropriate environment for scholars to acquire the Vaidik knowledge. Our public outreach programmes consist of Yog shivirs (practical meditation workshops), Yajna shivirs, Vaidikkathās and lectures. Feedback reports these programmes as highly beneficial to the participants.
+                                These ideals existed in the Vaidik age. The dissemination of the true knowledge about God, soul, nature and the Vedas among the masses would induce them to adopt these ideals in their day-to-day living. At the Darshan Yog Mahavidyalaya we are doing our utmost by providing the appropriate environment for scholars to acquire the Vaidik knowledge. Our public outreach programmes consist of Yog shivirs (practical meditation workshops), Yajna shivirs, Vaidikkathas and lectures. Feedback reports these programmes as highly beneficial to the participants.
                             </Typography>
                             <Row style={{ paddingLeft: "50px", paddingTop: "10px" }}>
                                 <ul>
