@@ -10,6 +10,12 @@ import EventsPage from "./pages/EventsPage";
 import EventDetailPage from "./pages/EventDetail";
 import UpdatePassword from "./pages/UpdatePassword";
 import SinglePageEventRegister from "./pages/SinglePageEventRegister";
+import KeyInformation from "./pages/KeyInformation";
+import AimsIdeals from "./pages/AimsIdeals";
+import OurFunctionary from "./pages/OurFunctionary";
+import PassScholar from "./pages/PassedScholar";
+import Vision from "./pages/vision";
+import Founder from "./pages/founder";
 
 const RoutesAll = () => {
   return (
@@ -21,6 +27,12 @@ const RoutesAll = () => {
           <Route path="/update-user" element={<UpdateUser />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/key-information" element={<KeyInformation />} />
+          <Route path="/aims-ideals" element={<AimsIdeals />} />
+          <Route path="/our-functionary" element={<OurFunctionary />} />
+          <Route path="/founder" element={<Founder />} />
+          <Route path="/passed-scholar" element={<PassScholar />} />
+          <Route path="/vision" element={<Vision />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/program-schedule" element={<ProgramSchedule />} />
           <Route path="/:id" element={<ViewDetails />} />

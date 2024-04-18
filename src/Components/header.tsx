@@ -41,6 +41,12 @@ const Header = () => {
         }
     }, [isloggedIn]);
 
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const toggleDropdown = () => {
+        setIsDropdownOpen(prevState => !prevState);
+    };
+
     return (
         <>
             <header>
@@ -58,9 +64,122 @@ const Header = () => {
                 </label>
 
                 <nav className="navbar">
-                    <a onClick={() => navigate("/")} className="nav-item" >Home</a>
+                    <ul style={{ listStyleType: "none", margin: 0, padding: 0 }}>
+                        <li style={{ position: "relative", float: "left" }}>
+                            <a onClick={() => navigate("/")} className="nav-item">Home</a>
+                        </li>
+                        <li className="dropdown" style={{ position: "relative", float: "left" }}>
+                            <a onClick={toggleDropdown} className="nav-item">About Us &#9662;</a>
+                            <div id="aboutUsDropdown" className="dropdown-content" style={{ display: isDropdownOpen ? "block" : "none", position: "absolute", backgroundColor: "#f9f9f9", minWidth: "160px", zIndex: "2" }}>
+                                <a onClick={() => navigate("/about-us")} style={{ color: "#333", padding: "2px 30px", textDecoration: "none", display: "block" }}>About Us</a>
+                                <a onClick={() => navigate("/key-information")} style={{ color: "#333", padding: "2px 10px", textDecoration: "none", display: "block" }}>Key information</a>
+                                <a onClick={() => navigate("/aims-ideals")} style={{ color: "#333", padding: "2px 10px", textDecoration: "none", display: "block" }}>Aims & Ideals</a>
+                                <a onClick={() => navigate("/our-functionary")} style={{ color: "#333", padding: "2px 10px", textDecoration: "none", display: "block" }}>Our Functionary</a>
+                                <a onClick={() => navigate("/passed-scholar")} style={{ color: "#333", padding: "2px 10px", textDecoration: "none", display: "block" }}>Passed scholar</a>
+                                <a onClick={() => navigate("/vision")} style={{ color: "#333", padding: "2px 40px", textDecoration: "none", display: "block" }}>Vision</a>
+                            </div>
+                        </li>
+                        <li style={{ position: "relative", float: "left" }}>
+                            <a onClick={() => navigate("/events")} className="nav-item">Events</a>
+                        </li>
+                        <li style={{ position: "relative", float: "left" }}>
+                            {localStorage.getItem("authToken") ? (
+                                <>
+                                    <Tooltip title="Account settings">
+                                        <IconButton
+                                            onClick={handleProfileClick}
+                                            size="small"
+                                            sx={{ ml: 2 }}
+                                            aria-controls={open ? "account-menu" : undefined}
+                                            aria-haspopup="true"
+                                            aria-expanded={open ? "true" : undefined}
+                                        >
+                                            <Avatar sx={{ width: 32, height: 32, backgroundColor: "#990000" }}>
+                                                {userDetail?.firstName?.charAt(0) || "User"}
+                                            </Avatar>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Menu
+                                        anchorEl={profileDropMenu}
+                                        id="account-menu"
+                                        open={open}
+                                        onClose={handleCloseProfile}
+                                        onClick={handleCloseProfile}
+                                        PaperProps={{
+                                            elevation: 0,
+                                            sx: {
+                                                overflow: "visible",
+                                                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                                                mt: 1.5,
+                                                "& .MuiAvatar-root": {
+                                                    width: 32,
+                                                    height: 32,
+                                                    ml: -0.5,
+                                                    mr: 1,
+                                                },
+                                                "&::before": {
+                                                    content: '""',
+                                                    display: "block",
+                                                    position: "absolute",
+                                                    top: 0,
+                                                    right: 14,
+                                                    width: 10,
+                                                    height: 10,
+                                                    bgcolor: "background.paper",
+                                                    transform: "translateY(-50%) rotate(45deg)",
+                                                    zIndex: 0,
+                                                },
+                                            },
+                                        }}
+                                        transformOrigin={{ horizontal: "right", vertical: "top" }}
+                                        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                                    >
+                                        <MenuItem
+                                            onClick={() => {
+                                                handleCloseProfile();
+                                                navigate("update-user");
+                                            }}
+                                        >
+                                            <Avatar /> Profile
+                                        </MenuItem>
+                                        <Divider />
+                                        <MenuItem
+                                            onClick={() => {
+                                                handleCloseProfile();
+                                                navigate("/update-password");
+                                            }}
+                                        >
+                                            <ListItemIcon>
+                                                <Settings fontSize="small" />
+                                            </ListItemIcon>
+                                            Set/Change Password
+                                        </MenuItem>
+                                        <MenuItem
+                                            onClick={() => {
+                                                handleCloseProfile();
+                                                localStorage.clear();
+                                                setNavOptions(pages);
+                                                navigate("/");
+                                            }}
+                                        >
+                                            <ListItemIcon>
+                                                <Logout fontSize="small" />
+                                            </ListItemIcon>
+                                            Logout
+                                        </MenuItem>
+                                    </Menu>
+                                </>
+                            ) : (
+                                <a onClick={() => navigate("/log-in")} className="nav-item">
+                                    Log In
+                                </a>
+                            )}
+                        </li>
+                    </ul>
+
+                    {/*  <a onClick={() => navigate("/")} className="nav-item" >Home</a>
+                    <a onClick={() => navigate("/about-us")} className="nav-item" >Abount Us</a>
                     <a onClick={() => navigate("/events")} className="nav-item" >Events</a>
-                    {/* <a href="/log-in" className="nav-item" >Log In</a> */}
                     {localStorage.getItem("authToken") ? (
                         <>
                             <Tooltip title="Account settings">
@@ -151,7 +270,7 @@ const Header = () => {
                         <a onClick={() => navigate("/log-in")} className="nav-item">
                             Log In
                         </a>
-                    )}
+                    )} */}
                 </nav>
             </header>
 

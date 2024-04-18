@@ -79,6 +79,10 @@ header {
   display: none;
 }
 
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
 @keyframes rotate {
   0% {
     transform: rotate(0deg);
