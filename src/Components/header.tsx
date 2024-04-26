@@ -3,7 +3,7 @@ import logo from "./assets/logo.jpg";
 import "./header.css";
 import { useEffect, useState } from "react";
 import { pages } from "../config/constants";
-import { Avatar, Button, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from "@mui/material";
+import { Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from "@mui/material";
 import { Settings, Logout } from "@mui/icons-material";
 
 const Header = () => {
@@ -14,7 +14,16 @@ const Header = () => {
     const [anchorEl, setAnchorEl] = useState<any>({});
     const [profileDropMenu, setProfileDropMenu] = useState<any>(null);
     const open = Boolean(profileDropMenu);
+    const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+
+    const handleToggle = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const handleClose = () => {
+        setIsOpen(false);
+    };
 
     const handleProfileClick = (event: any) => {
         setProfileDropMenu(event.currentTarget);
@@ -51,16 +60,17 @@ const Header = () => {
                         className="logo"
                     /></a>
 
-                <input type="checkbox" id="check" />
+                <input type="checkbox" id="check" checked={isOpen} onChange={handleToggle} />
                 <label htmlFor="check" className="icons">
                     <i className="bx bx-menu" id="menu-icon"></i>
                     <i className="bx bx-x" id="close-icon"></i>
                 </label>
 
-                <nav className="navbar">
-                    <a onClick={() => navigate("/")} className="nav-item" >Home</a>
-                    <a onClick={() => navigate("/events")} className="nav-item" >Events</a>
-                    {/* <a href="/log-in" className="nav-item" >Log In</a> */}
+                <nav className={`navbar ${isOpen ? "open" : ""}`}>
+                    <a onClick={() => { navigate("/"); handleClose(); }} className="nav-item">Home</a>
+                    <a onClick={() => { navigate("/events"); handleClose(); }} className="nav-item">Events</a>
+                    {/* <a onClick={() => navigate("/")} className="nav-item" >Home</a>
+                    <a onClick={() => navigate("/events")} className="nav-item" >Events</a> */}
                     {localStorage.getItem("authToken") ? (
                         <>
                             <Tooltip title="Account settings">
@@ -116,6 +126,7 @@ const Header = () => {
                                     onClick={() => {
                                         handleCloseProfile();
                                         navigate("update-user");
+                                        handleClose();
                                     }}
                                 >
                                     <Avatar /> Profile
@@ -125,6 +136,7 @@ const Header = () => {
                                     onClick={() => {
                                         handleCloseProfile();
                                         navigate("/update-password");
+                                        handleClose();
                                     }}
                                 >
                                     <ListItemIcon>
@@ -138,6 +150,7 @@ const Header = () => {
                                         localStorage.clear();
                                         setNavOptions(pages);
                                         navigate("/");
+                                        handleClose();
                                     }}
                                 >
                                     <ListItemIcon>
@@ -148,13 +161,11 @@ const Header = () => {
                             </Menu>
                         </>
                     ) : (
-                        <a onClick={() => navigate("/log-in")} className="nav-item">
-                            Log In
-                        </a>
+                        <a onClick={() => { navigate("/log-in"); handleClose(); }} className="nav-item">Log In</a>
+                        // <a onClick={() => navigate("/log-in")} className="nav-item">Log In</a>
                     )}
                 </nav>
             </header>
-
 
             {/*      <header>
                 <div className="container">
