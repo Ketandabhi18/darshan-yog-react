@@ -509,11 +509,13 @@ const Home = () => {
         </style>
         <Slider {...SETTINGS}>
           {
-            videoLinks.map(({ thumbnail, title, url }, inx) => (
-              <div key={inx} style={{ margin: '0 auto', cursor: 'pointer' }}>
-                <div style={{ width: '100%', height: '250px' }}>
-                  <img src={thumbnail} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
+            videoLinks.map(({ thumbnail, title, url }, index) => (
+              <div key={index} style={{ margin: '0 auto', cursor: 'pointer' }}>
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  <div style={{ width: '100%', height: '250px' }}>
+                    <img src={thumbnail} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                </a>
                 <h4 style={{ textAlign: 'center', marginTop: '10px', fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "800" }}>{title}</h4>
               </div>
             ))
