@@ -456,21 +456,23 @@ const Home = () => {
         </div>
       </div>
 
-      <div style={{ marginTop: "50px", marginLeft: "100px", marginRight: "100px", display: "flex", justifyContent: "center", flexDirection: "column" }}>
+
+      <div className="video-div" style={{ marginTop: "50px", display: "flex", justifyContent: "center", flexDirection: "column" }}>
         <div style={{ textAlign: "center" }}>
           <Typography variant="h4" style={{ fontFamily: '"Poppins", sans-serif', color: "#990000", fontWeight: "800", textAlign: "center" }}>दर्शन योग धाम</Typography>
           <div>
             <h4 style={{ color: "#990000", marginBottom: "20px" }}>संस्कृति वन, लाकरोड़ा, गांधीनगर, गुजरात</h4>
           </div>
           <div style={{ padding: "20px 0" }}>
-            <Grid style={{ padding: "0 70px" }} container spacing={2}>
+            <Grid /* style={{ padding: "0 70px" }} */ container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <CardMedia component="iframe" src={'https://www.youtube.com/embed/GMnq__u6gvM?si=c94Ipiw6WLbA13ia'} allow="autoPlay" style={{ width: "100%", height: "400px" }} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <div style={{ paddingTop: "100px" }}>
-                  <h3 style={{ color: "#990000", marginBottom: "10px" }}>(वैदिक धर्म की रक्षा और समृद्धि का आदर्श संस्थान)</h3>
-                  <p style={{ marginBottom: "20px" }}>
+                {/* <div style={{ paddingTop: "20px" }}> */}
+                <div className="video-content">
+                  <h3 style={{ color: "#990000", marginBottom: "10px", textAlign: "center" }}>(वैदिक धर्म की रक्षा और समृद्धि का आदर्श संस्थान)</h3>
+                  <p style={{ marginBottom: "20px", textAlign: "justify" }}>
                     दर्शन योग धर्मार्थ ट्रस्ट अपने पूर्वजों ऋषि-मुनियों के द्वारा अनुपालित परम्पराओं की अनमोल थाती को
                     सुरक्षित रखने के लिए सदैव प्रयासशील है । आर्य समाज में योग-विद्या में आदर्श माने जाने वाले पूज्य स्वामी
                     सत्यपति जी परिव्राजक की यह अभिलाषा रही है कि समाज में ऐसे सत्यवादी परोपकारी दार्शनिक आदर्श योगियों का
